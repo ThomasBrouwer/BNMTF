@@ -1,7 +1,7 @@
 """
 Test the class for Truncated Normal draws and expectations in truncated_normal.py.
 """
-from BNMTF.code.distributions.truncated_normal import TruncatedNormal
+from BNMTF.code.truncated_normal import TruncatedNormal
 from scipy.stats import norm
 
 def test_class():

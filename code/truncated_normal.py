@@ -19,7 +19,7 @@ class TruncatedNormal:
         
     # Draw a value for x ~ TruncatedNormal(mu,tau)
     def draw(self):
-        return truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=1)[0]
+        return truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
         
     # Return expectation
     def expectation(self):

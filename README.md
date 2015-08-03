@@ -3,30 +3,30 @@ Python implementations of bayesian non-negative matrix factorisation (BNMF) and 
 
 This project is structured as follows:
 
-/code
-	/distributions
+code/
+	distributions/
 		Contains code for obtaining draws of the exponential, Gaussian, and Truncated Normal distributions. Also has code for computing the expectation and variance of these distributions.
 
-	/bnmf_gibbs
+	bnmf_gibbs/
 		Implementation of Gibbs sampler introduced by Schmidt et al. for Bayesian non-negative matrix factorisation (BNMF), extended to take into account missing values.
 
-	/bnmf_vb
+	bnmf_vb/
 		Implementation of my own variational Bayesian inference for BNMF.
 
-	/bnmtf_gibbs
+	bnmtf_gibbs/
 		Implementation of Gibbs sampler for Bayesian non-negative matrix tri-factorisation (BNMTF).
 
-	/bnmtf_vb
+	bnmtf_vb/
 		Implementation of my own variational Bayesian inference for BNMTF.
 
-/tests
+tests/
 	py.test unit tests for the above mentioned code.
 
-/example
+example/
 	Contains code and data for trying the above code, with data generated from the model assumptions.
 
-	/generate_toy
+	generate_toy/
 		Code for generating toy datasets from the model assumptions.
 
-	/recover_data
+	recover_data/
 		Code for recovering the latent matrices by using the BNMF and BNMTF models.

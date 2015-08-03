@@ -15,7 +15,7 @@ class Gamma:
     def draw(self):
         shape = self.alpha
         scale = 1.0 / self.beta
-        return gamma(shape=shape,scale=scale,size=1)[0]
+        return gamma(shape=shape,scale=scale,size=None)
         
     # Return expectation, E[tau] = alpha / beta
     def expectation(self):
