@@ -1,7 +1,7 @@
 """
 Test the class for Gamma draws and expectations in gamma.py.
 """
-from BNMTF.code.gamma import Gamma
+from BNMTF.code.distributions.gamma import Gamma
 
 def test_class():
     alpha = 2.0
