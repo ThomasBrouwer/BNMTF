@@ -23,6 +23,14 @@ Or:
     BNMF.train(init,iterations)
     
 This returns a tuple (Us,Vs,taus) of lists of U, V, tau values - of size <iterations>.
+
+The expectation can be computed by specifying a burn-in and thinning rate, and using:
+    BNMF.approx_expectation(burn_in,thinning)
+
+We can test the performance of our model on a test dataset, specifying our test set with a mask M. 
+    performance = BNMF.predict(M_pred,burn_in,thinning)
+This gives a dictionary of performances,
+    performance = { 'MSE', 'R^2', 'Rp' }
 """
 
 import sys
@@ -31,7 +39,7 @@ from BNMTF.code.distributions.exponential import Exponential
 from BNMTF.code.distributions.gamma import Gamma
 from BNMTF.code.distributions.truncated_normal import TruncatedNormal
 
-import numpy, itertools
+import numpy, itertools, math
 
 class bnmf_gibbs:
     def __init__(self,R,M,K,priors):
@@ -122,6 +130,7 @@ class bnmf_gibbs:
         return (self.all_U, self.all_V, self.all_tau)
         
         
+    # Compute the parameters for the distributions we sample from
     def alpha_s(self):   
         return self.alpha + self.size_Omega/2.0
     
@@ -141,13 +150,40 @@ class bnmf_gibbs:
         return 1./tauVjk * (-self.lambdaV[j,k] + self.tau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.U,self.V[j])+self.U[:,k]*self.V[j,k])*self.U[:,k] )).sum()) 
 
 
-    # Return the average value for U, V, tau. Throw away the first <burn_in> samples, and then use every <thinning>th after.
+    # Return the average value for U, V, tau - i.e. our approximation to the expectations. 
+    # Throw away the first <burn_in> samples, and then use every <thinning>th after.
     def approx_expectation(self,burn_in,thinning):
         indices = range(burn_in,len(self.all_U),thinning)
-        Us, Vs, taus = [self.all_U[i] for i in indices], [self.all_V[i] for i in indices], [self.all_tau[i] for i in indices]
-        return (Us, Vs, taus)
+        exp_U = numpy.array([self.all_U[i] for i in indices]).sum(axis=0) / float(len(indices))      
+        exp_V = numpy.array([self.all_V[i] for i in indices]).sum(axis=0) / float(len(indices))  
+        exp_tau = sum([self.all_tau[i] for i in indices]) / float(len(indices))
+        return (exp_U, exp_V, exp_tau)
 
 
     # Compute the expectation of U and V, and use it to predict missing values
-    def predict(self):
-        return
+    def predict(self,M_pred,burn_in,thinning):
+        (exp_U,exp_V,_) = self.approx_expectation(burn_in,thinning)
+        R_pred = numpy.dot(exp_U,exp_V.T)
+        MSE = self.compute_MSE(M_pred,self.R,R_pred)
+        R2 = self.compute_R2(M_pred,self.R,R_pred)    
+        Rp = self.compute_Rp(M_pred,self.R,R_pred)        
+        return {'MSE':MSE,'R^2':R2,'Rp':Rp}
+        
+        
+    # Functions for computing MSE, R^2 (coefficient of determination), Rp (Pearson correlation)
+    def compute_MSE(self,M,R,R_pred):
+        return (M * (R-R_pred)**2).sum() / float(M.sum())
+        
+    def compute_R2(self,M,R,R_pred):
+        mean = (M*R).sum() / float(M.sum())
+        SS_total = float((M*(R-mean)**2).sum())
+        SS_res = float((M*(R-R_pred)**2).sum())
+        return 1. - SS_res / SS_total
+        
+    def compute_Rp(self,M,R,R_pred):
+        mean_real = (M*R).sum() / float(M.sum())
+        mean_pred = (M*R_pred).sum() / float(M.sum())
+        covariance = (M*(R-mean_real)*(R_pred-mean_pred)).sum()
+        variance_real = (M*(R-mean_real)**2).sum()
+        variance_pred = (M*(R_pred-mean_pred)**2).sum()
+        return covariance / float(math.sqrt(variance_real)*math.sqrt(variance_pred))
