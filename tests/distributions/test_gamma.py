@@ -16,3 +16,11 @@ def test_class():
     
     expectation_log = -0.67582795356964265 # digamma(2) - log_e (3) in Wolfram Alpha
     assert gammadist.expectation_log() == expectation_log
+    
+# Test a draw - simply verify it is > 0.
+def test_draw():
+    alpha = 2.0
+    beta = 3.0
+    gammadist = Gamma(alpha,beta)
+    for i in range(0,100):
+        assert gammadist.draw() >= 0.0

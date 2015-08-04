@@ -12,14 +12,15 @@ class TruncatedNormal:
     def __init__(self,mu,tau):
         self.mu = float(mu)
         self.tau = float(tau)
-        self.sigma = 1.0 / math.sqrt(self.tau)
+        self.sigma = numpy.float64(1.0) / math.sqrt(self.tau)
         
         self.a = - self.mu / self.sigma
         self.b = numpy.inf
         
-    # Draw a value for x ~ TruncatedNormal(mu,tau)
+    # Draw a value for x ~ TruncatedNormal(mu,tau). If we get inf we set it to 0.
     def draw(self):
-        return truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
+        d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
+        return d if (d != numpy.inf and not numpy.isnan(d)) else 0
         
     # Return expectation
     def expectation(self):

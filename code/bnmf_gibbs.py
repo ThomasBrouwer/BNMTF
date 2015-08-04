@@ -102,8 +102,8 @@ class bnmf_gibbs:
         self.all_V = numpy.zeros((iterations,self.J,self.K))   
         self.all_tau = numpy.zeros(iterations)
         
-        for i in range(1,iterations+1):
-            print "Iteration %s." % i
+        for it in range(0,iterations):
+            print "Iteration %s." % (it+1)
             
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
                 tauUik = self.tauU(i,k)
@@ -113,11 +113,11 @@ class bnmf_gibbs:
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 tauVjk = self.tauV(j,k)
                 muVjk = self.muU(tauVjk,j,k)
-                self.U[i,k] = TruncatedNormal(muVjk,tauVjk).draw()
+                self.V[j,k] = TruncatedNormal(muVjk,tauVjk).draw()
                 
-            self.tau = Gamma(self.alpha_s(),self.beta_s())
+            self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
             
-            self.all_U[i], self.all_V[i], self.all_tau[i] = numpy.copy(self.U), numpy.copy(self.V), self.tau
+            self.all_U[it], self.all_V[it], self.all_tau[it] = numpy.copy(self.U), numpy.copy(self.V), self.tau
         
         return (self.all_U, self.all_V, self.all_tau)
         

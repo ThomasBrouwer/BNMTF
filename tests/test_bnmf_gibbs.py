@@ -155,3 +155,37 @@ def test_muV():
         assert BNMF.muV(tauV[j,k],j,k) == muV[j,k]
         
 #TODO: more complicated test case, check single value for U, V, tau
+        
+        
+# Test two iterations, and that the values have changed in U and V.
+# This leads to lots of inf and 0's, so also tests whether we can handle that.
+def test_run():
+    I,J,K = 10,5,2
+    R = numpy.ones((I,J))
+    M = numpy.ones((I,J))
+    M[0,0], M[2,2], M[3,1] = 0, 0, 0
+    
+    lambdaU = 2*numpy.ones((I,K))
+    lambdaV = 3*numpy.ones((J,K))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    init = 'exp' #U=1/2,V=1/3
+    
+    U_prior = numpy.ones((I,K))/2.
+    V_prior = numpy.ones((J,K))/3.
+    
+    iterations = 15
+    
+    BNMF = bnmf_gibbs(R,M,K,priors)
+    BNMF.initialise(init)
+    (Us,Vs,taus) = BNMF.run(iterations)
+    
+    assert BNMF.all_U.shape == (iterations,I,K)
+    assert BNMF.all_V.shape == (iterations,J,K)
+    assert BNMF.all_tau.shape == (iterations,)
+    
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert Us[0,i,k] != U_prior[i,k]
+    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
+        assert Vs[0,j,k] != V_prior[j,k]
+    assert taus[1] != alpha/float(beta)
