@@ -26,9 +26,9 @@ import numpy, itertools
 
 output_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-I,J,K = 100, 50, 10
+I,J,K = 20,10,3 #100, 50, 10
 fraction_unknown = 0.1
-alpha, beta = 1., 1.
+alpha, beta = 10., 1.
 lambdaU = numpy.ones((I,K))
 lambdaV = numpy.ones((I,K))/2.
 

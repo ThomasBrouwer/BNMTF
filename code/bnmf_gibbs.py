@@ -113,17 +113,30 @@ class bnmf_gibbs:
         for it in range(0,iterations):
             print "Iteration %s." % (it+1)
             
+            #print self.R - numpy.dot(self.U,self.V.T)
+                
+            #self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+            #print "Tau, alpha, beta: ", self.tau, self.alpha_s(), self.beta_s()  
+            
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
                 tauUik = self.tauU(i,k)
                 muUik = self.muU(tauUik,i,k)
                 self.U[i,k] = TruncatedNormal(muUik,tauUik).draw()
+                #print "i, k, U, mu, tau: ", i, k, self.U[i,k], muUik, tauUik
+                #print TruncatedNormal(muUik,tauUik).expectation()
+                
+            #self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+            #print "Tau, alpha, beta: ", self.tau, self.alpha_s(), self.beta_s()  
                 
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 tauVjk = self.tauV(j,k)
-                muVjk = self.muU(tauVjk,j,k)
+                muVjk = self.muV(tauVjk,j,k)
                 self.V[j,k] = TruncatedNormal(muVjk,tauVjk).draw()
+                #print "j, k, V, mu, tau: ", j, k, self.V[j,k], muVjk, tauVjk
+                #print TruncatedNormal(muVjk,tauVjk).expectation()          
                 
             self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+            #print "Tau, alpha, beta: ", self.tau, self.alpha_s(), self.beta_s()  
             
             self.all_U[it], self.all_V[it], self.all_tau[it] = numpy.copy(self.U), numpy.copy(self.V), self.tau
         

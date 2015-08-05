@@ -135,7 +135,7 @@ def test_muU():
     tauU = 3.*numpy.array([[2./9.,2./9.],[1./3.,1./3.],[2./9.,2./9.],[2./9.,2./9.],[1./3.,1./3.]])
     muU = 1./tauU * ( 3. * numpy.array([[2.*(5./6.)*(1./3.),10./18.],[15./18.,15./18.],[10./18.,10./18.],[10./18.,10./18.],[15./18.,15./18.]]) - lambdaU )
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert BNMF.muU(tauU[i,k],i,k) == muU[i,k]
+        assert abs(BNMF.muU(tauU[i,k],i,k) - muU[i,k]) < 0.000000000000001
         
 def test_tauV():
     BNMF = bnmf_gibbs(R,M,K,priors)

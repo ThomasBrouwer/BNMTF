@@ -20,11 +20,12 @@ class TruncatedNormal:
     # Draw a value for x ~ TruncatedNormal(mu,tau). If we get inf we set it to 0.
     def draw(self):
         d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
-        return d if (d != numpy.inf and not numpy.isnan(d)) else 0
+        return d if (d != numpy.inf and not numpy.isnan(d)) else 0.
         
     # Return expectation
     def expectation(self):
-        return truncnorm.stats(self.a, self.b, loc=self.mu, scale=self.sigma, moments='m')
+        exp = truncnorm.stats(self.a, self.b, loc=self.mu, scale=self.sigma, moments='m')
+        return exp if (exp != numpy.inf and not numpy.isnan(exp)) else 0.
         
     # Return variance. The library gives NaN for this due to b->inf, so we compute it ourselves
     def variance(self):
