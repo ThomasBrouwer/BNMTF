@@ -8,10 +8,10 @@ from BNMTF.code.bnmf_gibbs import bnmf_gibbs
 
 """ Test constructor """
 def test_init():
-    # Test getting an exception when R and M are different sizes, and when R is not a 2D array
+    # Test getting an exception when R and M are different sizes, and when R is not a 2D array.
     R1 = numpy.ones(3)
     M = numpy.ones((2,3))
-    I,J,K = 5,3,0
+    I,J,K = 5,3,1
     lambdaU = numpy.ones((I,K))
     lambdaV = numpy.ones((J,K))
     alpha, beta = 3, 1    
@@ -31,10 +31,27 @@ def test_init():
         bnmf_gibbs(R3,M,K,priors)
     assert str(error.value) == "Input matrix R is not of the same size as the indicator matrix M: (3, 2) and (2, 3) respectively."
     
-    # Test getting an exception if a row or column is entirely unknown
+    # Similarly for lambdaU, lambdaV
     R4 = numpy.ones((2,3))
+    lambdaU = numpy.ones((2+1,1))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    with pytest.raises(AssertionError) as error:
+        bnmf_gibbs(R4,M,K,priors)
+    assert str(error.value) == "Prior matrix lambdaU has the wrong shape: (3, 1) instead of (2, 1)."
+    
+    lambdaU = numpy.ones((2,1))
+    lambdaV = numpy.ones((3+1,1))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    with pytest.raises(AssertionError) as error:
+        bnmf_gibbs(R4,M,K,priors)
+    assert str(error.value) == "Prior matrix lambdaV has the wrong shape: (4, 1) instead of (3, 1)."
+    
+    # Test getting an exception if a row or column is entirely unknown
+    lambdaU = numpy.ones((2,1))
+    lambdaV = numpy.ones((3,1))
     M1 = [[1,1,1],[0,0,0]]
     M2 = [[1,1,0],[1,0,0]]
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     
     with pytest.raises(AssertionError) as error:
         bnmf_gibbs(R4,M1,K,priors)
@@ -46,7 +63,10 @@ def test_init():
     # Finally, a successful case
     I,J,K = 3,2,2
     R5 = 2*numpy.ones((I,J))
+    lambdaU = numpy.ones((I,K))
+    lambdaV = numpy.ones((J,K))
     M = numpy.ones((I,J))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     BNMF = bnmf_gibbs(R5,M,K,priors)
     
     assert numpy.array_equal(BNMF.R,R5)
@@ -206,7 +226,7 @@ def test_approx_expectation():
     
     R = numpy.ones((3,2))
     M = numpy.ones((3,2))
-    K = 3
+    I, J, K = 3, 2, 3
     lambdaU = 2*numpy.ones((I,K))
     lambdaV = 3*numpy.ones((J,K))
     alpha, beta = 3, 1
@@ -265,7 +285,7 @@ def test_predict():
 def test_compute_statistics():
     R = numpy.array([[1,2],[3,4]],dtype=float)
     M = numpy.array([[1,1],[0,1]])
-    K = 3
+    I, J, K = 2, 2, 3
     lambdaU = 2*numpy.ones((I,K))
     lambdaV = 3*numpy.ones((J,K))
     alpha, beta = 3, 1
