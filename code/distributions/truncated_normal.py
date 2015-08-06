@@ -4,6 +4,11 @@ allowing us to sample from it, and compute the expectation and the variance.
 
 truncnorm: a, b = (myclip_a - my_mean) / my_std, (myclip_b - my_mean) / my_std
            loc, scale = mu, sigma
+           
+Note that if the mean is negative and the variance very low, this results in 
+an expectation of ~inf (same for variance). In that case we actually want the
+value of that variable to be 0 (we want it to be ~ the negative value, and 0 is
+the closest thing). So we set inf values to 0.
 """
 import math, numpy
 from scipy.stats import truncnorm, norm
@@ -22,7 +27,7 @@ class TruncatedNormal:
         d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
         return d if (d != numpy.inf and not numpy.isnan(d)) else 0.
         
-    # Return expectation
+    # Return expectation.
     def expectation(self):
         exp = truncnorm.stats(self.a, self.b, loc=self.mu, scale=self.sigma, moments='m')
         return exp if (exp != numpy.inf and not numpy.isnan(exp)) else 0.

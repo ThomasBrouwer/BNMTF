@@ -177,8 +177,7 @@ def test_muV():
 #TODO: more complicated test case, check single value for U, V, tau
         
         
-""" Test two iterations, and that the values have changed in U and V.
-    This leads to lots of inf and 0's, so also tests whether we can handle that. """
+""" Test two iterations, and that the values have changed in U and V. """
 def test_run():
     I,J,K = 10,5,2
     R = numpy.ones((I,J))
