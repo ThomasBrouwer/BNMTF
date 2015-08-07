@@ -33,10 +33,8 @@ This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
 """
 
-import sys
-sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Documenten/PhD/")
-from BNMTF.code.distributions.gamma import Gamma
-from BNMTF.code.distributions.truncated_normal import TruncatedNormal
+from distributions.gamma import Gamma
+from distributions.truncated_normal import TruncatedNormal
 
 import numpy, itertools, math
 
@@ -126,9 +124,9 @@ class bnmf_vb:
         self.alpha_s = self.alpha + self.size_Omega/2.0
         self.beta_s = self.beta + 0.5*self.exp_square_diff()
         
-    def exp_square_diff(self): # Compute sum_Omega E_q(U,V) [ ( Rij - Ui Vj )^2 ]
-        return(self.M *( ( self.R - numpy.dot(self.expU,self.expV) )**2 - \
-                         ( numpy.dot(self.varU+self.expU**2, self.varV+self.expV**2) - numpy.dot(self.expU**2,self.expV**2) ) ) ).sum()
+    def exp_square_diff(self): # Compute: sum_Omega E_q(U,V) [ ( Rij - Ui Vj )^2 ]
+        return(self.M *( ( self.R - numpy.dot(self.expU,self.expV.T) )**2 - \
+                         ( numpy.dot(self.varU+self.expU**2, (self.varV+self.expV**2).T) - numpy.dot(self.expU**2,(self.expV**2).T) ) ) ).sum()
         
     def update_U(self,i,k):       
         self.tauU[i,k] = self.exptau*(self.M[i]*( self.expV[:,k]**2 - self.varV[:,k] )).sum()

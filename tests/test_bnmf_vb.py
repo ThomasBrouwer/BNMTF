@@ -165,16 +165,44 @@ lambdaV = 3*numpy.ones((J,K))
 alpha, beta = 3, 1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
-# muU=0.5, tauU=1., muV=1./3., tauV=1.
-
 def test_update_exp_U():
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         BNMF = bnmf_vb(R,M,K,priors)
-        BNMF.initialise() # muU = [[0.5]]
-        BNMF.update_exp_U(i,k)
-        assert abs(BNMF.expU[i,k] - (0.5 + 0.352065 / (1-0.3085))) < 0.0001
-        #assert BNMF.varU[i,k] == 0.
+        values = { 'tauU' : 4*numpy.ones((I,K)) }
+        BNMF.initialise(values) # muU = [[0.5]], tauU = [[4.]]
+        BNMF.update_exp_U(i,k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
+        assert abs(BNMF.expU[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
+        assert abs(BNMF.varU[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
 
+def test_update_exp_V():
+    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
+        BNMF = bnmf_vb(R,M,K,priors)
+        values = { 'tauV' : 4*numpy.ones((I,K)) }
+        BNMF.initialise(values) # muV = [[1./3.]], tauV = [[4.]]
+        BNMF.update_exp_V(j,k) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
+        assert abs(BNMF.expV[j,k] - (1./3. + 1./2. * 0.4273551839464883)) < 0.00001
+        assert abs(BNMF.varV[j,k] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
+
+def test_exp_square_diff():
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = 1./lambdaU #[[1./2.]]
+    BNMF.expV = 1./lambdaV #[[1./3.]]
+    BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
+    BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
+    # expU * expV.T = [[1./3.]]. (varU+expU^2)=2.25, (varV+expV^2)=3.+1./9.
+    exp_square_diff = -162.0 #12.*(4./9.) - 12.*(2*(2.25*(3.+1./9.)-0.25/9.)) 
+    assert BNMF.exp_square_diff() == exp_square_diff
+
+def test_update_tau():
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = 1./lambdaU #[[1./2.]]
+    BNMF.expV = 1./lambdaV #[[1./3.]]
+    BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
+    BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
+    BNMF.update_tau()
+    assert BNMF.alpha_s == alpha + 12./2.
+    assert BNMF.beta_s == beta - 162./2.
+    
 
 """ Test two iterations of run(), and that all values have changed. """
 def test_run():

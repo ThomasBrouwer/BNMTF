@@ -33,11 +33,9 @@ This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
 """
 
-import sys
-sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Documenten/PhD/")
-from BNMTF.code.distributions.exponential import Exponential
-from BNMTF.code.distributions.gamma import Gamma
-from BNMTF.code.distributions.truncated_normal import TruncatedNormal
+from distributions.exponential import Exponential
+from distributions.gamma import Gamma
+from distributions.truncated_normal import TruncatedNormal
 
 import numpy, itertools, math
 

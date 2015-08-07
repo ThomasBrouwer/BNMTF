@@ -27,7 +27,7 @@ class TruncatedNormal:
         d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
         return d if (d != numpy.inf and not numpy.isnan(d)) else 0.
         
-    # Return expectation.
+    # Return expectation. x = - self.mu / self.sigma; lambdax = norm.pdf(x)/(1-norm.cdf(x)); return self.mu + self.sigma * lambdax
     def expectation(self):
         exp = truncnorm.stats(self.a, self.b, loc=self.mu, scale=self.sigma, moments='m')
         return exp if (exp != numpy.inf and not numpy.isnan(exp)) else 0.

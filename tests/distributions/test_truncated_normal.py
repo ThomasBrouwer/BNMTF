@@ -22,6 +22,7 @@ def test_class():
     
     variance = sigma**2 * ( 1 - ( lambdav * ( lambdav + mu / sigma ) ) )
     assert tndist.variance() == variance  
+
     
 # Test a draw - simply verify it is > 0.
 # Also test whether we get inf for a very negative mean and high variance
