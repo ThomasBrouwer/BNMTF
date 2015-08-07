@@ -150,11 +150,7 @@ def test_initialise():
         assert BNMF.muV[j,k] == 200.
         
         
-""" Test updating parameters U, V, tau """        
-#TODO: 
- 
-
-""" Test computing expectation, variance U, V, tau """        
+""" Test updating parameters U, V, tau """          
 I,J,K = 5,3,2
 R = numpy.ones((I,J))
 M = numpy.ones((I,J))
@@ -165,6 +161,58 @@ lambdaV = 3*numpy.ones((J,K))
 alpha, beta = 3, 1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
+def test_exp_square_diff():
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = 1./lambdaU #[[1./2.]]
+    BNMF.expV = 1./lambdaV #[[1./3.]]
+    BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
+    BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
+    # expU * expV.T = [[1./3.]]. (varU+expU^2)=2.25, (varV+expV^2)=3.+1./9.
+    exp_square_diff = 172.66666666666666 #12.*(4./9.) + 12.*(2*(2.25*(3.+1./9.)-0.25/9.)) 
+    assert BNMF.exp_square_diff() == exp_square_diff
+
+def test_update_tau():
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = 1./lambdaU #[[1./2.]]
+    BNMF.expV = 1./lambdaV #[[1./3.]]
+    BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
+    BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
+    BNMF.update_tau()
+    assert BNMF.alpha_s == alpha + 12./2.
+    assert BNMF.beta_s == beta + 172.66666666666666/2.
+    
+def test_update_U():
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        BNMF = bnmf_vb(R,M,K,priors)
+        BNMF.muU = numpy.zeros((I,K))
+        BNMF.tauU = numpy.zeros((I,K))
+        BNMF.expU = 1./lambdaU #[[1./2.]]
+        BNMF.expV = 1./lambdaV #[[1./3.]]
+        BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
+        BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
+        BNMF.exptau = 3.
+        BNMF.update_U(i,k)
+        assert BNMF.tauU[i,k] == 3. * (M[i] * ( BNMF.expV[:,k]*BNMF.expV[:,k] + BNMF.varV[:,k] )).sum()
+        assert BNMF.muU[i,k] == (1./(3. * (M[i] * ( BNMF.expV[:,k]*BNMF.expV[:,k] + BNMF.varV[:,k] )).sum())) * \
+                                ( -2. + BNMF.exptau * (M[i]*( (BNMF.R[i] - numpy.dot(BNMF.expU[i],BNMF.expV.T) + BNMF.expU[i,k]*BNMF.expV[:,k])*BNMF.expV[:,k] )).sum() )
+
+def test_update_V():
+    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
+        BNMF = bnmf_vb(R,M,K,priors)
+        BNMF.muV = numpy.zeros((J,K))
+        BNMF.tauV = numpy.zeros((J,K))
+        BNMF.expU = 1./lambdaU #[[1./2.]]
+        BNMF.expV = 1./lambdaV #[[1./3.]]
+        BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
+        BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
+        BNMF.exptau = 3.
+        BNMF.update_V(j,k)
+        assert BNMF.tauV[j,k] == 3. * (M[:,j] * ( BNMF.expU[:,k]*BNMF.expU[:,k] + BNMF.varU[:,k] )).sum()
+        assert BNMF.muV[j,k] == (1./(3. * (M[:,j] * ( BNMF.expU[:,k]*BNMF.expU[:,k] + BNMF.varU[:,k] )).sum())) * \
+                                ( -3. + BNMF.exptau * (M[:,j]*( (BNMF.R[:,j] - numpy.dot(BNMF.expU,BNMF.expV[j]) + BNMF.expU[:,k]*BNMF.expV[j,k])*BNMF.expU[:,k] )).sum() )
+
+
+""" Test computing expectation, variance U, V, tau """     
 def test_update_exp_U():
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         BNMF = bnmf_vb(R,M,K,priors)
@@ -182,40 +230,52 @@ def test_update_exp_V():
         BNMF.update_exp_V(j,k) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
         assert abs(BNMF.expV[j,k] - (1./3. + 1./2. * 0.4273551839464883)) < 0.00001
         assert abs(BNMF.varV[j,k] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
-
-def test_exp_square_diff():
+    
+def test_update_exp_tau():
     BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.expU = 1./lambdaU #[[1./2.]]
-    BNMF.expV = 1./lambdaV #[[1./3.]]
-    BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
-    BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
-    # expU * expV.T = [[1./3.]]. (varU+expU^2)=2.25, (varV+expV^2)=3.+1./9.
-    exp_square_diff = -162.0 #12.*(4./9.) - 12.*(2*(2.25*(3.+1./9.)-0.25/9.)) 
-    assert BNMF.exp_square_diff() == exp_square_diff
-
-def test_update_tau():
-    BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.expU = 1./lambdaU #[[1./2.]]
-    BNMF.expV = 1./lambdaV #[[1./3.]]
-    BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
-    BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
-    BNMF.update_tau()
-    assert BNMF.alpha_s == alpha + 12./2.
-    assert BNMF.beta_s == beta - 162./2.
+    BNMF.initialise()  
+    BNMF.update_exp_tau()
+    assert BNMF.exptau == 3.
+    assert BNMF.explogtau == 0.9227843350984671393934879099175975689578406640600764 - 0.
     
 
 """ Test two iterations of run(), and that all values have changed. """
 def test_run():
-    #TODO:
-    return
+    I,J,K = 10,5,2
+    R = numpy.ones((I,J))
+    M = numpy.ones((I,J))
+    M[0,0], M[2,2], M[3,1] = 0, 0, 0
+    
+    lambdaU = 2*numpy.ones((I,K))
+    lambdaV = 3*numpy.ones((J,K))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    
+    iterations = 2
+    
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.initialise()
+    BNMF.run(iterations)
+    
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMF.muU[i,k] != 1./lambdaU[i,k]
+        assert BNMF.tauU[i,k] != 1.
+        assert BNMF.expU[i,k] != numpy.inf and not math.isnan(BNMF.expU[i,k])
+        assert BNMF.tauU[i,k] != numpy.inf and not math.isnan(BNMF.tauU[i,k])
+    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
+        assert BNMF.muV[j,k] != 1./lambdaV[j,k]
+        assert BNMF.tauV[j,k] != 1.
+        assert BNMF.expV[j,k] != numpy.inf and not math.isnan(BNMF.expV[j,k])
+        assert BNMF.tauV[j,k] != numpy.inf and not math.isnan(BNMF.tauV[j,k])
+    assert BNMF.alpha_s != alpha
+    assert BNMF.beta_s != beta
+    assert BNMF.exptau != numpy.inf and not math.isnan(BNMF.exptau)
+    assert BNMF.explogtau != numpy.inf and not math.isnan(BNMF.explogtau)
     
 
 """ Test computing the performance of the predictions using the expectations """
 def test_predict():
-    burn_in = 2
-    thinning = 3 # so index 2,5,8 -> m=3,m=6,m=9
     (I,J,K) = (5,3,2)
-    
     R = numpy.array([[1,2,3],[4,5,6],[7,8,9],[10,11,12],[13,14,15]],dtype=float)
     M = numpy.ones((I,J))
     K = 3
@@ -235,7 +295,7 @@ def test_predict():
     BNMF = bnmf_vb(R,M,K,priors)
     BNMF.expU = expU
     BNMF.expV = expV
-    performances = BNMF.predict(M_test,burn_in,thinning)
+    performances = BNMF.predict(M_test)
     
     assert performances['MSE'] == MSE
     assert performances['R^2'] == R2

@@ -116,7 +116,13 @@ class bnmf_vb:
             #TODO: Print the ELBO, the change in ELBO, and the performance
             
         
-        return (self.all_U, self.all_V, self.all_tau)
+        return
+        
+        
+    # Compute the ELBO
+    def elbo(self):
+        #TODO:
+        return        
         
         
     # Update the parameters for the distributions
@@ -125,16 +131,20 @@ class bnmf_vb:
         self.beta_s = self.beta + 0.5*self.exp_square_diff()
         
     def exp_square_diff(self): # Compute: sum_Omega E_q(U,V) [ ( Rij - Ui Vj )^2 ]
-        return(self.M *( ( self.R - numpy.dot(self.expU,self.expV.T) )**2 - \
+        return(self.M *( ( self.R - numpy.dot(self.expU,self.expV.T) )**2 + \
                          ( numpy.dot(self.varU+self.expU**2, (self.varV+self.expV**2).T) - numpy.dot(self.expU**2,(self.expV**2).T) ) ) ).sum()
         
     def update_U(self,i,k):       
-        self.tauU[i,k] = self.exptau*(self.M[i]*( self.expV[:,k]**2 - self.varV[:,k] )).sum()
+        self.tauU[i,k] = self.exptau*(self.M[i]*( self.varV[:,k] + self.expV[:,k]**2 )).sum()
+        #self.tauU[i,k] = self.exptau * sum([( self.varV[j,k] + self.expV[j,k]**2 ) for j in [1 for j in range(0,self.J) if self.M[i,j]]])
         self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
+        #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in [1 for j in range(0,self.J) if self.M[i,j]]]))
         
     def update_V(self,j,k):
-        self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.expU[:,k]**2 - self.varU[:,k] )).sum()
+        self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
+        #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in [1 for i in range(0,self.I) if self.M[i,j]]])
         self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
+        #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in [1 for i in range(0,self.I) if self.M[i,j]]]))
         
 
     # Update the expectations and variances
@@ -155,7 +165,7 @@ class bnmf_vb:
 
 
     # Compute the expectation of U and V, and use it to predict missing values
-    def predict(self,M_pred,burn_in,thinning):
+    def predict(self,M_pred):
         R_pred = numpy.dot(self.expU,self.expV.T)
         MSE = self.compute_MSE(M_pred,self.R,R_pred)
         R2 = self.compute_R2(M_pred,self.R,R_pred)    
