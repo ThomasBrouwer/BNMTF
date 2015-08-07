@@ -37,6 +37,7 @@ from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
 
 import numpy, itertools, math
+from scipy.stats import norm
 
 class bnmf_vb:
     def __init__(self,R,M,K,priors):
@@ -113,16 +114,27 @@ class bnmf_vb:
             self.update_tau()
             self.update_exp_tau()
             
-            #TODO: Print the ELBO, the change in ELBO, and the performance
-            
-        
+            perf, elbo = self.predict(self.M), self.elbo()
+            print "ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (elbo,perf['MSE'],perf['R^2'],perf['Rp'])
         return
         
         
     # Compute the ELBO
     def elbo(self):
-        #TODO:
-        return        
+        return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
+             - self.exptau / 2. * self.exp_square_diff() \
+             + numpy.log(self.lambdaU).sum() - ( self.lambdaU * self.expU ).sum() \
+             + numpy.log(self.lambdaV).sum() - ( self.lambdaV * self.expV ).sum() \
+             + self.alpha * math.log(self.beta) - math.log(math.gamma(self.alpha)) \
+             + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau \
+             - self.alpha_s * math.log(self.beta_s) + math.log(math.gamma(self.alpha_s)) \
+             - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau \
+             - .5*numpy.log(self.tauU).sum() + self.I*self.K/2.*math.log(2*math.pi) \
+             + numpy.log(1. - norm.cdf(-self.muU*numpy.sqrt(self.tauU))).sum() \
+             + ( self.tauU / 2. * ( self.varU + (self.expU - self.muU)**2 ) ).sum() \
+             - .5*numpy.log(self.tauV).sum() + self.J*self.K/2.*math.log(2*math.pi) \
+             + numpy.log(1. - norm.cdf(-self.muV*numpy.sqrt(self.tauV))).sum() \
+             + ( self.tauV / 2. * ( self.varV + (self.expV - self.muV)**2 ) ).sum()
         
         
     # Update the parameters for the distributions

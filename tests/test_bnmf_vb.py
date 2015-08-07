@@ -150,6 +150,11 @@ def test_initialise():
         assert BNMF.muV[j,k] == 200.
         
         
+""" Test computing the ELBO. """
+def test_elbo():
+    return
+    
+        
 """ Test updating parameters U, V, tau """          
 I,J,K = 5,3,2
 R = numpy.ones((I,J))
@@ -245,6 +250,7 @@ def test_run():
     R = numpy.ones((I,J))
     M = numpy.ones((I,J))
     M[0,0], M[2,2], M[3,1] = 0, 0, 0
+    R[0,1], R[0,2] = 2., 3.
     
     lambdaU = 2*numpy.ones((I,K))
     lambdaV = 3*numpy.ones((J,K))
