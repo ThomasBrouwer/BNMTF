@@ -3,6 +3,7 @@ Test the class for Truncated Normal draws and expectations in truncated_normal.p
 """
 from BNMTF.code.distributions.truncated_normal import TruncatedNormal
 from scipy.stats import norm
+import numpy
 
 def test_class():
     mu = 1.0
@@ -23,6 +24,12 @@ def test_class():
     variance = sigma**2 * ( 1 - ( lambdav * ( lambdav + mu / sigma ) ) )
     assert tndist.variance() == variance  
 
+    # Also test that we get variance and exp 0 if tau is very high and mu negative
+    mu = -1.
+    tau = 2000.
+    tndist = TruncatedNormal(mu,tau)
+    assert tndist.expectation() == 0.
+    assert tndist.variance() == 0.
     
 # Test a draw - simply verify it is > 0.
 # Also test whether we get inf for a very negative mean and high variance

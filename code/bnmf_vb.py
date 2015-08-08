@@ -36,7 +36,7 @@ This gives a dictionary of performances,
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
 
-import numpy, itertools, math
+import numpy, itertools, math, scipy
 from scipy.stats import norm
 
 class bnmf_vb:
@@ -106,6 +106,7 @@ class bnmf_vb:
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
                 self.update_U(i,k)
                 self.update_exp_U(i,k)
+                #print i,k, self.muU[i,k], self.tauU[i,k], self.expU[i,k], self.varU[i,k]
                 
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 self.update_V(j,k)
@@ -121,13 +122,30 @@ class bnmf_vb:
         
     # Compute the ELBO
     def elbo(self):
+        '''
+        v1 = self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) )
+        v2 = - self.exptau / 2. * self.exp_square_diff()
+        v3 =  numpy.log(self.lambdaU).sum() - ( self.lambdaU * self.expU ).sum()
+        v4 = numpy.log(self.lambdaV).sum() - ( self.lambdaV * self.expV ).sum()
+        v5 = self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha)
+        v6 = (self.alpha - 1.)*self.explogtau - self.beta * self.exptau
+        v7 = - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s)
+        v8 = - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau
+        v9 = - .5*numpy.log(self.tauU).sum() + self.I*self.K/2.*math.log(2*math.pi)
+        v10 = numpy.log(1. - norm.cdf(-self.muU*numpy.sqrt(self.tauU))).sum()
+        v11 = ( self.tauU / 2. * ( self.varU + (self.expU - self.muU)**2 ) ).sum()
+        v12 = - .5*numpy.log(self.tauV).sum() + self.J*self.K/2.*math.log(2*math.pi)
+        v13 = numpy.log(1. - norm.cdf(-self.muV*numpy.sqrt(self.tauV))).sum()
+        v14 = ( self.tauV / 2. * ( self.varV + (self.expV - self.muV)**2 ) ).sum()
+        '''
+        
         return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
              - self.exptau / 2. * self.exp_square_diff() \
              + numpy.log(self.lambdaU).sum() - ( self.lambdaU * self.expU ).sum() \
              + numpy.log(self.lambdaV).sum() - ( self.lambdaV * self.expV ).sum() \
-             + self.alpha * math.log(self.beta) - math.log(math.gamma(self.alpha)) \
+             + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha) \
              + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau \
-             - self.alpha_s * math.log(self.beta_s) + math.log(math.gamma(self.alpha_s)) \
+             - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s) \
              - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau \
              - .5*numpy.log(self.tauU).sum() + self.I*self.K/2.*math.log(2*math.pi) \
              + numpy.log(1. - norm.cdf(-self.muU*numpy.sqrt(self.tauU))).sum() \
@@ -152,11 +170,16 @@ class bnmf_vb:
         self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
         #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in [1 for j in range(0,self.J) if self.M[i,j]]]))
         
+        
     def update_V(self,j,k):
+        #print zip(self.varU[:,k], self.expU[:,k])        
+        
         self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
         #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in [1 for i in range(0,self.I) if self.M[i,j]]])
         self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
         #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in [1 for i in range(0,self.I) if self.M[i,j]]]))
+        
+        #print self.tauV[j,k], self.muV[j,k]        
         
 
     # Update the expectations and variances
