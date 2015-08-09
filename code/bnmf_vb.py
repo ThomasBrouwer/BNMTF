@@ -100,13 +100,12 @@ class bnmf_vb:
 
     # Run the Gibbs sampler
     def run(self,iterations):
+        self.all_exp_tau = []  # to check for convergence     
+        
         for it in range(0,iterations):
-            print "Iteration %s." % (it+1)
-            
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
                 self.update_U(i,k)
                 self.update_exp_U(i,k)
-                #print i,k, self.muU[i,k], self.tauU[i,k], self.expU[i,k], self.varU[i,k]
                 
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 self.update_V(j,k)
@@ -114,31 +113,16 @@ class bnmf_vb:
                 
             self.update_tau()
             self.update_exp_tau()
+            self.all_exp_tau.append(self.exptau)
             
             perf, elbo = self.predict(self.M), self.elbo()
-            print "ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (elbo,perf['MSE'],perf['R^2'],perf['Rp'])
+            print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
+            
         return
         
         
     # Compute the ELBO
     def elbo(self):
-        '''
-        v1 = self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) )
-        v2 = - self.exptau / 2. * self.exp_square_diff()
-        v3 =  numpy.log(self.lambdaU).sum() - ( self.lambdaU * self.expU ).sum()
-        v4 = numpy.log(self.lambdaV).sum() - ( self.lambdaV * self.expV ).sum()
-        v5 = self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha)
-        v6 = (self.alpha - 1.)*self.explogtau - self.beta * self.exptau
-        v7 = - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s)
-        v8 = - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau
-        v9 = - .5*numpy.log(self.tauU).sum() + self.I*self.K/2.*math.log(2*math.pi)
-        v10 = numpy.log(1. - norm.cdf(-self.muU*numpy.sqrt(self.tauU))).sum()
-        v11 = ( self.tauU / 2. * ( self.varU + (self.expU - self.muU)**2 ) ).sum()
-        v12 = - .5*numpy.log(self.tauV).sum() + self.J*self.K/2.*math.log(2*math.pi)
-        v13 = numpy.log(1. - norm.cdf(-self.muV*numpy.sqrt(self.tauV))).sum()
-        v14 = ( self.tauV / 2. * ( self.varV + (self.expV - self.muV)**2 ) ).sum()
-        '''
-        
         return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
              - self.exptau / 2. * self.exp_square_diff() \
              + numpy.log(self.lambdaU).sum() - ( self.lambdaU * self.expU ).sum() \
