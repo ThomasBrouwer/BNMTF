@@ -35,7 +35,7 @@ I,J,K = 100, 50, 10
 
 alpha, beta = 1., 1.
 lambdaU = numpy.ones((I,K))
-lambdaV = numpy.ones((J,K))/2.    
+lambdaV = numpy.ones((J,K))  
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
 # For each tau, generate a dataset, and mask matrices

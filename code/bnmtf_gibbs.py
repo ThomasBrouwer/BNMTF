@@ -154,32 +154,37 @@ class bnmf_gibbs:
     def tauF(self,i,k):       
         return self.tau * ( self.M[i] * numpy.dot(self.S[k],self.G.T)**2 ).sum()
         
-    def muF(self,tauUik,i,k):
-        return 1./tauUik * (-self.lambdaU[i,k] + self.tau*(self.M[i] * ( (self.R[i]-numpy.dot(self.U[i],self.V.T)+self.U[i,k]*self.V[:,k])*self.V[:,k] )).sum()) 
+    def muF(self,tauFik,i,k):
+        return 1./tauFik * (-self.lambdaF[i,k] + self.tau*(self.M[i] * ( (self.R[i]-self.triple_dot(self.F[i],self.S,self.G.T)+self.F[i,k]*numpy.dot(self.S[k],self.G.T))*numpy.dot(self.S[k],self.G.T) )).sum()) 
         
     def tauS(self,k,l):       
         return self.tau * ( self.M * numpy.outer(self.F[:,k]**2,self.G[:,l]**2) ).sum()
         
-    def muV(self,tauVjk,j,k):
-        return 1./tauVjk * (-self.lambdaV[j,k] + self.tau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.U,self.V[j])+self.U[:,k]*self.V[j,k])*self.U[:,k] )).sum()) 
-
+    def muS(self,tauSkl,k,l):
+        return 1./tauSkl * (-self.lambdaS[k,l] + self.tau*(self.M * ( (self.R-self.triple_dot(self.F,self.S,self.G.T)+self.S[k,l]*numpy.outer(self.F[:,k],self.G[:,l]))*numpy.outer(self.F[:,k],self.G[:,l]) )).sum()) 
+        
     def tauG(self,j,l):       
         return self.tau * ( self.M[:,j] * numpy.dot(self.F,self.S[:,l])**2 ).sum()
+        
+    def muG(self,tauGjl,j,l):
+        return 1./tauGjl * (-self.lambdaG[j,l] + self.tau*(self.M[:,j] * ( (self.R[:,j]-self.triple_dot(self.F,self.S,self.G[j])+self.G[j,l]*numpy.dot(self.F,self.S[:,l]))*numpy.dot(self.F,self.S[:,l]) )).sum()) 
+        
 
     # Return the average value for U, V, tau - i.e. our approximation to the expectations. 
     # Throw away the first <burn_in> samples, and then use every <thinning>th after.
     def approx_expectation(self,burn_in,thinning):
-        indices = range(burn_in,len(self.all_U),thinning)
-        exp_U = numpy.array([self.all_U[i] for i in indices]).sum(axis=0) / float(len(indices))      
-        exp_V = numpy.array([self.all_V[i] for i in indices]).sum(axis=0) / float(len(indices))  
+        indices = range(burn_in,len(self.all_F),thinning)
+        exp_F = numpy.array([self.all_F[i] for i in indices]).sum(axis=0) / float(len(indices))      
+        exp_S = numpy.array([self.all_S[i] for i in indices]).sum(axis=0) / float(len(indices))   
+        exp_G = numpy.array([self.all_G[i] for i in indices]).sum(axis=0) / float(len(indices))  
         exp_tau = sum([self.all_tau[i] for i in indices]) / float(len(indices))
-        return (exp_U, exp_V, exp_tau)
+        return (exp_F, exp_S, exp_G, exp_tau)
 
 
     # Compute the expectation of U and V, and use it to predict missing values
     def predict(self,M_pred,burn_in,thinning):
-        (exp_U,exp_V,_) = self.approx_expectation(burn_in,thinning)
-        R_pred = numpy.dot(exp_U,exp_V.T)
+        (exp_F,exp_S,exp_G,_) = self.approx_expectation(burn_in,thinning)
+        R_pred = self.triple_dot(exp_F,exp_S,exp_G.T)
         MSE = self.compute_MSE(M_pred,self.R,R_pred)
         R2 = self.compute_R2(M_pred,self.R,R_pred)    
         Rp = self.compute_Rp(M_pred,self.R,R_pred)        
