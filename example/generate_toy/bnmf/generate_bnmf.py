@@ -24,16 +24,14 @@ from ml_helpers.code.mask import generate_M
 
 import numpy, itertools
 
-def generate_dataset(I,J,K,lambdaU,lambdaV,alpha,beta):
+def generate_dataset(I,J,K,lambdaU,lambdaV,tau):
     # Generate U, V
     U = numpy.zeros((I,K))
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         U[i,k] = Exponential(lambdaU[i,k]).draw()
-    V = numpy.zeros((I,K))
+    V = numpy.zeros((J,K))
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
         V[j,k] = Exponential(lambdaV[j,k]).draw()
-        
-    tau = alpha / beta
     
     # Generate R
     true_R = numpy.dot(U,V.T)
@@ -53,8 +51,9 @@ if __name__ == "__main__":
     alpha, beta = 0.1, 1.
     lambdaU = numpy.ones((I,K))
     lambdaV = numpy.ones((I,K))/2.
+    tau = alpha / beta
     
-    (U,V,tau,true_R,R) = generate_dataset(I,J,K,lambdaU,lambdaV,alpha,beta)
+    (U,V,tau,true_R,R) = generate_dataset(I,J,K,lambdaU,lambdaV,tau)
     M = generate_M(I,J,fraction_unknown)
     
     # Store all matrices in text files

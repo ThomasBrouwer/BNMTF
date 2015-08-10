@@ -20,11 +20,11 @@ import numpy, matplotlib.pyplot as plt
 ##########
 
 fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8 ]
-noise_levels = [ 100., 10., 1., 0.1, 0.01 ] # values for tau
+noise_levels = [ 0.01, 0.1, 1., 10., 100. ] # values for tau
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-iterations = 100#1000
+iterations = 1000
 I,J,K = 100, 50, 10
 
 alpha, beta = 1., 1.
@@ -37,7 +37,7 @@ all_R = []
 all_Ms = []
 all_Ms_test = []
 for noise in noise_levels:
-    (_,_,_,_,R) = generate_dataset(I,J,K,lambdaU,lambdaV,alpha,beta)
+    (_,_,_,R_true,R) = generate_dataset(I,J,K,lambdaU,lambdaV,noise)
     Ms = [ generate_M(I,J,fraction) for fraction in fractions_unknown ]
     Ms_test = [ calc_inverse_M(M) for M in Ms ]
     
