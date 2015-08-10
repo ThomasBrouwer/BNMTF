@@ -25,12 +25,12 @@ import numpy, matplotlib.pyplot as plt
 
 ##########
 
-fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8 ]
+fractions_unknown = [0.8]#[ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8 ]
 noise_ratios = [ 0.01, 0.1, 0.2, 0.5, 1. ] # 1/SNR
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-iterations = 1000
+iterations = 100
 I,J,K = 100, 50, 10
 
 alpha, beta = 1., 1.
@@ -43,7 +43,7 @@ all_R = []
 all_Ms = []
 all_Ms_test = []
 for noise in noise_ratios:
-    (_,_,_,true_R,_) = generate_dataset(I,J,K,lambdaU,lambdaV,alpha,beta)
+    (_,_,_,true_R,_) = generate_dataset(I,J,K,lambdaU,lambdaV,alpha/beta)
     
     variance_signal = true_R.var()
     tau = 1. / (variance_signal * noise)

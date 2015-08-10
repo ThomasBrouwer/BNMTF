@@ -149,18 +149,12 @@ class bnmf_vb:
         self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
         #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in [1 for j in range(0,self.J) if self.M[i,j]]]))
         
-        
     def update_V(self,j,k):
-        #print zip(self.varU[:,k], self.expU[:,k])        
-        
         self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
         #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in [1 for i in range(0,self.I) if self.M[i,j]]])
         self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
         #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in [1 for i in range(0,self.I) if self.M[i,j]]]))
         
-        #print self.tauV[j,k], self.muV[j,k]        
-        
-
     # Update the expectations and variances
     def update_exp_U(self,i,k):
         tn = TruncatedNormal(self.muU[i,k],self.tauU[i,k])
