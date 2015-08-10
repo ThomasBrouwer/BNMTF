@@ -2,7 +2,7 @@
 Tests for the BNMF Gibbs sampler.
 """
 
-import numpy, math, pytest, itertools, random
+import numpy, math, pytest, itertools
 from BNMTF.code.bnmf_gibbs import bnmf_gibbs
 
 

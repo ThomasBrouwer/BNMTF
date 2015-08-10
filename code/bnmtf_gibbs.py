@@ -39,7 +39,7 @@ from distributions.truncated_normal import TruncatedNormal
 
 import numpy, itertools, math
 
-class bnmf_gibbs:
+class bnmtf_gibbs:
     def __init__(self,R,M,K,L,priors):
         self.R = numpy.array(R,dtype=float)
         self.M = numpy.array(M,dtype=float)
@@ -58,9 +58,9 @@ class bnmf_gibbs:
         self.alpha, self.beta, self.lambdaF, self.lambdaS, self.lambdaG = \
             float(priors['alpha']), float(priors['beta']), numpy.array(priors['lambdaF']), numpy.array(priors['lambdaS']), numpy.array(priors['lambdaG'])
         
-        assert self.lambdaF.shape == (self.I,self.K), "Prior matrix lambdaU has the wrong shape: %s instead of (%s, %s)." % (self.lambdaU.shape,self.I,self.K)
-        assert self.lambdaS.shape == (self.K,self.L), "Prior matrix lambdaV has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.K,self.L)
-        assert self.lambdaG.shape == (self.J,self.L), "Prior matrix lambdaV has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.J,self.L)
+        assert self.lambdaF.shape == (self.I,self.K), "Prior matrix lambdaF has the wrong shape: %s instead of (%s, %s)." % (self.lambdaF.shape,self.I,self.K)
+        assert self.lambdaS.shape == (self.K,self.L), "Prior matrix lambdaS has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.K,self.L)
+        assert self.lambdaG.shape == (self.J,self.L), "Prior matrix lambdaG has the wrong shape: %s instead of (%s, %s)." % (self.lambdaG.shape,self.J,self.L)
             
         
     # Raise an exception if an entire row or column is empty
