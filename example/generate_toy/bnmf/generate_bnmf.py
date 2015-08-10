@@ -35,11 +35,19 @@ def generate_dataset(I,J,K,lambdaU,lambdaV,tau):
     
     # Generate R
     true_R = numpy.dot(U,V.T)
+    
+    R = numpy.zeros((I,J))
+    for i,j in itertools.product(xrange(0,I),xrange(0,J)):
+        R[i,j] = Normal(true_R[i,j],tau).draw()   
+        
+    return (U,V,tau,true_R,R)
+    
+def add_noise(true_R,tau):
+    (I,J) = true_R.shape
     R = numpy.zeros((I,J))
     for i,j in itertools.product(xrange(0,I),xrange(0,J)):
         R[i,j] = Normal(true_R[i,j],tau).draw()
-        
-    return (U,V,tau,true_R,R)
+    return R
     
 ##########
 

@@ -16,19 +16,14 @@ Alternatively, you can pass a dictionary { 'muU', 'tauU', 'muV', 'tauV', 'alpha_
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.initisalise(init)
+    BNMF.initisalise()
     BNMF.run(iterations)
 Or:
     BNMF = bnmf_vb(R,M,K,priors)
     BNMF.train(init,iterations)
-    
-This returns a tuple (expU,varU,expV,varV,exptau) of lists of U, V, tau values - of size <iterations>.
-
-The expectation can be computed by specifying a burn-in and thinning rate, and using:
-    BNMF.approx_expectation(burn_in,thinning)
 
 We can test the performance of our model on a test dataset, specifying our test set with a mask M. 
-    performance = BNMF.predict(M_pred,burn_in,thinning)
+    performance = BNMF.predict(M_pred)
 This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
 """
@@ -74,8 +69,8 @@ class bnmf_vb:
 
 
     # Initialise and run the sampler
-    def train(self,init,iterations):
-        self.initialise(init=init)
+    def train(self,iterations):
+        self.initialise()
         return self.run(iterations)
 
 

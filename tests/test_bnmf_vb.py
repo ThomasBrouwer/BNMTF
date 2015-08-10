@@ -152,6 +152,7 @@ def test_initialise():
         
 """ Test computing the ELBO. """
 def test_elbo():
+    #TODO:
     return
     
         
