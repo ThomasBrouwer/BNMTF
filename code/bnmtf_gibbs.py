@@ -1,0 +1,205 @@
+"""
+Gibbs sampler for non-negative matrix tri-factorisation.
+
+We expect the following arguments:
+- R, the matrix
+- M, the mask matrix indicating observed values (1) and unobserved ones (0)
+- K, the number of row clusters
+- L, the number of column clusters
+- priors = { 'alpha' = alpha_R, 'beta' = beta_R, 'lambdaF' = [[lambdaFik]], 'lambdaS' = [[lambdaSkl]], 'lambdaG' = [[lambdaGjl]] },
+    a dictionary defining the priors over tau, F, S, G.
+    
+Initialisation can be done by running the initialise() function, with argument init:
+- init='random' -> draw initial values randomly from priors Exp, Gamma
+- init='exp'    -> use the expectation of the priors Exp, Gamma
+Alternatively, you can define your own initial values for F, S, G, and tau.
+
+Usage of class:
+    BNMF = bnmf_gibbs(R,M,K,L,priors)
+    BNMF.initisalise(init)
+    BNMF.run(iterations)
+Or:
+    BNMF = bnmf_gibbs(R,M,K,L,priors)
+    BNMF.train(init,iterations)
+    
+This returns a tuple (Fs,Ss,Gs,taus) of lists of F, S, G, tau values - of size <iterations>.
+
+The expectation can be computed by specifying a burn-in and thinning rate, and using:
+    BNMF.approx_expectation(burn_in,thinning)
+
+We can test the performance of our model on a test dataset, specifying our test set with a mask M. 
+    performance = BNMF.predict(M_pred,burn_in,thinning)
+This gives a dictionary of performances,
+    performance = { 'MSE', 'R^2', 'Rp' }
+"""
+
+from distributions.exponential import Exponential
+from distributions.gamma import Gamma
+from distributions.truncated_normal import TruncatedNormal
+
+import numpy, itertools, math
+
+class bnmf_gibbs:
+    def __init__(self,R,M,K,L,priors):
+        self.R = numpy.array(R,dtype=float)
+        self.M = numpy.array(M,dtype=float)
+        self.K = K
+        self.L = L
+        
+        assert len(self.R.shape) == 2, "Input matrix R is not a two-dimensional array, " \
+            "but instead %s-dimensional." % len(self.R.shape)
+        assert self.R.shape == self.M.shape, "Input matrix R is not of the same size as " \
+            "the indicator matrix M: %s and %s respectively." % (self.R.shape,self.M.shape)
+            
+        (self.I,self.J) = self.R.shape
+        self.size_Omega = self.M.sum()
+        self.check_empty_rows_columns()      
+        
+        self.alpha, self.beta, self.lambdaF, self.lambdaS, self.lambdaG = \
+            float(priors['alpha']), float(priors['beta']), numpy.array(priors['lambdaF']), numpy.array(priors['lambdaS']), numpy.array(priors['lambdaG'])
+        
+        assert self.lambdaF.shape == (self.I,self.K), "Prior matrix lambdaU has the wrong shape: %s instead of (%s, %s)." % (self.lambdaU.shape,self.I,self.K)
+        assert self.lambdaS.shape == (self.K,self.L), "Prior matrix lambdaV has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.K,self.L)
+        assert self.lambdaG.shape == (self.J,self.L), "Prior matrix lambdaV has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.J,self.L)
+            
+        
+    # Raise an exception if an entire row or column is empty
+    def check_empty_rows_columns(self):
+        sums_columns = self.M.sum(axis=0)
+        sums_rows = self.M.sum(axis=1)
+                    
+        # Assert none of the rows or columns are entirely unknown values
+        for i,c in enumerate(sums_rows):
+            assert c != 0, "Fully unobserved row in R, row %s." % i
+        for j,c in enumerate(sums_columns):
+            assert c != 0, "Fully unobserved column in R, column %s." % j
+
+
+    # Initialise and run the sampler
+    def train(self,init,iterations):
+        self.initialise(init=init)
+        return self.run(iterations)
+
+
+    # Initialise U, V, and tau. If init='random', draw values from an Exp and Gamma distribution. If init='exp', set it to the expectation values.
+    def initialise(self,init='random'):
+        assert init in ['random','exp'], "Unknown initialisation option: %s. Should be 'random' or 'exp'." % init
+        self.F = numpy.zeros((self.I,self.K))
+        self.S = numpy.zeros((self.K,self.L))
+        self.G = numpy.zeros((self.J,self.L))
+        
+        if init == 'random':
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                self.F[i,k] = Exponential(self.lambdaF[i][k]).draw()
+            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
+                self.S[k,l] = Exponential(self.lambdaS[k][l]).draw()
+            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
+                self.G[j,l] = Exponential(self.lambdaG[j][l]).draw()
+            self.tau = Gamma(self.alpha,self.beta).draw()
+            
+        elif init == 'exp':
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                self.F[i,k] = 1.0/self.lambdaF[i][k]
+            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
+                self.S[k,l] = 1.0/self.lambdaS[k][l]
+            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
+                self.G[j,l] = 1.0/self.lambdaG[j][l]
+            self.tau = self.alpha/self.beta
+
+
+    # Run the Gibbs sampler
+    def run(self,iterations):
+        self.all_F = numpy.zeros((iterations,self.I,self.K))  
+        self.all_S = numpy.zeros((iterations,self.K,self.L))   
+        self.all_G = numpy.zeros((iterations,self.J,self.L))  
+        self.all_tau = numpy.zeros(iterations)
+        
+        for it in range(0,iterations):
+            print "Iteration %s." % (it+1)
+            
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                tauFik = self.tauF(i,k)
+                muFik = self.muF(tauFik,i,k)
+                self.F[i,k] = TruncatedNormal(muFik,tauFik).draw()
+                
+            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
+                tauSkl = self.tauS(k,l)
+                muSkl = self.muS(tauSkl,k,l)
+                self.S[k,l] = TruncatedNormal(muSkl,tauSkl).draw()
+                
+            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
+                tauGjl = self.tauG(j,l)
+                muGjl = self.muG(tauGjl,j,l)
+                self.G[j,l] = TruncatedNormal(muGjl,tauGjl).draw()
+                
+            self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+            
+            self.all_F[it], self.all_S[it], self.all_G[it], self.all_tau[it] = numpy.copy(self.F), numpy.copy(self.S), numpy.copy(self.G), self.tau
+        
+        return (self.all_F, self.all_S, self.all_G, self.all_tau)
+        
+
+    # Compute the dot product of three matrices
+    def triple_dot(self,M1,M2,M3):
+        return numpy.dot(M1,numpy.dot(M2,M3))
+        
+        
+    # Compute the parameters for the distributions we sample from
+    def alpha_s(self):   
+        return self.alpha + self.size_Omega/2.0
+    
+    def beta_s(self):   
+        return self.beta + 0.5*(self.M*(self.R-self.triple_dot(self.F,self.S,self.G.T))**2).sum()
+        
+    def tauF(self,i,k):       
+        return self.tau * ( self.M[i] * numpy.dot(self.S[k],self.G.T)**2 ).sum()
+        
+    def muF(self,tauUik,i,k):
+        return 1./tauUik * (-self.lambdaU[i,k] + self.tau*(self.M[i] * ( (self.R[i]-numpy.dot(self.U[i],self.V.T)+self.U[i,k]*self.V[:,k])*self.V[:,k] )).sum()) 
+        
+    def tauS(self,k,l):       
+        return self.tau * ( self.M * numpy.outer(self.F[:,k]**2,self.G[:,l]**2) ).sum()
+        
+    def muV(self,tauVjk,j,k):
+        return 1./tauVjk * (-self.lambdaV[j,k] + self.tau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.U,self.V[j])+self.U[:,k]*self.V[j,k])*self.U[:,k] )).sum()) 
+
+    def tauG(self,j,l):       
+        return self.tau * ( self.M[:,j] * numpy.dot(self.F,self.S[:,l])**2 ).sum()
+
+    # Return the average value for U, V, tau - i.e. our approximation to the expectations. 
+    # Throw away the first <burn_in> samples, and then use every <thinning>th after.
+    def approx_expectation(self,burn_in,thinning):
+        indices = range(burn_in,len(self.all_U),thinning)
+        exp_U = numpy.array([self.all_U[i] for i in indices]).sum(axis=0) / float(len(indices))      
+        exp_V = numpy.array([self.all_V[i] for i in indices]).sum(axis=0) / float(len(indices))  
+        exp_tau = sum([self.all_tau[i] for i in indices]) / float(len(indices))
+        return (exp_U, exp_V, exp_tau)
+
+
+    # Compute the expectation of U and V, and use it to predict missing values
+    def predict(self,M_pred,burn_in,thinning):
+        (exp_U,exp_V,_) = self.approx_expectation(burn_in,thinning)
+        R_pred = numpy.dot(exp_U,exp_V.T)
+        MSE = self.compute_MSE(M_pred,self.R,R_pred)
+        R2 = self.compute_R2(M_pred,self.R,R_pred)    
+        Rp = self.compute_Rp(M_pred,self.R,R_pred)        
+        return {'MSE':MSE,'R^2':R2,'Rp':Rp}
+        
+        
+    # Functions for computing MSE, R^2 (coefficient of determination), Rp (Pearson correlation)
+    def compute_MSE(self,M,R,R_pred):
+        return (M * (R-R_pred)**2).sum() / float(M.sum())
+        
+    def compute_R2(self,M,R,R_pred):
+        mean = (M*R).sum() / float(M.sum())
+        SS_total = float((M*(R-mean)**2).sum())
+        SS_res = float((M*(R-R_pred)**2).sum())
+        return 1. - SS_res / SS_total
+        
+    def compute_Rp(self,M,R,R_pred):
+        mean_real = (M*R).sum() / float(M.sum())
+        mean_pred = (M*R_pred).sum() / float(M.sum())
+        covariance = (M*(R-mean_real)*(R_pred-mean_pred)).sum()
+        variance_real = (M*(R-mean_real)**2).sum()
+        variance_pred = (M*(R_pred-mean_pred)**2).sum()
+        return covariance / float(math.sqrt(variance_real)*math.sqrt(variance_pred))
