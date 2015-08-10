@@ -223,9 +223,8 @@ def test_approx_expectation():
     expected_exp_U = numpy.array([[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.]])
     expected_exp_V = numpy.array([[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)],[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)],[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)]])
     
-    R = numpy.ones((3,2))
-    M = numpy.ones((3,2))
-    I, J, K = 3, 2, 3
+    R = numpy.ones((I,J))
+    M = numpy.ones((I,J))
     lambdaU = 2*numpy.ones((I,K))
     lambdaV = 3*numpy.ones((J,K))
     alpha, beta = 3, 1

@@ -202,71 +202,79 @@ def test_muG():
     assert False
       
       
-#TODO:
 """ Test some iterations, and that the values have changed in U and V. """
 def test_run():
-    I,J,K = 10,5,2
+    I,J,K,L = 10,5,3,2
     R = numpy.ones((I,J))
     M = numpy.ones((I,J))
     M[0,0], M[2,2], M[3,1] = 0, 0, 0
     
-    lambdaU = 2*numpy.ones((I,K))
-    lambdaV = 3*numpy.ones((J,K))
+    lambdaF = 2*numpy.ones((I,K))
+    lambdaS = 3*numpy.ones((K,L))
+    lambdaG = 4*numpy.ones((J,L))
     alpha, beta = 3, 1
-    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
-    init = 'exp' #U=1/2,V=1/3
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+    init = 'exp' #F=1/2,S=1/3,G=1/4
     
-    U_prior = numpy.ones((I,K))/2.
-    V_prior = numpy.ones((J,K))/3.
+    F_prior = numpy.ones((I,K))/2.
+    S_prior = numpy.ones((K,L))/3.
+    G_prior = numpy.ones((J,L))/4.
     
     iterations = 15
     
-    BNMF = bnmf_gibbs(R,M,K,priors)
-    BNMF.initialise(init)
-    (Us,Vs,taus) = BNMF.run(iterations)
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.initialise(init)
+    (Fs,Ss,Gs,taus) = BNMTF.run(iterations)
     
-    assert BNMF.all_U.shape == (iterations,I,K)
-    assert BNMF.all_V.shape == (iterations,J,K)
-    assert BNMF.all_tau.shape == (iterations,)
+    assert BNMTF.all_F.shape == (iterations,I,K)
+    assert BNMTF.all_S.shape == (iterations,K,L)
+    assert BNMTF.all_G.shape == (iterations,J,L)
+    assert BNMTF.all_tau.shape == (iterations,)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert Us[0,i,k] != U_prior[i,k]
-    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
-        assert Vs[0,j,k] != V_prior[j,k]
+        assert Fs[0,i,k] != F_prior[i,k]
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert Ss[0,k,l] != S_prior[k,l]
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert Gs[0,j,l] != G_prior[j,l]
     assert taus[1] != alpha/float(beta)
     
     
 #TODO:
-""" Test approximating the expectations for U, V, tau """
+""" Test approximating the expectations for F, S, G, tau """
 def test_approx_expectation():
     burn_in = 2
     thinning = 3 # so index 2,5,8 -> m=3,m=6,m=9
-    (I,J,K) = (5,3,2)
-    Us = [numpy.ones((I,K)) * 3*m**2 for m in range(1,10+1)] #first is 1's, second is 4's, third is 9's, etc.
-    Vs = [numpy.ones((J,K)) * 2*m**2 for m in range(1,10+1)]
+    (I,J,K,L) = (5,3,2,4)
+    Fs = [numpy.ones((I,K)) * 3*m**2 for m in range(1,10+1)] 
+    Ss = [numpy.ones((K,L)) * 2*m**2 for m in range(1,10+1)]
+    Gs = [numpy.ones((J,L)) * 1*m**2 for m in range(1,10+1)] #first is 1's, second is 4's, third is 9's, etc.
     taus = [m**2 for m in range(1,10+1)]
     
     expected_exp_tau = (9.+36.+81.)/3.
-    expected_exp_U = numpy.array([[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.]])
-    expected_exp_V = numpy.array([[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)],[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)],[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)]])
+    expected_exp_F = numpy.array([[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.],[9.+36.+81.,9.+36.+81.]])
+    expected_exp_S = numpy.array([[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)],[(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.),(9.+36.+81.)*(2./3.)]])
+    expected_exp_G = numpy.array([[(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.)],[(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.)],[(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.),(9.+36.+81.)*(1./3.)]])
     
-    R = numpy.ones((3,2))
-    M = numpy.ones((3,2))
-    I, J, K = 3, 2, 3
-    lambdaU = 2*numpy.ones((I,K))
-    lambdaV = 3*numpy.ones((J,K))
+    R = numpy.ones((I,J))
+    M = numpy.ones((I,J))
+    lambdaF = 2*numpy.ones((I,K))
+    lambdaS = 3*numpy.ones((K,L))
+    lambdaG = 4*numpy.ones((J,L))
     alpha, beta = 3, 1
-    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
-    BNMF = bnmf_gibbs(R,M,K,priors)
-    BNMF.all_U = Us
-    BNMF.all_V = Vs
-    BNMF.all_tau = taus
-    (exp_U, exp_V, exp_tau) = BNMF.approx_expectation(burn_in,thinning)
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.all_F = Fs
+    BNMTF.all_S = Ss
+    BNMTF.all_G = Gs
+    BNMTF.all_tau = taus
+    (exp_F, exp_S, exp_G, exp_tau) = BNMTF.approx_expectation(burn_in,thinning)
     
     assert expected_exp_tau == exp_tau
-    assert numpy.array_equal(expected_exp_U,exp_U)
-    assert numpy.array_equal(expected_exp_V,exp_V)
+    assert numpy.array_equal(expected_exp_F,exp_F)
+    assert numpy.array_equal(expected_exp_S,exp_S)
+    assert numpy.array_equal(expected_exp_G,exp_G)
 
     
 #TODO:
