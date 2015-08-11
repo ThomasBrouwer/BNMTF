@@ -145,7 +145,9 @@ lambdaS = 3*numpy.ones((K,L))
 lambdaG = 5*numpy.ones((J,L))
 alpha, beta = 3, 1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
-init = 'exp' #F=1/2,S=1/3,G=1/5
+init = 'exp' 
+# F = 1/2, S = 1/3, G = 1/5
+# R - FSG.T = [[1]] - [[4/15]] = [[11/15]]
 
 def test_alpha_s():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
@@ -162,20 +164,20 @@ def test_beta_s():
 def test_tauF():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
     BNMTF.initialise(init)
-    # S*G.T = [[4/15]], S*G.T = [[16/225]], sum_j S*G.T = [[32/225,32/225],[48/225,48/225],[32/225,32/225],[32/225,32/225],[48/225,48/225]]
+    # S*G.T = [[4/15]], (S*G.T)^2 = [[16/225]], sum_j S*G.T = [[32/225,32/225],[48/225,48/225],[32/225,32/225],[32/225,32/225],[48/225,48/225]]
     tauF = 3.*numpy.array([[32./225.,32./225.],[48./225.,48./225.],[32./225.,32./225.],[32./225.,32./225.],[48./225.,48./225.]])
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert abs(BNMTF.tauF(i,k) - tauF[i,k]) < 0.000000000000001
         
-#TODO:
 def test_muF():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
     BNMTF.initialise(init)
-    #U*V^T - Uik*Vjk = [[1/6,..]], so Rij - Ui * Vj + Uik * Vjk = 5/6
-    tauU = 3.*numpy.array([[2./9.,2./9.],[1./3.,1./3.],[2./9.,2./9.],[2./9.,2./9.],[1./3.,1./3.]])
-    muU = 1./tauU * ( 3. * numpy.array([[2.*(5./6.)*(1./3.),10./18.],[15./18.,15./18.],[10./18.,10./18.],[10./18.,10./18.],[15./18.,15./18.]]) - lambdaU )
+    tauF = 3.*numpy.array([[32./225.,32./225.],[48./225.,48./225.],[32./225.,32./225.],[32./225.,32./225.],[48./225.,48./225.]])
+    # Rij - Fi*S*Gj + Fik(Sk*Gj) = 11/15 + 1/2 * 4/15 = 13/15
+    # (Rij - Fi*S*Gj + Fik(Sk*Gj)) * (Sk*Gj) = 13/15 * 4/15 = 52/225
+    muF = 1./tauF * ( 3. * numpy.array([[2*(52./225.),2*(52./225.)],[3*(52./225.),3*(52./225.)],[2*(52./225.),2*(52./225.)],[2*(52./225.),2*(52./225.)],[3*(52./225.),3*(52./225.)]]) - lambdaF )
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert abs(BNMTF.muU(tauU[i,k],i,k) - muU[i,k]) < 0.000000000000001
+        assert abs(BNMTF.muF(tauF[i,k],i,k) - muF[i,k]) < 0.000000000000001
         
 def test_tauS():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
@@ -185,21 +187,33 @@ def test_tauS():
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
         assert abs(BNMTF.tauS(k,l) - tauS[k,l]) < 0.000000000000001
     
-#TODO:
 def test_muS():
-    assert False
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.initialise(init)
+    tauS = 3.*numpy.array([[3./25.,3./25.,3./25.,3./25.],[3./25.,3./25.,3./25.,3./25.]])
+    # Rij - Fi*S*Gj + Fik*Skl*Gjk = 11/15 + 1/2*1/3*1/5 = 23/30
+    # (Rij - Fi*S*Gj + Fik*Skl*Gjk) * Fik*Gjk = 23/30 * 1/10 = 23/300
+    muS = 1./tauS * ( 3. * numpy.array([[12*23./300.,12*23./300.,12*23./300.,12*23./300.],[12*23./300.,12*23./300.,12*23./300.,12*23./300.]]) - lambdaS )
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert abs(BNMTF.muS(tauS[k,l],k,l) - muS[k,l]) < 0.000000000000001
         
 def test_tauG():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
     BNMTF.initialise(init)
-    # F*S = [[1/3]], S*G.T = [[1/9]], sum_i F*S = [[4/9]]
+    # F*S = [[1/3]], (F*S)^2 = [[1/9]], sum_i F*S = [[4/9]]
     tauG = 3.*numpy.array([[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.]])
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         assert BNMTF.tauG(j,l) == tauG[j,l]
     
-#TODO:
 def test_muG():
-    assert False
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.initialise(init)
+    tauG = 3.*numpy.array([[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.]])
+    # Rij - Fi*S*Gj + Gjl*(Fi*Sl)) = 11/15 + 1/5 * 1/3 = 12/15 = 4/5
+    # (Rij - Fi*S*Gj + Gjl*(Fi*Sl)) * (Fi*Sl) = 4/5 * 1/3 = 4/15
+    muG = 1./tauG * ( 3. * numpy.array([[4.*4./15.,4.*4./15.,4.*4./15.,4.*4./15.],[4.*4./15.,4.*4./15.,4.*4./15.,4.*4./15.],[4.*4./15.,4.*4./15.,4.*4./15.,4.*4./15.]]) - lambdaG )
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert abs(BNMTF.muG(tauG[j,l],j,l) - muG[j,l]) < 0.000000000000001
       
       
 """ Test some iterations, and that the values have changed in U and V. """
@@ -240,7 +254,6 @@ def test_run():
     assert taus[1] != alpha/float(beta)
     
     
-#TODO:
 """ Test approximating the expectations for F, S, G, tau """
 def test_approx_expectation():
     burn_in = 2
@@ -282,34 +295,37 @@ def test_approx_expectation():
 def test_predict():
     burn_in = 2
     thinning = 3 # so index 2,5,8 -> m=3,m=6,m=9
-    (I,J,K) = (5,3,2)
-    Us = [numpy.ones((I,K)) * 3*m**2 for m in range(1,10+1)] #first is 1's, second is 4's, third is 9's, etc.
-    Vs = [numpy.ones((J,K)) * 2*m**2 for m in range(1,10+1)]
-    Us[2][0,0] = 24 #instead of 27 - to ensure we do not get 0 variance in our predictions
+    (I,J,K,L) = (5,3,2,4)
+    Fs = [numpy.ones((I,K)) * 3*m**2 for m in range(1,10+1)] 
+    Ss = [numpy.ones((K,L)) * 2*m**2 for m in range(1,10+1)]
+    Gs = [numpy.ones((J,L)) * 1*m**2 for m in range(1,10+1)] #first is 1's, second is 4's, third is 9's, etc.
+    Fs[2][0,0] = 24 #instead of 27 - to ensure we do not get 0 variance in our predictions
     taus = [m**2 for m in range(1,10+1)]
     
     R = numpy.array([[1,2,3],[4,5,6],[7,8,9],[10,11,12],[13,14,15]],dtype=float)
     M = numpy.ones((I,J))
-    K = 3
-    lambdaU = 2*numpy.ones((I,K))
-    lambdaV = 3*numpy.ones((J,K))
+    lambdaF = 2*numpy.ones((I,K))
+    lambdaS = 3*numpy.ones((K,L))
+    lambdaG = 5*numpy.ones((J,L))
     alpha, beta = 3, 1
-    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
-    #expected_exp_U = numpy.array([[125.,126.],[126.,126.],[126.,126.],[126.,126.],[126.,126.]])
-    #expected_exp_V = numpy.array([[84.,84.],[84.,84.],[84.,84.]])
-    #R_pred = numpy.array([[21084.,21084.,21084.],[ 21168.,21168.,21168.],[21168.,21168.,21168.],[21168.,21168.,21168.],[21168.,21168.,21168.]])
+    #expected_exp_F = numpy.array([[125.,126.],[126.,126.],[126.,126.],[126.,126.],[126.,126.]])
+    #expected_exp_S = numpy.array([[84.,84.,84.,84.],[84.,84.,84.,84.]])
+    #expected_exp_G = numpy.array([[42.,42.,42.,42.],[42.,42.,42.,42.],[42.,42.,42.,42.]])
+    #R_pred = numpy.array([[ 3542112.,  3542112.,  3542112.],[ 3556224.,  3556224.,  3556224.],[ 3556224.,  3556224.,  3556224.],[ 3556224.,  3556224.,  3556224.],[ 3556224.,  3556224.,  3556224.]])
+       
+    M_test = numpy.array([[0,0,1],[0,1,0],[0,0,0],[1,1,0],[0,0,0]]) #R->3,5,10,11, P_pred->3542112,3556224,3556224,3556224
+    MSE = ((3.-3542112.)**2 + (5.-3556224.)**2 + (10.-3556224.)**2 + (11.-3556224.)**2) / 4.
+    R2 = 1. - ((3.-3542112.)**2 + (5.-3556224.)**2 + (10.-3556224.)**2 + (11.-3556224.)**2) / (4.25**2+2.25**2+2.75**2+3.75**2) #mean=7.25
+    Rp = 357. / ( math.sqrt(44.75) * math.sqrt(5292.) ) #mean=7.25,var=44.75, mean_pred=3552696,var_pred=5292, corr=(-4.25*-63 + -2.25*21 + 2.75*21 + 3.75*21)
     
-    M_test = numpy.array([[0,0,1],[0,1,0],[0,0,0],[1,1,0],[0,0,0]]) #R->3,5,10,11, P_pred->21084,21168,21168,21168
-    MSE = (444408561. + 447872569. + 447660964. + 447618649) / 4.
-    R2 = 1. - (444408561. + 447872569. + 447660964. + 447618649) / (4.25**2+2.25**2+2.75**2+3.75**2) #mean=7.25
-    Rp = 357. / ( math.sqrt(44.75) * math.sqrt(5292.) ) #mean=7.25,var=44.75, mean_pred=21147,var_pred=5292, corr=(-4.25*-63 + -2.25*21 + 2.75*21 + 3.75*21)
-    
-    BNMF = bnmf_gibbs(R,M,K,priors)
-    BNMF.all_U = Us
-    BNMF.all_V = Vs
-    BNMF.all_tau = taus
-    performances = BNMF.predict(M_test,burn_in,thinning)
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.all_F = Fs
+    BNMTF.all_S = Ss
+    BNMTF.all_G = Gs
+    BNMTF.all_tau = taus
+    performances = BNMTF.predict(M_test,burn_in,thinning)
     
     assert performances['MSE'] == MSE
     assert performances['R^2'] == R2

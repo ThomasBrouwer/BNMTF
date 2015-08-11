@@ -185,6 +185,7 @@ class bnmtf_gibbs:
     def predict(self,M_pred,burn_in,thinning):
         (exp_F,exp_S,exp_G,_) = self.approx_expectation(burn_in,thinning)
         R_pred = self.triple_dot(exp_F,exp_S,exp_G.T)
+        print R_pred
         MSE = self.compute_MSE(M_pred,self.R,R_pred)
         R2 = self.compute_R2(M_pred,self.R,R_pred)    
         Rp = self.compute_Rp(M_pred,self.R,R_pred)        
