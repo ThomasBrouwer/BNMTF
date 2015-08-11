@@ -290,7 +290,6 @@ def test_approx_expectation():
     assert numpy.array_equal(expected_exp_G,exp_G)
 
     
-#TODO:
 """ Test computing the performance of the predictions using the expectations """
 def test_predict():
     burn_in = 2

@@ -54,9 +54,9 @@ def add_noise(true_R,tau):
 if __name__ == "__main__":
     output_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-    I,J,K = 705, 140, 15 #100, 50, 10 #20,10,3 # 
-    fraction_unknown = 0.4
-    alpha, beta = 0.1, 1.
+    I,J,K = 100, 50, 10 #20,10,3 # 705, 140, 15 #
+    fraction_unknown = 0.9
+    alpha, beta = 1., 1.
     lambdaU = numpy.ones((I,K))
     lambdaV = numpy.ones((I,K))/2.
     tau = alpha / beta
