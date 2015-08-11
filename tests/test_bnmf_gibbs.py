@@ -253,7 +253,6 @@ def test_predict():
     
     R = numpy.array([[1,2,3],[4,5,6],[7,8,9],[10,11,12],[13,14,15]],dtype=float)
     M = numpy.ones((I,J))
-    K = 3
     lambdaU = 2*numpy.ones((I,K))
     lambdaV = 3*numpy.ones((J,K))
     alpha, beta = 3, 1

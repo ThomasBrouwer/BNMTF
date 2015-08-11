@@ -16,13 +16,15 @@ import numpy, matplotlib.pyplot as plt
 
 ##########
 
-input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
+input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
 iterations = 1000
+burn_in = 500
+thinning = 5
 init = 'random'
 I, J, K = 100, 50, 10 #20,10,3 #
 
-alpha, beta = 10., 1.
+alpha, beta = 1., 1.
 lambdaU = numpy.ones((I,K))
 lambdaV = numpy.ones((J,K))/2.    
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
@@ -54,8 +56,6 @@ axarr[2].set_ylabel("V[0,0]")
 axarr[2].set_xlabel("Iterations")
 
 # Approximate the expectations
-burn_in = 500
-thinning = 5
 (exp_U, exp_V, exp_tau) = BNMF.approx_expectation(burn_in,thinning)
 
 # Also measure the performances
