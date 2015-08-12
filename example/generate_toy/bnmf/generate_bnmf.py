@@ -22,7 +22,7 @@ from BNMTF.code.distributions.exponential import Exponential
 from BNMTF.code.distributions.normal import Normal
 from ml_helpers.code.mask import generate_M
 
-import numpy, itertools
+import numpy, itertools, matplotlib.pyplot as plt
 
 def generate_dataset(I,J,K,lambdaU,lambdaV,tau):
     # Generate U, V
@@ -62,7 +62,24 @@ if __name__ == "__main__":
     tau = alpha / beta
     
     (U,V,tau,true_R,R) = generate_dataset(I,J,K,lambdaU,lambdaV,tau)
-    M = generate_M(I,J,fraction_unknown)
+    
+    # Try to generate M
+    attempts = 10000
+    for i in range(0,attempts):
+        try:
+            M = generate_M(I,J,fraction_unknown)
+            sums_columns = M.sum(axis=0)
+            sums_rows = M.sum(axis=1)
+            for i,c in enumerate(sums_rows):
+                assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction_unknown)
+            for j,c in enumerate(sums_columns):
+                assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction_unknown)
+            success = True
+            break
+        except AssertionError:
+            success = False
+            
+    assert success == True, "Failed to generate dataset, keep getting empty rows/columns. Tried %s times for fraction %s." % (attempts,fraction_unknown)
     
     # Store all matrices in text files
     numpy.savetxt(open(output_folder+"U.txt",'w'),U)
@@ -72,3 +89,6 @@ if __name__ == "__main__":
     numpy.savetxt(open(output_folder+"M.txt",'w'),M)
     
     print "Mean R: %s. Variance R: %s. Min R: %s. Max R: %s." % (numpy.mean(R),numpy.var(R),R.min(),R.max())
+    fig = plt.figure()
+    plt.hist(R.flatten(),bins=range(0,int(R.max())+1))
+    plt.show()

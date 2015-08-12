@@ -18,8 +18,8 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 1000
-burn_in = 500
+iterations = 100
+burn_in = 50
 thinning = 5
 init = 'random'
 I, J, K, L = 100, 50, 10, 5
