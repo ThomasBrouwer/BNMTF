@@ -18,7 +18,7 @@ Alternatively, you can pass a dictionary { 'muF', 'tauF', 'muS', 'tauS', 'muG', 
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,L,priors)
-    BNMF.initisalise()
+    BNMF.initisalise()      (or: BNMF.initialise(values=dict))
     BNMF.run(iterations)
 Or:
     BNMF = bnmf_vb(R,M,K,L,priors)
@@ -36,7 +36,7 @@ from distributions.truncated_normal import TruncatedNormal
 import numpy, itertools, math, scipy
 from scipy.stats import norm
 
-class bnmf_vb:
+class bnmtf_vb:
     def __init__(self,R,M,K,L,priors):
         self.R = numpy.array(R,dtype=float)
         self.M = numpy.array(M,dtype=float)
@@ -55,9 +55,9 @@ class bnmf_vb:
         self.alpha, self.beta, self.lambdaF, self.lambdaS, self.lambdaG = \
             float(priors['alpha']), float(priors['beta']), numpy.array(priors['lambdaF']), numpy.array(priors['lambdaS']), numpy.array(priors['lambdaG'])
         
-        assert self.lambdaF.shape == (self.I,self.K), "Prior matrix lambdaF has the wrong shape: %s instead of (%s, %s)." % (self.lambdaU.shape,self.I,self.K)
-        assert self.lambdaS.shape == (self.K,self.L), "Prior matrix lambdaS has the wrong shape: %s instead of (%s, %s)." % (self.lambdaV.shape,self.K,self.L)
-        assert self.lambdaG.shape == (self.J,self.L), "Prior matrix lambdaG has the wrong shape: %s instead of (%s, %s)." % (self.lambdaV.shape,self.J,self.L)
+        assert self.lambdaF.shape == (self.I,self.K), "Prior matrix lambdaF has the wrong shape: %s instead of (%s, %s)." % (self.lambdaF.shape,self.I,self.K)
+        assert self.lambdaS.shape == (self.K,self.L), "Prior matrix lambdaS has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.K,self.L)
+        assert self.lambdaG.shape == (self.J,self.L), "Prior matrix lambdaG has the wrong shape: %s instead of (%s, %s)." % (self.lambdaG.shape,self.J,self.L)
                    
             
     # Raise an exception if an entire row or column is empty
@@ -162,23 +162,23 @@ class bnmf_vb:
         self.beta_s = self.beta + 0.5*self.exp_square_diff()
         
     def exp_square_diff(self): # Compute: sum_Omega E_q(F,S,G) [ ( Rij - Fi S Gj )^2 ]
-        return(self.M *( ( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2 + \
+        return (self.M *( ( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2 + \
                          ( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) ) ) ).sum()
         
     def update_F(self,i,k):       
-        varSkG = numpy.dot( self.varS[k]+self.expS[k]**2 , self.varG+self.expG**2 ) - numpy.dot( self.expS[k]**2 , self.expG**2 ) # Vector of size J
-        self.tauF[i,k] = self.exptau*(self.M[i]*( varSkG + ( numpy.dot(self.expS[k],self.expG) )**2 )).sum()
-        self.muF[i,k] = 1./self.tauF[i,k] * (-self.lambdaF[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-self.triple_dot(self.expF[i],self.expS,self.expG.T)+self.expF[i,k]*numpy.dot(self.expS[k],self.expG) ) * numpy.dot(self.expS[k],self.expG) )).sum()) 
+        varSkG = numpy.dot( self.varS[k]+self.expS[k]**2 , (self.varG+self.expG**2).T ) - numpy.dot( self.expS[k]**2 , (self.expG**2).T ) # Vector of size J
+        self.tauF[i,k] = self.exptau*(self.M[i]*( varSkG + ( numpy.dot(self.expS[k],self.expG.T) )**2 )).sum()
+        self.muF[i,k] = 1./self.tauF[i,k] * (-self.lambdaF[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-self.triple_dot(self.expF[i],self.expS,self.expG.T)+self.expF[i,k]*numpy.dot(self.expS[k],self.expG.T) ) * numpy.dot(self.expS[k],self.expG.T) )).sum()) 
     
     def update_S(self,k,l):       
         varFkGl = numpy.outer( self.varF[:,k]+self.expF[:,k]**2 , self.varG[:,l]+self.expG[:,l]**2 ) - numpy.outer( self.expF[:,k]**2 , self.expG[:,l]**2 ) # Matrix of size IxJ
         self.tauS[k,l] = self.exptau*(self.M*( varFkGl + numpy.outer(self.expF[:,k]**2,self.expG[:,l]**2) )).sum()
-        self.muS[k,l] = 1./self.tauS[k,l] * (-self.lambdaS[k,l] + self.exptau*(self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+self.expS[k,l]*numpy.outer(self.expF[:,l],self.expG[:,l]) ) * numpy.outer(self.expF[:,l],self.expG[:,l]) )).sum()) 
+        self.muS[k,l] = 1./self.tauS[k,l] * (-self.lambdaS[k,l] + self.exptau*(self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+self.expS[k,l]*numpy.outer(self.expF[:,k],self.expG[:,l]) ) * numpy.outer(self.expF[:,k],self.expG[:,l]) )).sum()) 
             
     def update_G(self,j,l):       
         varFSl = numpy.dot( self.varF+self.expF**2 , self.varS[:,l]+self.expS[:,l]**2 ) - numpy.dot( self.expF**2 , self.expS[:,l]**2 ) # Vector of size I
-        self.tauG[j,l] = self.exptau*(self.M[j]*( varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 )).sum()
-        self.muG[j,l] = 1./self.tauG[j,l] * (-self.lambdaG[j,l] + self.exptau*(self.M[j] * ( (self.R[j]-self.triple_dot(self.expF,self.expS,self.expG[j].T)+self.expG[j,l]*numpy.dot(self.expF,self.expS[:,l]) ) * numpy.dot(self.expF,self.expS[:,l]) )).sum()) 
+        self.tauG[j,l] = self.exptau*(self.M[:,j]*( varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 )).sum()
+        self.muG[j,l] = 1./self.tauG[j,l] * (-self.lambdaG[j,l] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-self.triple_dot(self.expF,self.expS,self.expG[j].T)+self.expG[j,l]*numpy.dot(self.expF,self.expS[:,l]) ) * numpy.dot(self.expF,self.expS[:,l]) )).sum()) 
         
 
     # Update the expectations and variances

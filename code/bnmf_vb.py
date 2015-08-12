@@ -12,11 +12,11 @@ Initialisation can be done by running the initialise() function. We initialise a
 - muU[i,k], tauU[i,k] = lambdaU[i,k], 1
 - muV[j,k], tauV[j,k] = lambdaV[j,k], 1
 - alpha_s, beta_s = alpha, beta
-Alternatively, you can pass a dictionary { 'muU', 'tauU', 'muV', 'tauV', 'alpha_s', 'beta_s' }.
+Alternatively, you can pass a dictionary { 'muU', 'tauU', 'muV', 'tauV', 'alpha_s', 'beta_s' }
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.initisalise()
+    BNMF.initisalise()      (or: BNMF.initialise(values=dict))
     BNMF.run(iterations)
 Or:
     BNMF = bnmf_vb(R,M,K,priors)
@@ -145,15 +145,15 @@ class bnmf_vb:
         
     def update_U(self,i,k):       
         self.tauU[i,k] = self.exptau*(self.M[i]*( self.varV[:,k] + self.expV[:,k]**2 )).sum()
-        #self.tauU[i,k] = self.exptau * sum([( self.varV[j,k] + self.expV[j,k]**2 ) for j in [1 for j in range(0,self.J) if self.M[i,j]]])
+        #self.tauU[i,k] = self.exptau * sum([( self.varV[j,k] + self.expV[j,k]**2 ) for j in range(0,self.J) if self.M[i,j]])
         self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
-        #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in [1 for j in range(0,self.J) if self.M[i,j]]]))
+        #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in range(0,self.J) if self.M[i,j]]))
         
     def update_V(self,j,k):
         self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
-        #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in [1 for i in range(0,self.I) if self.M[i,j]]])
+        #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in range(0,self.I) if self.M[i,j]])
         self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
-        #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in [1 for i in range(0,self.I) if self.M[i,j]]]))
+        #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in range(0,self.I) if self.M[i,j]]))
         
     # Update the expectations and variances
     def update_exp_U(self,i,k):
