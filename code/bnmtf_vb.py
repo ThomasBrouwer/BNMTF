@@ -108,8 +108,18 @@ class bnmtf_vb:
         
         for it in range(0,iterations):
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                
+                elbo_now = self.elbo()
+                old_vals = (self.expF[i,k],self.varF[i,k],self.muF[i,k],self.tauF[i,k])
+                
                 self.update_F(i,k)
                 self.update_exp_F(i,k)
+                
+                new_vals = (self.expF[i,k],self.varF[i,k],self.muF[i,k],self.tauF[i,k])
+                elbo_then = self.elbo()
+                if elbo_then-elbo_now < 0.:
+                    print i,k,old_vals,new_vals, elbo_then-elbo_now
+                
                 
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
