@@ -131,24 +131,29 @@ class bnmf_vb:
         
     # Compute the ELBO
     def elbo(self):
-        #TODO: ELBO
-        return 0
-        '''
         return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
              - self.exptau / 2. * self.exp_square_diff() \
-             + numpy.log(self.lambdaU).sum() - ( self.lambdaU * self.expU ).sum() \
-             + numpy.log(self.lambdaV).sum() - ( self.lambdaV * self.expV ).sum() \
+             + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum() \
+             + numpy.log(self.lambdaS).sum() - ( self.lambdaS * self.expS ).sum() \
+             + numpy.log(self.lambdaG).sum() - ( self.lambdaG * self.expG ).sum() \
              + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha) \
              + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau \
              - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s) \
              - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau \
-             - .5*numpy.log(self.tauU).sum() + self.I*self.K/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muU*numpy.sqrt(self.tauU))).sum() \
-             + ( self.tauU / 2. * ( self.varU + (self.expU - self.muU)**2 ) ).sum() \
-             - .5*numpy.log(self.tauV).sum() + self.J*self.K/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muV*numpy.sqrt(self.tauV))).sum() \
-             + ( self.tauV / 2. * ( self.varV + (self.expV - self.muV)**2 ) ).sum()
-        '''
+             - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi) \
+             + numpy.log(1. - norm.cdf(-self.muF*numpy.sqrt(self.tauF))).sum() \
+             + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum() \
+             - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi) \
+             + numpy.log(1. - norm.cdf(-self.muS*numpy.sqrt(self.tauS))).sum() \
+             + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum() \
+             - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi) \
+             + numpy.log(1. - norm.cdf(-self.muG*numpy.sqrt(self.tauG))).sum() \
+             + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum()
+        
+
+    # Compute the dot product of three matrices
+    def triple_dot(self,M1,M2,M3):
+        return numpy.dot(M1,numpy.dot(M2,M3))
         
         
     # Update the parameters for the distributions
@@ -156,17 +161,24 @@ class bnmf_vb:
         self.alpha_s = self.alpha + self.size_Omega/2.0
         self.beta_s = self.beta + 0.5*self.exp_square_diff()
         
-    def exp_square_diff(self): # Compute: sum_Omega E_q(U,V) [ ( Rij - Ui Vj )^2 ]
-        return(self.M *( ( self.R - numpy.dot(self.expU,self.expV.T) )**2 + \
-                         ( numpy.dot(self.varU+self.expU**2, (self.varV+self.expV**2).T) - numpy.dot(self.expU**2,(self.expV**2).T) ) ) ).sum()
+    def exp_square_diff(self): # Compute: sum_Omega E_q(F,S,G) [ ( Rij - Fi S Gj )^2 ]
+        return(self.M *( ( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2 + \
+                         ( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) ) ) ).sum()
         
-        
-    #TODO: update_F, update_S, update_G
     def update_F(self,i,k):       
-        self.tauF[i,k] = self.exptau*(self.M[i]*( self.varV[:,k] + self.expV[:,k]**2 )).sum()
-        #self.tauU[i,k] = self.exptau * sum([( self.varV[j,k] + self.expV[j,k]**2 ) for j in [1 for j in range(0,self.J) if self.M[i,j]]])
-        self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
-        #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in [1 for j in range(0,self.J) if self.M[i,j]]]))
+        varSkG = numpy.dot( self.varS[k]+self.expS[k]**2 , self.varG+self.expG**2 ) - numpy.dot( self.expS[k]**2 , self.expG**2 ) # Vector of size J
+        self.tauF[i,k] = self.exptau*(self.M[i]*( varSkG + ( numpy.dot(self.expS[k],self.expG) )**2 )).sum()
+        self.muF[i,k] = 1./self.tauF[i,k] * (-self.lambdaF[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-self.triple_dot(self.expF[i],self.expS,self.expG.T)+self.expF[i,k]*numpy.dot(self.expS[k],self.expG) ) * numpy.dot(self.expS[k],self.expG) )).sum()) 
+    
+    def update_S(self,k,l):       
+        varFkGl = numpy.outer( self.varF[:,k]+self.expF[:,k]**2 , self.varG[:,l]+self.expG[:,l]**2 ) - numpy.outer( self.expF[:,k]**2 , self.expG[:,l]**2 ) # Matrix of size IxJ
+        self.tauS[k,l] = self.exptau*(self.M*( varFkGl + numpy.outer(self.expF[:,k]**2,self.expG[:,l]**2) )).sum()
+        self.muS[k,l] = 1./self.tauS[k,l] * (-self.lambdaS[k,l] + self.exptau*(self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+self.expS[k,l]*numpy.outer(self.expF[:,l],self.expG[:,l]) ) * numpy.outer(self.expF[:,l],self.expG[:,l]) )).sum()) 
+            
+    def update_G(self,j,l):       
+        varFSl = numpy.dot( self.varF+self.expF**2 , self.varS[:,l]+self.expS[:,l]**2 ) - numpy.dot( self.expF**2 , self.expS[:,l]**2 ) # Vector of size I
+        self.tauG[j,l] = self.exptau*(self.M[j]*( varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 )).sum()
+        self.muG[j,l] = 1./self.tauG[j,l] * (-self.lambdaG[j,l] + self.exptau*(self.M[j] * ( (self.R[j]-self.triple_dot(self.expF,self.expS,self.expG[j].T)+self.expG[j,l]*numpy.dot(self.expF,self.expS[:,l]) ) * numpy.dot(self.expF,self.expS[:,l]) )).sum()) 
         
 
     # Update the expectations and variances
@@ -193,7 +205,7 @@ class bnmf_vb:
 
     # Compute the expectation of U and V, and use it to predict missing values
     def predict(self,M_pred):
-        R_pred = numpy.dot(self.expF,numpy.dot(self.expS,self.expG.T))
+        R_pred = self.triple_dot(self.expF,self.expS,self.expG.T)
         MSE = self.compute_MSE(M_pred,self.R,R_pred)
         R2 = self.compute_R2(M_pred,self.R,R_pred)    
         Rp = self.compute_Rp(M_pred,self.R,R_pred)        

@@ -26,7 +26,7 @@ I, J, K = 100, 50, 10 #20,10,3 #
 
 alpha, beta = 1., 1.
 lambdaU = numpy.ones((I,K))
-lambdaV = numpy.ones((J,K))/2.    
+lambdaV = numpy.ones((J,K))
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
 # Load in data

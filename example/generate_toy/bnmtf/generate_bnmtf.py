@@ -39,14 +39,14 @@ def generate_dataset(I,J,K,L,lambdaF,lambdaS,lambdaG,tau):
     
     # Generate R
     true_R = numpy.dot(F,numpy.dot(S,G.T))
-    
-    R = numpy.zeros((I,J))
-    for i,j in itertools.product(xrange(0,I),xrange(0,J)):
-        R[i,j] = Normal(true_R[i,j],tau).draw()   
+    R = add_noise(true_R,tau) 
         
     return (F,S,G,tau,true_R,R)
     
 def add_noise(true_R,tau):
+    if numpy.isinf(tau):
+        return numpy.copy(true_R)
+    
     (I,J) = true_R.shape
     R = numpy.zeros((I,J))
     for i,j in itertools.product(xrange(0,I),xrange(0,J)):

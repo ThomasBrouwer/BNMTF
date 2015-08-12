@@ -35,14 +35,14 @@ def generate_dataset(I,J,K,lambdaU,lambdaV,tau):
     
     # Generate R
     true_R = numpy.dot(U,V.T)
+    R = add_noise(true_R,tau)    
     
-    R = numpy.zeros((I,J))
-    for i,j in itertools.product(xrange(0,I),xrange(0,J)):
-        R[i,j] = Normal(true_R[i,j],tau).draw()   
-        
     return (U,V,tau,true_R,R)
     
 def add_noise(true_R,tau):
+    if numpy.isinf(tau):
+        return numpy.copy(true_R)
+    
     (I,J) = true_R.shape
     R = numpy.zeros((I,J))
     for i,j in itertools.product(xrange(0,I),xrange(0,J)):
@@ -54,11 +54,11 @@ def add_noise(true_R,tau):
 if __name__ == "__main__":
     output_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-    I,J,K = 100, 50, 10 #20,10,3 # 705, 140, 15 #
+    I,J,K = 100, 50, 10
     fraction_unknown = 0.1
     alpha, beta = 1., 1.
     lambdaU = numpy.ones((I,K))
-    lambdaV = numpy.ones((I,K))/2.
+    lambdaV = numpy.ones((I,K))
     tau = alpha / beta
     
     (U,V,tau,true_R,R) = generate_dataset(I,J,K,lambdaU,lambdaV,tau)
