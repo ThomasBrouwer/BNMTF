@@ -152,8 +152,62 @@ def test_initialise():
         
 """ Test computing the ELBO. """
 def test_elbo():
-    #TODO:
-    return
+    I,J,K = 5,3,2
+    R = numpy.ones((I,J))
+    M = numpy.ones((I,J))
+    M[0,0], M[2,2], M[3,1] = 0, 0, 0 # size Omega = 12
+    
+    lambdaU = 2*numpy.ones((I,K))
+    lambdaV = 3*numpy.ones((J,K))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    
+    expU = 5*numpy.ones((I,K))
+    expV = 6*numpy.ones((J,K))
+    varU = 11*numpy.ones((I,K))
+    varV = 12*numpy.ones((J,K))
+    exptau = 8.
+    explogtau = 9.
+    
+    muU = 14*numpy.ones((I,K))
+    muV = 15*numpy.ones((J,K))
+    tauU = numpy.ones((I,K))/100.
+    tauV = numpy.ones((J,K))/101.
+    alpha_s = 20.
+    beta_s = 21.
+    
+    # expU * expV = [[60]]
+    # (R - expU*expV)^2 = 12*59^2 = 41772
+    # Var[U*V] = 12*K*((11+5^2)*(12+6^2)-5^2*6^2) = 12*2*828 = 19872
+    
+    # -muU*sqrt(tauU) = -14*math.sqrt(100) = -1.4
+    # -muV*sqrt(tauV) = -15*math.sqrt(101) = -1.4925557853149838
+    # cdf(-1.4) = 0.080756659233771066
+    # cdf(-1.4925557853149838) = 0.067776752211548219
+    
+    ELBO = 12./2.*(explogtau - math.log(2*math.pi)) - 8./2.*(41772+19872) \
+         + 5*2*(math.log(2.) - 2.*5.) + 3*2*(math.log(3.) - 3.*6.) \
+         + 3.*numpy.log(1.) - numpy.log(math.gamma(3.)) + 2.*9. - 1.*8. \
+         - 20.*numpy.log(21.) + numpy.log(math.gamma(20.)) - 19.*9. + 21.*8. \
+         - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi) + 5*2*math.log(1.-0.080756659233771066) \
+         + 0.5*5*2*1./100.*(11.+81.) \
+         - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi) + 3*2*math.log(1.-0.067776752211548219) \
+         + 0.5*3*2*1./101.*(12.+81.)
+         
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = expU
+    BNMF.expV = expV
+    BNMF.varU = varU
+    BNMF.varV = varV
+    BNMF.exptau = exptau
+    BNMF.explogtau = explogtau
+    BNMF.muU = muU
+    BNMF.muV = muV
+    BNMF.tauU = tauU
+    BNMF.tauV = tauV
+    BNMF.alpha_s = alpha_s
+    BNMF.beta_s = beta_s
+    assert BNMF.elbo() == ELBO
     
         
 """ Test updating parameters U, V, tau """          
