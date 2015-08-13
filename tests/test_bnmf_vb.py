@@ -194,6 +194,15 @@ def test_elbo():
          - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi) + 3*2*math.log(1.-0.067776752211548219) \
          + 0.5*3*2*1./101.*(12.+81.)
          
+    print 12./2.*(explogtau - math.log(2*math.pi)), - 8./2.*(41772+19872), \
+         + 5*2*(math.log(2.) - 2.*5.), + 3*2*(math.log(3.) - 3.*6.), \
+         + 3.*numpy.log(1.) - numpy.log(math.gamma(3.)), + 2.*9. - 1.*8., \
+         - 20.*numpy.log(21.) + numpy.log(math.gamma(20.)), - 19.*9. + 21.*8., \
+         - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi), + 5*2*math.log(1.-0.080756659233771066), \
+         + 0.5*5*2*1./100.*(11.+81.), \
+         - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi), + 3*2*math.log(1.-0.067776752211548219), \
+         + 0.5*3*2*1./101.*(12.+81.)
+         
     BNMF = bnmf_vb(R,M,K,priors)
     BNMF.expU = expU
     BNMF.expV = expV

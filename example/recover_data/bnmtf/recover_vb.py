@@ -16,7 +16,7 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 1000
+iterations = 100
 init = 'random'
 I, J, K, L = 100, 50, 10, 5
 
@@ -32,13 +32,13 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
-BNMF = bnmtf_vb(R,M,K,L,priors)
-BNMF.initialise()
-BNMF.run(iterations)
+BNMTF = bnmtf_vb(R,M,K,L,priors)
+BNMTF.initialise()
+BNMTF.run(iterations)
 
 # Also measure the performances
-performances = BNMF.predict(M_test)
+performances = BNMTF.predict(M_test)
 print performances
 
 # Plot the tau expectation values to check convergence
-plt.plot(BNMF.all_exp_tau)
+plt.plot(BNMTF.all_exp_tau)

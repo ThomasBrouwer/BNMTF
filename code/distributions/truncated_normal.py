@@ -5,15 +5,12 @@ allowing us to sample from it, and compute the expectation and the variance.
 truncnorm: a, b = (myclip_a - my_mean) / my_std, (myclip_b - my_mean) / my_std
            loc, scale = mu, sigma
            
-If the mean is negative and the variance very low (so tau very high), the 
-distribution is very flat, and we get draws of inf. In this case we actually 
-want value 0, since a negative mean means we want roughly that value. So if we
-draw inf, we return 0.
+We get efficient draws using the library rtnorm by C. Lassner, from:
+    http://miv.u-strasbg.fr/mazet/rtnorm/
+We compute the expectation and variance ourselves - note that we use the
+complementary error function for 1-cdf(x) = 0.5*erfc(x/sqrt(2)), as for large
+x (>8), cdf(x)=1., so we get 0. instead of something like n*e^-n.
 
-Similarly for computing the expectation and variance, if we get expectation 
-inf we actually want it to be zero. We then also get variance inf, but that 
-would result in 0's for all Uik, Vjk, Fik, Skl, Gjl dependent on that entry -
-we actually want variance 0 (so we get 0 with 100% guarantee).
 """
 import math, numpy, time
 from scipy.stats import truncnorm, norm
@@ -31,15 +28,18 @@ class TruncatedNormal:
     def draw(self):
         if self.tau == 0.:
             return 0.
-        d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
-        #d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=self.mu, sigma=self.sigma)[0]
+        #d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
+        d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=self.mu, sigma=self.sigma)[0]
         return d if (d >= 0. and d != numpy.inf and d != -numpy.inf and not numpy.isnan(d)) else 0.
         
     # Return expectation. x = - self.mu / self.sigma; lambdax = norm.pdf(x)/(1-norm.cdf(x)); return self.mu + self.sigma * lambdax
     def expectation(self):
         if self.tau == 0.:
             return 0.
-        exp = truncnorm.stats(self.a, self.b, loc=self.mu, scale=self.sigma, moments='m')
+        #exp = truncnorm.moment(1,self.a,self.b,self.mu,self.sigma)
+        x = - self.mu / self.sigma
+        lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
+        exp = self.mu + self.sigma * lambdax
         return exp if (exp >= 0.0 and exp != numpy.inf and exp != -numpy.inf and not numpy.isnan(exp)) else 0.
         
     # Return variance. The library gives NaN for this due to b->inf, so we compute it ourselves
@@ -47,7 +47,7 @@ class TruncatedNormal:
         if self.tau == 0.:
             return 0.
         x = - self.mu / self.sigma
-        lambdax = norm.pdf(x)/(1-norm.cdf(x))
+        lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
         deltax = lambdax*(lambdax-x)
         var = self.sigma**2 * ( 1 - deltax )
         return var if (var >= 0.0 and var != numpy.inf and var != -numpy.inf and not numpy.isnan(var)) else 0.
