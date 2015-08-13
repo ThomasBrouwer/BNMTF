@@ -37,7 +37,7 @@ from distributions.exponential import Exponential
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
 
-import numpy, itertools, math
+import numpy, itertools, math, time
 
 class bnmf_gibbs:
     def __init__(self,R,M,K,priors):

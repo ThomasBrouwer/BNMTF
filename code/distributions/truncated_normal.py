@@ -31,8 +31,8 @@ class TruncatedNormal:
     def draw(self):
         if self.tau == 0.:
             return 0.
-        #d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
-        d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=self.mu, sigma=self.sigma)[0]
+        d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
+        #d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=self.mu, sigma=self.sigma)[0]
         return d if (d >= 0. and d != numpy.inf and d != -numpy.inf and not numpy.isnan(d)) else 0.
         
     # Return expectation. x = - self.mu / self.sigma; lambdax = norm.pdf(x)/(1-norm.cdf(x)); return self.mu + self.sigma * lambdax

@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     I,J,K = 100, 50, 10
     fraction_unknown = 0.1
-    alpha, beta = 1., 1.
+    alpha, beta = 100., 1.
     lambdaU = numpy.ones((I,K))
     lambdaV = numpy.ones((I,K))
     tau = alpha / beta
