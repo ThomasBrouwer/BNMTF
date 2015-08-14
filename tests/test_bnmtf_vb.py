@@ -178,8 +178,75 @@ def test_initialise():
         
 """ Test computing the ELBO. """
 def test_elbo():
-    #TODO:
-    return
+    I,J,K,L = 5,3,2,4
+    R = numpy.ones((I,J))
+    M = numpy.ones((I,J))
+    M[0,0], M[2,2], M[3,1] = 0, 0, 0 # size Omega = 12
+    
+    lambdaF = 2*numpy.ones((I,K))
+    lambdaS = 3*numpy.ones((K,L))
+    lambdaG = 4*numpy.ones((J,L))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+    
+    expF = 5*numpy.ones((I,K))
+    expS = 6*numpy.ones((K,L))
+    expG = 7*numpy.ones((J,L))
+    varF = 11*numpy.ones((I,K))
+    varS = 12*numpy.ones((K,L))
+    varG = 13*numpy.ones((J,L))
+    exptau = 8.
+    explogtau = 9.
+    
+    muF = 14*numpy.ones((I,K))
+    muS = 15*numpy.ones((K,L))
+    muG = 16*numpy.ones((J,L))
+    tauF = numpy.ones((I,K))/100.
+    tauS = numpy.ones((K,L))/101.
+    tauG = numpy.ones((J,L))/102.
+    alpha_s = 20.
+    beta_s = 21.
+    
+    # expF * expS * expG.T = [[1680]]
+    # (R - expF*expS*expG.T)^2 = 12*1679^2 = 33828492
+    # Var[F*S*G.T] = 12*K*L*((11+5^2)*(12+6^2)*(13+7^2)-5^2*6^2*7^2) = 12*2*4*63036 = 6051456
+    
+    # -muF*sqrt(tauF) = -14*math.sqrt(1./100.) = -1.4
+    # -muS*sqrt(tauS) = -15*math.sqrt(1./101.) = -1.4925557853149838
+    # -muG*sqrt(tauG) = -16*math.sqrt(1./102.) = -1.5842360687626789
+    # cdf(-1.4) = 0.080756659233771066
+    # cdf(-1.4925557853149838) = 0.067776752211548219
+    # cdf(-1.5842360687626789) = 0.056570004076003155
+    
+    ELBO = 12./2.*(explogtau - math.log(2*math.pi)) - 8./2.*(33828492+6051456) \
+         + 5*2*(math.log(2.) - 2.*5.) + 2*4*(math.log(3.) - 3.*6.) + 3*4*(math.log(4.) - 4.*7.) \
+         + 3.*numpy.log(1.) - numpy.log(math.gamma(3.)) + 2.*9. - 1.*8. \
+         - 20.*numpy.log(21.) + numpy.log(math.gamma(20.)) - 19.*9. + 21.*8. \
+         - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi) + 5*2*math.log(1.-0.080756659233771066) \
+         + 0.5*5*2*1./100.*(11.+81.) \
+         - 0.5*4*2*math.log(1./101.) + 0.5*4*2*math.log(2*math.pi) + 4*2*math.log(1.-0.067776752211548219) \
+         + 0.5*4*2*1./101.*(12.+81.) \
+         - 0.5*4*3*math.log(1./102.) + 0.5*4*3*math.log(2*math.pi) + 4*3*math.log(1.-0.056570004076003155) \
+         + 0.5*4*3*1./102.*(13.+81.)
+         
+    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF.expF = expF
+    BNMTF.expS = expS
+    BNMTF.expG = expG
+    BNMTF.varF = varF
+    BNMTF.varS = varS
+    BNMTF.varG = varG
+    BNMTF.exptau = exptau
+    BNMTF.explogtau = explogtau
+    BNMTF.muF = muF
+    BNMTF.muS = muS
+    BNMTF.muG = muG
+    BNMTF.tauF = tauF
+    BNMTF.tauS = tauS
+    BNMTF.tauG = tauG
+    BNMTF.alpha_s = alpha_s
+    BNMTF.beta_s = beta_s
+    assert BNMTF.elbo() == ELBO
     
         
 """ Test updating parameters U, V, tau """          

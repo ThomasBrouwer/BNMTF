@@ -108,8 +108,61 @@ class bnmtf_vb:
         
         for it in range(0,iterations):
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                '''
+                elbo1 = self.elbo()
+                old_elbo = (self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ), \
+                     - self.exptau / 2. * self.exp_square_diff(), \
+                     + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum(), \
+                     + numpy.log(self.lambdaS).sum() - ( self.lambdaS * self.expS ).sum(), \
+                     + numpy.log(self.lambdaG).sum() - ( self.lambdaG * self.expG ).sum(), \
+                     + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha), \
+                     + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau, \
+                     - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s), \
+                     - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau, \
+                     - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi), \
+                     + numpy.log(0.5*scipy.special.erfc(-self.muF*numpy.sqrt(self.tauF))).sum(), \
+                     + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum(), \
+                     - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi), \
+                     + numpy.log(0.5*scipy.special.erfc(-self.muS*numpy.sqrt(self.tauS))).sum(), \
+                     + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum(), \
+                     - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi), \
+                     + numpy.log(0.5*scipy.special.erfc(-self.muG*numpy.sqrt(self.tauG))).sum(), \
+                     + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum()  )                
+                '''
+                
                 self.update_F(i,k)
                 self.update_exp_F(i,k)
+                
+                '''
+                elbo2 = self.elbo()
+                new_elbo = (self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ), \
+                     - self.exptau / 2. * self.exp_square_diff(), \
+                     + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum(), \
+                     + numpy.log(self.lambdaS).sum() - ( self.lambdaS * self.expS ).sum(), \
+                     + numpy.log(self.lambdaG).sum() - ( self.lambdaG * self.expG ).sum(), \
+                     + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha), \
+                     + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau, \
+                     - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s), \
+                     - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau, \
+                     - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi), \
+                     + numpy.log(0.5*scipy.special.erfc(-self.muF*numpy.sqrt(self.tauF))).sum(), \
+                     + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum(), \
+                     - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi), \
+                     + numpy.log(0.5*scipy.special.erfc(-self.muS*numpy.sqrt(self.tauS))).sum(), \
+                     + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum(), \
+                     - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi), \
+                     + numpy.log(0.5*scipy.special.erfc(-self.muG*numpy.sqrt(self.tauG))).sum(), \
+                     + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum()  )                     
+                
+                if elbo2 < elbo1:
+                    print i,k,elbo1,elbo2,elbo2-elbo1
+                    print zip(old_elbo,new_elbo)
+                    for i,(v1,v2) in enumerate(zip(old_elbo,new_elbo)):
+                        if v1 < v2:
+                            print "Down",i,v1,v2, v1-v2
+                        if v1 > v2:
+                            print "Up",i,v1,v2,v1-v2
+                '''
                 
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
@@ -131,6 +184,27 @@ class bnmtf_vb:
         
     # Compute the ELBO
     def elbo(self):
+        '''
+        print self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ), \
+             - self.exptau / 2. * self.exp_square_diff(), \
+             + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum(), \
+             + numpy.log(self.lambdaS).sum() - ( self.lambdaS * self.expS ).sum(), \
+             + numpy.log(self.lambdaG).sum() - ( self.lambdaG * self.expG ).sum(), \
+             + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha), \
+             + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau, \
+             - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s), \
+             - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau, \
+             - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi), \
+             + numpy.log(0.5*scipy.special.erfc(-self.muF*numpy.sqrt(self.tauF))).sum(), \
+             + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum(), \
+             - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi), \
+             + numpy.log(0.5*scipy.special.erfc(-self.muS*numpy.sqrt(self.tauS))).sum(), \
+             + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum(), \
+             - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi), \
+             + numpy.log(0.5*scipy.special.erfc(-self.muG*numpy.sqrt(self.tauG))).sum(), \
+             + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum()  
+        '''
+        
         return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
              - self.exptau / 2. * self.exp_square_diff() \
              + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum() \
@@ -141,13 +215,13 @@ class bnmtf_vb:
              - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s) \
              - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau \
              - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muF*numpy.sqrt(self.tauF))).sum() \
+             + numpy.log(0.5*scipy.special.erfc(-self.muF*numpy.sqrt(self.tauF)/math.sqrt(2))).sum() \
              + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum() \
              - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muS*numpy.sqrt(self.tauS))).sum() \
+             + numpy.log(0.5*scipy.special.erfc(-self.muS*numpy.sqrt(self.tauS)/math.sqrt(2))).sum() \
              + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum() \
              - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muG*numpy.sqrt(self.tauG))).sum() \
+             + numpy.log(0.5*scipy.special.erfc(-self.muG*numpy.sqrt(self.tauG)/math.sqrt(2))).sum() \
              + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum()
         
 
@@ -163,12 +237,79 @@ class bnmtf_vb:
         
     def exp_square_diff(self): # Compute: sum_Omega E_q(F,S,G) [ ( Rij - Fi S Gj )^2 ]
         return (self.M *( ( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2 + \
-                         ( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) ) ) ).sum()
+                         ( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T ) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) ) ) ).sum()
         
     def update_F(self,i,k):       
+        
+        old_vals = (self.muF[i,k],self.tauF[i,k])
+        elbo1 = self.elbo()
+        
         varSkG = numpy.dot( self.varS[k]+self.expS[k]**2 , (self.varG+self.expG**2).T ) - numpy.dot( self.expS[k]**2 , (self.expG**2).T ) # Vector of size J
         self.tauF[i,k] = self.exptau*(self.M[i]*( varSkG + ( numpy.dot(self.expS[k],self.expG.T) )**2 )).sum()
+        
+        #self.tauF[i,k] = self.exptau*sum([
+        #    (sum([self.expS[k,l]*self.expG[j,l] for l in range(0,self.L)]))**2 + \
+        #    sum([(self.varS[k,l] + self.expS[k,l]**2)*(self.varG[j,l] + self.expG[j,l]**2) - self.expS[k,l]**2 * self.expG[j,l]**2 for l in range(0,self.L)])
+        #for j in range(0,self.J) if self.M[i,j]])  
+        
+        self.update_exp_F(i,k)
+        elbo2 = self.elbo()
+        new_vals = (self.muF[i,k],self.tauF[i,k])
+        old_elbo = (self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ), \
+             - self.exptau / 2. * self.exp_square_diff(), \
+             + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum(), \
+             + numpy.log(self.lambdaS).sum() - ( self.lambdaS * self.expS ).sum(), \
+             + numpy.log(self.lambdaG).sum() - ( self.lambdaG * self.expG ).sum(), \
+             + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha), \
+             + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau, \
+             - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s), \
+             - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau, \
+             - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi), \
+             + numpy.log(1. - norm.cdf(-self.muF*numpy.sqrt(self.tauF))).sum(), \
+             + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum(), \
+             - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi), \
+             + numpy.log(1. - norm.cdf(-self.muS*numpy.sqrt(self.tauS))).sum(), \
+             + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum(), \
+             - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi), \
+             + numpy.log(1. - norm.cdf(-self.muG*numpy.sqrt(self.tauG))).sum(), \
+             + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum() )
+        
         self.muF[i,k] = 1./self.tauF[i,k] * (-self.lambdaF[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-self.triple_dot(self.expF[i],self.expS,self.expG.T)+self.expF[i,k]*numpy.dot(self.expS[k],self.expG.T) ) * numpy.dot(self.expS[k],self.expG.T) )).sum()) 
+    
+        #self.muF[i,k] = 1./self.tauF[i,k] * (-self.lambdaF[i,k] + self.exptau * sum([
+        #    sum([self.expS[k,l]*self.expG[j,l] for l in range(0,self.L)]) * \
+        #    (self.R[i,j] - sum([self.expF[i,kp]*self.expS[kp,l]*self.expG[j,l] for kp,l in itertools.product(xrange(0,self.K),xrange(0,self.L)) if kp != k]))
+        #for j in range(0,self.J) if self.M[i,j]]))
+    
+        new_vals = (self.muF[i,k],self.tauF[i,k])
+        self.update_exp_F(i,k)
+        elbo3 = self.elbo()
+        '''
+        if elbo3-elbo2 < 0.:
+            print "Decrease in ELBO from : ",i,k, elbo2, elbo3, elbo3-elbo2, old_vals,new_vals
+            new_elbo = ( self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ), \
+                 - self.exptau / 2. * self.exp_square_diff(), \
+                 + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum(), \
+                 + numpy.log(self.lambdaS).sum() - ( self.lambdaS * self.expS ).sum(), \
+                 + numpy.log(self.lambdaG).sum() - ( self.lambdaG * self.expG ).sum(), \
+                 + self.alpha * math.log(self.beta) - scipy.special.gammaln(self.alpha), \
+                 + (self.alpha - 1.)*self.explogtau - self.beta * self.exptau, \
+                 - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s), \
+                 - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau, \
+                 - .5*numpy.log(self.tauF).sum() + self.I*self.K/2.*math.log(2*math.pi), \
+                 + numpy.log(1. - norm.cdf(-self.muF*numpy.sqrt(self.tauF))).sum(), \
+                 + ( self.tauF / 2. * ( self.varF + (self.expF - self.muF)**2 ) ).sum(), \
+                 - .5*numpy.log(self.tauS).sum() + self.K*self.L/2.*math.log(2*math.pi), \
+                 + numpy.log(1. - norm.cdf(-self.muS*numpy.sqrt(self.tauS))).sum(), \
+                 + ( self.tauS / 2. * ( self.varS + (self.expS - self.muS)**2 ) ).sum(), \
+                 - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi), \
+                 + numpy.log(1. - norm.cdf(-self.muG*numpy.sqrt(self.tauG))).sum(), \
+                 + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum() )
+            print zip(old_elbo,new_elbo)
+        '''
+        if elbo2 - elbo1 < 0.:
+            print "Decrease in ELBO from tau update from: ",i,k,elbo1,elbo2,elbo2-elbo1,old_vals,new_vals
+    
     
     def update_S(self,k,l):       
         varFkGl = numpy.outer( self.varF[:,k]+self.expF[:,k]**2 , self.varG[:,l]+self.expG[:,l]**2 ) - numpy.outer( self.expF[:,k]**2 , self.expG[:,l]**2 ) # Matrix of size IxJ

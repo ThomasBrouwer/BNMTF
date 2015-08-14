@@ -99,17 +99,29 @@ class bnmf_vb:
         
         for it in range(0,iterations):
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                elbo1 = self.elbo()
                 self.update_U(i,k)
                 self.update_exp_U(i,k)
+                elbo2 = self.elbo()
+                if elbo2 < elbo1:
+                    print "Failed1! Elbo was %s, is now %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
                 
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
+                elbo1 = self.elbo()
                 self.update_V(j,k)
                 self.update_exp_V(j,k)
-                
+                elbo2 = self.elbo()
+                if elbo2 < elbo1:
+                    print "Failed2! Elbo was %s, is now %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
+              
+            elbo1 = self.elbo()  
             self.update_tau()
             self.update_exp_tau()
             self.all_exp_tau.append(self.exptau)
-            
+            elbo2 = self.elbo()
+            if elbo2 < elbo1:
+                "Failed3! Elbo was %s, is now %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
+              
             perf, elbo = self.predict(self.M), self.elbo()
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
             
@@ -127,10 +139,10 @@ class bnmf_vb:
              - self.alpha_s * math.log(self.beta_s) + scipy.special.gammaln(self.alpha_s) \
              - (self.alpha_s - 1.)*self.explogtau + self.beta_s * self.exptau \
              - .5*numpy.log(self.tauU).sum() + self.I*self.K/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muU*numpy.sqrt(self.tauU))).sum() \
+             + numpy.log(0.5*scipy.special.erfc(-self.muU*numpy.sqrt(self.tauU)/math.sqrt(2))).sum() \
              + ( self.tauU / 2. * ( self.varU + (self.expU - self.muU)**2 ) ).sum() \
              - .5*numpy.log(self.tauV).sum() + self.J*self.K/2.*math.log(2*math.pi) \
-             + numpy.log(1. - norm.cdf(-self.muV*numpy.sqrt(self.tauV))).sum() \
+             + numpy.log(0.5*scipy.special.erfc(-self.muV*numpy.sqrt(self.tauV)/math.sqrt(2))).sum() \
              + ( self.tauV / 2. * ( self.varV + (self.expV - self.muV)**2 ) ).sum()
         
         
