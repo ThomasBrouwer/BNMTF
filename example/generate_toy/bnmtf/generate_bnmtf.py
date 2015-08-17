@@ -59,7 +59,7 @@ if __name__ == "__main__":
     output_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
     I,J,K,L = 100, 50, 10, 5
-    fraction_unknown = 0.9
+    fraction_unknown = 0.1
     alpha, beta = 1., 1.
     lambdaF = numpy.ones((I,K))
     lambdaS = numpy.ones((K,L))
