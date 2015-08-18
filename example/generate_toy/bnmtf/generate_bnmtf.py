@@ -53,13 +53,30 @@ def add_noise(true_R,tau):
         R[i,j] = Normal(true_R[i,j],tau).draw()
     return R
     
+def try_generate_M(I,J,fraction_unknown,attempts):
+    for attempt in range(1,attempts+1):
+        try:
+            M = generate_M(I,J,fraction_unknown)
+            sums_columns = M.sum(axis=0)
+            sums_rows = M.sum(axis=1)
+            for i,c in enumerate(sums_rows):
+                assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction_unknown)
+            for j,c in enumerate(sums_columns):
+                assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction_unknown)
+            print "Took %s attempts to generate M." % attempt
+            return M
+        except AssertionError:
+            pass
+    raise Exception("Tried to generate M %s times, with I=%s, J=%s, fraction=%s, but failed." % (attempts,I,J,fraction_unknown))
+      
+    
 ##########
 
 if __name__ == "__main__":
     output_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-    I,J,K,L = 100, 50, 10, 5
-    fraction_unknown = 0.1
+    I,J,K,L = 50, 50, 10, 5
+    fraction_unknown = 0.8
     alpha, beta = 1., 1.
     lambdaF = numpy.ones((I,K))
     lambdaS = numpy.ones((K,L))
@@ -69,22 +86,7 @@ if __name__ == "__main__":
     (F,S,G,tau,true_R,R) = generate_dataset(I,J,K,L,lambdaF,lambdaS,lambdaG,tau)
     
     # Try to generate M
-    attempts = 10000
-    for i in range(0,attempts):
-        try:
-            M = generate_M(I,J,fraction_unknown)
-            sums_columns = M.sum(axis=0)
-            sums_rows = M.sum(axis=1)
-            for i,c in enumerate(sums_rows):
-                assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction_unknown)
-            for j,c in enumerate(sums_columns):
-                assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction_unknown)
-            success = True
-            break
-        except AssertionError:
-            success = False
-            
-    assert success == True, "Failed to generate dataset, keep getting empty rows/columns. Tried %s times for fraction %s." % (attempts,fraction_unknown)
+    M = try_generate_M(I,J,fraction_unknown,attempts=1000)
     
     # Store all matrices in text files
     numpy.savetxt(open(output_folder+"F.txt",'w'),F)

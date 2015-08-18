@@ -49,23 +49,8 @@ def add_noise(true_R,tau):
         R[i,j] = Normal(true_R[i,j],tau).draw()
     return R
     
-##########
-
-if __name__ == "__main__":
-    output_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
-
-    I,J,K = 20,10,5#100, 50, 10
-    fraction_unknown = 0.8
-    alpha, beta = 100., 1.
-    lambdaU = numpy.ones((I,K))
-    lambdaV = numpy.ones((I,K))
-    tau = alpha / beta
-    
-    (U,V,tau,true_R,R) = generate_dataset(I,J,K,lambdaU,lambdaV,tau)
-    
-    # Try to generate M
-    attempts = 10000
-    for i in range(0,attempts):
+def try_generate_M(I,J,fraction_unknown,attempts):
+    for attempt in range(1,attempts+1):
         try:
             M = generate_M(I,J,fraction_unknown)
             sums_columns = M.sum(axis=0)
@@ -74,12 +59,28 @@ if __name__ == "__main__":
                 assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction_unknown)
             for j,c in enumerate(sums_columns):
                 assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction_unknown)
-            success = True
-            break
+            print "Took %s attempts to generate M." % attempt
+            return M
         except AssertionError:
-            success = False
-            
-    assert success == True, "Failed to generate dataset, keep getting empty rows/columns. Tried %s times for fraction %s." % (attempts,fraction_unknown)
+            pass
+    raise Exception("Tried to generate M %s times, with I=%s, J=%s, fraction=%s, but failed." % (attempts,I,J,fraction_unknown))
+      
+##########
+
+if __name__ == "__main__":
+    output_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
+
+    I,J,K = 50, 50, 10
+    fraction_unknown = 0.8
+    alpha, beta = 1., 1.
+    lambdaU = numpy.ones((I,K))
+    lambdaV = numpy.ones((I,K))
+    tau = alpha / beta
+    
+    (U,V,tau,true_R,R) = generate_dataset(I,J,K,lambdaU,lambdaV,tau)
+    
+    # Try to generate M
+    M = try_generate_M(I,J,fraction_unknown,attempts=1000)
     
     # Store all matrices in text files
     numpy.savetxt(open(output_folder+"U.txt",'w'),U)

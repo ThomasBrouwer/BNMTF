@@ -18,20 +18,22 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmf_gibbs import bnmf_gibbs
-from BNMTF.example.generate_toy.bnmf.generate_bnmf import generate_dataset, add_noise
-from ml_helpers.code.mask import generate_M, calc_inverse_M
+from BNMTF.example.generate_toy.bnmf.generate_bnmf import generate_dataset, add_noise, try_generate_M
+from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 
 ##########
 
-fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8 ]
-noise_ratios = [ 0.01, 0.1, 0.2, 0.5, 1. ] # 1/SNR
+fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9 ]
+noise_ratios = [ 0.01, 0.05, 0.1 ] # 1/SNR
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
 iterations = 2000
-I,J,K = 100, 50, 10
+I,J,K = 50, 50, 10
+attempts = 1000 # How many attempts we should make at generating M's
 
 burn_in = 1000
 thinning = 10
@@ -54,7 +56,7 @@ for noise in noise_ratios:
     
     R = add_noise(true_R,tau)
     
-    Ms = [ generate_M(I,J,fraction) for fraction in fractions_unknown ]
+    Ms = [ try_generate_M(I,J,fraction,attempts) for fraction in fractions_unknown ]
     Ms_test = [ calc_inverse_M(M) for M in Ms ]
     
     all_R.append(R)
@@ -177,10 +179,15 @@ All performances versus noise level and fraction of entries missing:
 # So we get n lines in each plot for n noise levels.
 f, axarr = plt.subplots(3, sharex=True)
 x = fractions_unknown
-axarr[0].set_title('Performance versus fraction missing')
+
+# Set axis font to small
+fontP = FontProperties()
+fontP.set_size('small')
+
+axarr[0].set_title('BNMF performance versus fraction missing')
 for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
     axarr[0].plot(x, [perf['MSE'] for perf in all_performances],label="Noise %s%%" % (100.*noise))
-    axarr[0].legend(loc="upper left")
+    axarr[0].legend(loc="upper left", prop = fontP)
 axarr[0].set_ylabel("MSE")
 for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
     axarr[1].plot(x, [perf['R^2'] for perf in all_performances],label="Noise %s%%" % (100.*noise))   
