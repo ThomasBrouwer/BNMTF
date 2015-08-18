@@ -43,7 +43,8 @@ lambdaF = numpy.ones((I,K))
 lambdaS = numpy.ones((K,L))  
 lambdaG = numpy.ones((J,L))  
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
-
+  
+'''
 # For each tau, generate a dataset, and mask matrices
 all_R = []
 all_Ms = []
@@ -77,8 +78,7 @@ for noise in noise_ratios:
         check_empty_rows_columns(M,fraction)
         
 print "Generated datasets and mask matrices."
-       
-       
+     
 # For each level of noise, and for each fraction of missing data, run the VB algorithm.
 # Then plot this, and convergence of tau as well.
 all_performances_per_noise = []
@@ -117,9 +117,10 @@ print "All performances versus noise level and fraction of entries missing: %s."
 
 
 '''
-All performances versus noise level and fraction of entries missing: 
-(Noise -> Fraction -> Performances)
-[(0.01, 
+# All performances versus noise level and fraction of entries missing: 
+# (Noise -> Fraction -> Performances)
+stored_all_performances = [
+ (0.01, 
       [(0.1, {'R^2': 0.9827806402055835, 'MSE': 19.000913967003534, 'Rp': 0.99135308174986569}), 
        (0.2, {'R^2': 0.9865015312881293, 'MSE': 20.788764048766264, 'Rp': 0.99336726740295134}), 
        (0.3, {'R^2': 0.9863355718902775, 'MSE': 21.898187013256795, 'Rp': 0.99322770486605105}), 
@@ -157,13 +158,15 @@ All performances versus noise level and fraction of entries missing:
        (0.75, {'R^2': 0.8317152863079489, 'MSE': 59.309184298399096, 'Rp': 0.91464996028396983}), 
        (0.8, {'R^2': 0.8348612978982133, 'MSE': 60.229660889051601, 'Rp': 0.91404450206165555}), 
        (0.85, {'R^2': 0.8052573923279411, 'MSE': 69.113408274560896, 'Rp': 0.89901532296961462}), 
-       (0.9, {'R^2': 0.7621337376835944, 'MSE': 87.47487375643496, 'Rp': 0.87333697688306988})])]
-'''
-
+       (0.9, {'R^2': 0.7621337376835944, 'MSE': 87.47487375643496, 'Rp': 0.87333697688306988})])
+]
+all_performances_per_noise = [[performance for fraction,performance in all_performances] for noise,all_performances in stored_all_performances]
+''''''
 
 # Plot the MSE and R^2 for each noise level, as the fraction of missing values varies.
 # So we get n lines in each plot for n noise levels.
-f, axarr = plt.subplots(3, sharex=True)
+#f, axarr = plt.subplots(3, sharex=True)
+f, axarr = plt.subplots(2, sharex=True, figsize=(7.5,5))
 x = fractions_unknown
 
 # Set axis font to small
@@ -173,12 +176,18 @@ fontP.set_size('small')
 axarr[0].set_title('BNMTF performance versus fraction missing')
 for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
     axarr[0].plot(x, [perf['MSE'] for perf in all_performances],label="Noise %s%%" % (100.*noise))
-    axarr[0].legend(loc="upper left", prop = fontP)
+axarr[0].legend(loc="upper left", prop = fontP)
 axarr[0].set_ylabel("MSE")
+
 for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
-    axarr[1].plot(x, [perf['R^2'] for perf in all_performances],label="Noise %s%%" % (100.*noise))   
-axarr[1].set_ylabel("R^2")
-for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
-    axarr[2].plot(x, [perf['Rp'] for perf in all_performances],label="Noise %s%%" % (100.*noise)) 
-axarr[2].set_ylabel("Rp")
-axarr[2].set_xlabel("Fraction missing")
+    axarr[1].plot(x, [perf['R^2'] for perf in all_performances],label="Noise %s%%" % (100.*noise)) 
+axarr[1].set_ylabel("R2")
+axarr[1].set_ylim(0.4,1)
+
+#for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
+#    axarr[2].plot(x, [perf['Rp'] for perf in all_performances],label="Noise %s%%" % (100.*noise)) 
+#axarr[2].set_ylabel("Rp")
+#
+#axarr[2].set_xlabel("Fraction missing")
+axarr[1].set_xlabel("Fraction missing")
+plt.xlim(x[0],x[-1])
