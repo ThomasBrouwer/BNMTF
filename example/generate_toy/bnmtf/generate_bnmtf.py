@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     I,J,K,L = 50, 40, 10, 5
     fraction_unknown = 0.1
-    alpha, beta = 1., 1.
+    alpha, beta = 1000., 1.
     lambdaF = numpy.ones((I,K))
     lambdaS = numpy.ones((K,L))
     lambdaG = numpy.ones((J,L))

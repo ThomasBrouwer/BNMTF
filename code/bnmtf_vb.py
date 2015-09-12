@@ -166,20 +166,28 @@ class bnmtf_vb:
                 '''
                 
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
+                #elbo1 = self.elbo()
                 self.update_S(k,l)
                 self.update_exp_S(k,l)
+                #elbo2 = self.elbo()
+                #if elbo2 < elbo1:
+                #    print "FAILED S! %s, %s." % (k,l)
                 
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
+                #elbo1 = self.elbo()
                 self.update_G(j,l)
                 self.update_exp_G(j,l)
+                #elbo2 = self.elbo()
+                #if elbo2 < elbo1:
+                #    print "FAILED G! %s, %s." % (j,l)
                 
-            elbo1 = self.elbo()
+            #elbo1 = self.elbo()
             self.update_tau()
             self.update_exp_tau()
             self.all_exp_tau.append(self.exptau)
-            elbo2 = self.elbo()
-            if elbo2 < elbo1:
-                print "Updated tau but ELBO went down... Before: %s. After: %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
+            #elbo2 = self.elbo()
+            #if elbo2 < elbo1:
+            #    print "Updated tau but ELBO went down... Before: %s. After: %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
             
             perf, elbo = self.predict(self.M), self.elbo()
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
@@ -189,7 +197,7 @@ class bnmtf_vb:
         
     # Compute the ELBO
     def elbo(self):
-        #'''
+        '''
         print self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ), \
              - self.exptau / 2. * self.exp_square_diff(), \
              + numpy.log(self.lambdaF).sum() - ( self.lambdaF * self.expF ).sum(), \
@@ -208,7 +216,7 @@ class bnmtf_vb:
              - .5*numpy.log(self.tauG).sum() + self.J*self.L/2.*math.log(2*math.pi), \
              + numpy.log(0.5*scipy.special.erfc(-self.muG*numpy.sqrt(self.tauG))).sum(), \
              + ( self.tauG / 2. * ( self.varG + (self.expG - self.muG)**2 ) ).sum()  
-        #'''
+        '''
         
         return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
              - self.exptau / 2. * self.exp_square_diff() \
@@ -260,12 +268,11 @@ class bnmtf_vb:
         '''
         
     def exp_square_diff(self): # Compute: sum_Omega E_q(F,S,G) [ ( Rij - Fi S Gj )^2 ]
-        print (self.M*( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2).sum()
-        print (self.M*( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T ) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) )).sum()
-        print (self.M*( numpy.dot(self.varF, ( numpy.dot(self.expS,self.expG.T)**2 - numpy.dot(self.expS**2,self.expG.T**2) ) ) )).sum()
-        print (self.M*( numpy.dot( numpy.dot(self.expF,self.expS)**2 - numpy.dot(self.expF**2,self.expS**2), self.varG.T ) )).sum()
-        print (self.M*( numpy.dot( self.varG.T, numpy.dot(self.expF,self.expS)**2 - numpy.dot(self.expF**2,self.expS**2).T ) )).sum()
-    
+        #print (self.M*( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2).sum()
+        #print (self.M*( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T ) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) )).sum()
+        #print (self.M*( numpy.dot(self.varF, ( numpy.dot(self.expS,self.expG.T)**2 - numpy.dot(self.expS**2,self.expG.T**2) ) ) )).sum()
+        #print (self.M*( numpy.dot( numpy.dot(self.expF,self.expS)**2 - numpy.dot(self.expF**2,self.expS**2), self.varG.T ) )).sum()
+        
         return (self.M*( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2).sum() + \
                (self.M*( self.triple_dot(self.varF+self.expF**2, self.varS+self.expS**2, (self.varG+self.expG**2).T ) - self.triple_dot(self.expF**2,self.expS**2,(self.expG**2).T) )).sum() + \
                (self.M*( numpy.dot(self.varF, ( numpy.dot(self.expS,self.expG.T)**2 - numpy.dot(self.expS**2,self.expG.T**2) ) ) )).sum() + \
@@ -415,14 +422,15 @@ class bnmtf_vb:
         #    for k in range(0,self.K)])
         #for i in range(0,self.I) if self.M[i,j]]))
         
+        '''
         if j == 2 and l == 4:
             print self.tauG[j,l], self.muG[j,l]            
             
-            old_tauGjl = self.tauG[j,l] #old_muGjl = self.muG[j,l] #
-            offsets = [1*v for v in range(-67,100)] #range(-int(old_muGjl),100)  #offsets = range(-int(old_tauGjl)+1,100)  
+            old_muGjl = self.muG[j,l] #old_tauGjl = self.tauG[j,l] #
+            offsets = [0.1*v for v in range(-10,10)] #range(-int(old_muGjl),100)  #offsets = range(-int(old_tauGjl)+1,100)  
             elbos = []
             for offset in offsets:
-                self.tauG[j,l] = old_tauGjl + offset #self.muG[j,l] = old_muGjl + offset #
+                self.muG[j,l] = old_muGjl + offset #self.tauG[j,l] = old_tauGjl + offset #
                 self.update_exp_G(j,l)
                 elbos.append(self.elbo())
             
@@ -431,8 +439,9 @@ class bnmtf_vb:
             plt.show()   
             print "Best offset: ", offsets[elbos.index(max(elbos))],max(elbos)
             
-            self.tauG[j,l] = old_tauGjl #self.muG[j,l] = old_muGjl #
+            self.muG[j,l] = old_muGjl #self.tauG[j,l] = old_tauGjl #
             self.update_exp_G(j,l)
+        '''
             
 
     # Update the expectations and variances

@@ -18,11 +18,11 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 2000
-burn_in = 1000
-thinning = 5
+iterations = 100
+burn_in = 50
+thinning = 2
 init = 'random'
-I, J, K, L = 50, 50, 10, 5
+I, J, K, L = 50, 40, 10, 5
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))
