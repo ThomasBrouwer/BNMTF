@@ -33,6 +33,7 @@ from distributions.truncated_normal import TruncatedNormal
 
 import numpy, itertools, math, scipy
 from scipy.stats import norm
+import matplotlib.pyplot as plt
 
 class bnmf_vb:
     def __init__(self,R,M,K,priors):
@@ -99,29 +100,17 @@ class bnmf_vb:
         
         for it in range(0,iterations):
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                elbo1 = self.elbo()
                 self.update_U(i,k)
                 self.update_exp_U(i,k)
-                elbo2 = self.elbo()
-                if elbo2 < elbo1:
-                    print "Failed1! Elbo was %s, is now %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
                 
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
-                elbo1 = self.elbo()
                 self.update_V(j,k)
                 self.update_exp_V(j,k)
-                elbo2 = self.elbo()
-                if elbo2 < elbo1:
-                    print "Failed2! Elbo was %s, is now %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
-              
-            elbo1 = self.elbo()  
+                
             self.update_tau()
             self.update_exp_tau()
             self.all_exp_tau.append(self.exptau)
-            elbo2 = self.elbo()
-            if elbo2 < elbo1:
-                "Failed3! Elbo was %s, is now %s. Diff: %s." % (elbo1,elbo2,elbo2-elbo1)
-              
+            
             perf, elbo = self.predict(self.M), self.elbo()
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
             
@@ -160,12 +149,13 @@ class bnmf_vb:
         #self.tauU[i,k] = self.exptau * sum([( self.varV[j,k] + self.expV[j,k]**2 ) for j in range(0,self.J) if self.M[i,j]])
         self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
         #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in range(0,self.J) if self.M[i,j]]))
-        
+
     def update_V(self,j,k):
         self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
         #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in range(0,self.I) if self.M[i,j]])
         self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
         #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in range(0,self.I) if self.M[i,j]]))
+        
         
     # Update the expectations and variances
     def update_exp_U(self,i,k):

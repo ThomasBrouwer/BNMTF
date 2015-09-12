@@ -26,11 +26,11 @@ input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
 iterations = 100
 init = 'random'
-I, J, K = 20,10,5#100, 50, 10
+I, J, K = 20, 10, 5 #100, 50, 10
 
 alpha, beta = 1., 1. #1., 1.
-lambdaU = numpy.ones((I,K))
-lambdaV = numpy.ones((J,K))
+lambdaU = numpy.ones((I,K))*2
+lambdaV = numpy.ones((J,K))*2
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
 # Load in data
