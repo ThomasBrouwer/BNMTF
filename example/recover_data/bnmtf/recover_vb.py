@@ -18,7 +18,7 @@ input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
 iterations = 3
 init = 'random'
-I, J, K, L = 50, 50, 10, 5
+I, J, K, L = 50, 40, 10, 5
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))
