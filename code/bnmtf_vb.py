@@ -13,8 +13,8 @@ Initialisation can be done by running the initialise() function. We initialise a
 - muF[i,k], tauF[i,k] = lambdaF[i,k], 1
 - muS[k,l], tauS[k,l] = lambdaS[k,l], 1
 - muG[j,l], tauG[j,l] = lambdaG[j,l], 1
-- alpha_s, beta_s = alpha, beta
-Alternatively, you can pass a dictionary { 'muF', 'tauF', 'muS', 'tauS', 'muG', 'tauG', 'alpha_s', 'beta_s' }.
+- alpha_s, beta_s using updates of model
+Alternatively, you can pass a dictionary { 'muF', 'tauF', 'muS', 'tauS', 'muG', 'tauG' }.
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,L,priors)
@@ -111,7 +111,7 @@ class bnmtf_vb:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
-            for k,i in itertools.product(xrange(0,self.K),xrange(0,self.I)):
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
                 self.update_F(i,k)
                 self.update_exp_F(i,k)
                 
@@ -125,7 +125,7 @@ class bnmtf_vb:
             self.update_tau()
             self.update_exp_tau()
                 
-            for l,j in itertools.product(xrange(0,self.L),xrange(0,self.J)):
+            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
                 self.update_G(j,l)
                 self.update_exp_G(j,l)
                 
@@ -204,8 +204,8 @@ class bnmtf_vb:
         # List form
         #self.muS[k,l] = 1./self.tauS[k,l] * (-self.lambdaS[k,l] + self.exptau * sum([
         #    self.expF[i,k]*self.expG[j,l]*(self.R[i,j] - sum([self.expF[i,kp]*self.expS[kp,lp]*self.expG[j,lp] for kp,lp in itertools.product(xrange(0,self.K),xrange(0,self.L)) if (kp != k or lp != l)]))
-        #    - 1./2. * self.varF[i,k] * self.expG[j,l] * sum([self.expS[k,lp] * self.expG[j,lp] for lp in range(0,self.L) if lp != l])
-        #    - 1./2. * self.expF[i,k] * self.varG[j,l] * sum([self.expF[i,kp] * self.expS[kp,l] for kp in range(0,self.K) if kp != k])
+        #    - self.varF[i,k] * self.expG[j,l] * sum([self.expS[k,lp] * self.expG[j,lp] for lp in range(0,self.L) if lp != l])
+        #    - self.expF[i,k] * self.varG[j,l] * sum([self.expF[i,kp] * self.expS[kp,l] for kp in range(0,self.K) if kp != k])
         #for i,j in itertools.product(xrange(0,self.I),xrange(0,self.J)) if self.M[i,j]]))
         
             
