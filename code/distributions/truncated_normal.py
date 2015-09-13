@@ -85,3 +85,5 @@ ax[2].hist(X3, bins=range(-20,20), normed=True)
 ax[3].hist(N, bins=range(-20,20), normed=True)
 plt.show()
 '''
+
+#print TruncatedNormal(-6,1).expectation(), TruncatedNormal(-6,3000).variance(), TruncatedNormal(-6,3000).draw()
