@@ -89,9 +89,9 @@ class bnmtf_vb:
 
     # Initialise U, V, and tau. 
     def initialise(self,init_S='random',init_FG='random'):
-        self.tauF = numpy.ones((self.I,self.K))
-        self.tauS = numpy.ones((self.K,self.L))
-        self.tauG = numpy.ones((self.J,self.L))
+        self.tauF = numpy.ones((self.I,self.K))*10
+        self.tauS = numpy.ones((self.K,self.L))*10
+        self.tauG = numpy.ones((self.J,self.L))*10
         
         assert init_S in ['exp','random'], "Unrecognised init option for S: %s." % init_S
         self.muS = 1./self.lambdaS
@@ -111,13 +111,13 @@ class bnmtf_vb:
             kmeans_F = KMeans(self.R,self.M,self.K)
             kmeans_F.initialise()
             kmeans_F.cluster()
-            self.muF = kmeans_F.clustering_results + 0.2            
+            self.muF = kmeans_F.clustering_results #+ 0.2            
             
             print "Initialising G using KMeans."
             kmeans_G = KMeans(self.R.T,self.M.T,self.L)   
             kmeans_G.initialise()
             kmeans_G.cluster()
-            self.muG = kmeans_G.clustering_results + 0.2
+            self.muG = kmeans_G.clustering_results #+ 0.2
         
         # Initialise the expectations and variances
         self.expF, self.varF = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
