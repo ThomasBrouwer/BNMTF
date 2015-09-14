@@ -105,9 +105,10 @@ def test_initialise():
     alpha, beta = 3, 1
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
-    # Initialisation without custom values
+    # Initialisation using expectation
+    init_S, init_FG = 'exp', 'exp'
     BNMTF = bnmtf_vb(R,M,K,L,priors)
-    BNMTF.initialise()
+    BNMTF.initialise(init_S,init_FG)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMTF.tauF[i,k] == 1.
@@ -121,7 +122,6 @@ def test_initialise():
     assert BNMTF.alpha_s == alpha + I*J/2.
     assert BNMTF.beta_s == beta + BNMTF.exp_square_diff()/2.
         
-    # Test whether the expectation and variance values are correctly computed
     assert BNMTF.exptau == (alpha + I*J/2.)/(beta + BNMTF.exp_square_diff()/2.)
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert abs(BNMTF.expF[i,k] - (0.5 + 0.352065 / (1-0.3085))) < 0.0001
@@ -130,43 +130,50 @@ def test_initialise():
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         assert abs(BNMTF.expG[j,l] - (1./4. + 0.386668 / (1-0.4013))) < 0.0001
     
-    # Then initialise with predefined values. First override muF, tauS, tauG, alpha_s
-    values1 = {
-        'muF' : numpy.ones((I,K))*100, 
-        'tauS' : numpy.ones((K,L))*5, 
-        'tauG' : numpy.ones((J,L))*15
-    }
+    # Initialisation of S using random draws from prior
+    init_S, init_FG = 'random', 'exp'
     BNMTF = bnmtf_vb(R,M,K,L,priors)
-    BNMTF.initialise(values1)
+    BNMTF.initialise(init_S,init_FG)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMTF.tauF[i,k] == 1.
-        assert BNMTF.muF[i,k] == 100.
-    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
-        assert BNMTF.tauS[k,l] == 5.
-        assert BNMTF.muS[k,l] == 1./lambdaS[k,l]
-    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
-        assert BNMTF.tauG[j,l] == 15.
-        assert BNMTF.muG[j,l] == 1./lambdaG[j,l]
-        
-    # Then override tauF, muS, muG, beta_s
-    values2 = {
-        'tauF' : numpy.ones((I,K))*10,
-        'muS' : numpy.ones((K,L))*200,
-        'muG' : numpy.ones((J,L))*300
-    }
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
-    BNMTF.initialise(values2)
-    
-    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert BNMTF.tauF[i,k] == 10.
         assert BNMTF.muF[i,k] == 1./lambdaF[i,k]
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
         assert BNMTF.tauS[k,l] == 1.
-        assert BNMTF.muS[k,l] == 200.
+        assert BNMTF.muS[k,l] != 1./lambdaS[k,l] # test whether we overwrote the expectation
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         assert BNMTF.tauG[j,l] == 1.
-        assert BNMTF.muG[j,l] == 300.
+        assert BNMTF.muG[j,l] == 1./lambdaG[j,l]
+    
+    # Initialisation of F and G using random draws from prior
+    init_S, init_FG = 'exp', 'random'
+    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF.initialise(init_S,init_FG)
+    
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMTF.tauF[i,k] == 1.
+        assert BNMTF.muF[i,k] != 1./lambdaF[i,k] # test whether we overwrote the expectation
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert BNMTF.tauS[k,l] == 1.
+        assert BNMTF.muS[k,l] == 1./lambdaS[k,l]
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert BNMTF.tauG[j,l] == 1.
+        assert BNMTF.muG[j,l] != 1./lambdaG[j,l]
+        
+    # Initialisation of F and G using Kmeans
+    init_S, init_FG = 'exp', 'kmeans'
+    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF.initialise(init_S,init_FG)
+    
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMTF.tauF[i,k] == 1.
+        assert BNMTF.muF[i,k] != 1./lambdaF[i,k] # test whether we overwrote the expectation
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert BNMTF.tauS[k,l] == 1.
+        assert BNMTF.muS[k,l] == 1./lambdaS[k,l]
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert BNMTF.tauG[j,l] == 1.
+        assert BNMTF.muG[j,l] != 1./lambdaG[j,l]
         
         
 """ Test computing the ELBO. """
@@ -255,6 +262,8 @@ lambdaS = 3*numpy.ones((K,L))
 lambdaG = 4*numpy.ones((J,L))
 alpha, beta = 3, 1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+
+init_S, init_FG = 'exp', 'exp'
 
 def test_exp_square_diff():
     BNMTF = bnmtf_vb(R,M,K,L,priors)
@@ -371,8 +380,8 @@ def test_update_G():
 def test_update_exp_F():
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         BNMTF = bnmtf_vb(R,M,K,L,priors)
-        values = { 'tauF' : 4*numpy.ones((I,K)) }
-        BNMTF.initialise(values) # muF = [[0.5]], tauF = [[4.]]
+        BNMTF.initialise(init_S,init_FG)
+        BNMTF.tauF = 4*numpy.ones((I,K))  # muF = [[0.5]], tauF = [[4.]]
         BNMTF.update_exp_F(i,k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
         assert abs(BNMTF.expF[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
         assert abs(BNMTF.varF[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
@@ -380,8 +389,8 @@ def test_update_exp_F():
 def test_update_exp_S():
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
         BNMTF = bnmtf_vb(R,M,K,L,priors)
-        values = { 'tauS' : 4*numpy.ones((K,L)) }
-        BNMTF.initialise(values) # muS = [[1./3.]], tauS = [[4.]]
+        BNMTF.initialise(init_S,init_FG) 
+        BNMTF.tauS = 4*numpy.ones((K,L)) # muS = [[1./3.]], tauS = [[4.]]
         BNMTF.update_exp_S(k,l) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
         assert abs(BNMTF.expS[k,l] - (1./3. + 1./2. * 0.4273551839464883)) < 0.00001
         assert abs(BNMTF.varS[k,l] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
@@ -389,8 +398,8 @@ def test_update_exp_S():
 def test_update_exp_G():
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         BNMTF = bnmtf_vb(R,M,K,L,priors)
-        values = { 'tauG' : 4*numpy.ones((J,L)) }
-        BNMTF.initialise(values) # muG = [[1./4.]], tauG = [[4.]]
+        BNMTF.initialise(init_S,init_FG) 
+        BNMTF.tauG = 4*numpy.ones((J,L)) # muG = [[1./4.]], tauG = [[4.]]
         BNMTF.update_exp_G(j,l) #-mu*sqrt(tau) = -0.5., lambda(..) = 0.352065 / (1-0.3085) = 0.5091323210412148, gamma = 0.5137818808494219
         assert abs(BNMTF.expG[j,l] - (1./4. + 1./2. * 0.5091323210412148)) < 0.0001
         assert abs(BNMTF.varG[j,l] - 1./4.*(1. - 0.5137818808494219)) < 0.0001

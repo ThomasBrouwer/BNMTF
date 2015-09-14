@@ -17,7 +17,8 @@ import numpy, matplotlib.pyplot as plt
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
 iterations = 100
-init = 'random'
+init_FG = 'random'
+init_S = 'exp'
 I, J, K, L = 50,40,10,5 #50, 40, 10, 5
 
 alpha, beta = 1., 1.
@@ -33,7 +34,12 @@ M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
 BNMTF = bnmtf_vb(R,M,K,L,priors)
-BNMTF.initialise()
+BNMTF.initialise(init_S=init_S,init_FG=init_FG)
+
+expF = BNMTF.expF
+expS = BNMTF.expS
+expG = BNMTF.expG
+
 BNMTF.run(iterations)
 
 # Also measure the performances

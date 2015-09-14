@@ -8,15 +8,15 @@ We expect the following arguments:
 - priors = { 'alpha' = alpha_R, 'beta' = beta_R, 'lambdaU' = [[lambdaUik]], 'lambdaV' = [[lambdaVjk]] },
     a dictionary defining the priors over tau, U, V.
     
-Initialisation can be done by running the initialise() function. We initialise as follows:
-- muU[i,k], tauU[i,k] = lambdaU[i,k], 1
-- muV[j,k], tauV[j,k] = lambdaV[j,k], 1
-- alpha_s, beta_s = alpha, beta
-Alternatively, you can pass a dictionary { 'muU', 'tauU', 'muV', 'tauV', 'alpha_s', 'beta_s' }
+Initialisation can be done by running the initialise(init) function. We initialise as follows:
+- tauU[i,k] = tauV[k,l] = 1
+- init = 'exp'       -> muU[i,k] = 1/lambdaU[i,k], muV[j,k] = 1/lambdaV[j,k]
+       = 'random'    -> muU[i,k] ~ Exp(lambdaU[i,k]), muV[j,k] ~ Exp(lambdaV[j,k]), 
+- alpha_s, beta_s using updates of model
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.initisalise()      (or: BNMF.initialise(values=dict))
+    BNMF.initisalise(init)      
     BNMF.run(iterations)
 Or:
     BNMF = bnmf_vb(R,M,K,priors)
@@ -30,6 +30,7 @@ This gives a dictionary of performances,
 
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
+from distributions.exponential import Exponential
 
 import numpy, itertools, math, scipy
 from scipy.stats import norm
@@ -70,20 +71,25 @@ class bnmf_vb:
 
 
     # Initialise and run the sampler
-    def train(self,iterations):
-        self.initialise()
+    def train(self,init,iterations):
+        self.initialise(init)
         return self.run(iterations)
 
 
     # Initialise U, V, and tau. 
-    def initialise(self,values={}):
-        self.muU = values['muU'] if 'muU' in values else 1./self.lambdaU # expectation of Exp(lambdaUik)
-        self.tauU = values['tauU'] if 'tauU' in values else numpy.ones((self.I,self.K))
-        self.muV = values['muV'] if 'muV' in values else 1./self.lambdaV # expectation of Exp(lambdaVjk)
-        self.tauV = values['tauV'] if 'tauV' in values else numpy.ones((self.J,self.K))
-        self.alpha_s = values['alpha_s'] if 'alpha_s' in values else self.alpha
-        self.beta_s = values['beta_s'] if 'beta_s' in values else self.beta
+    def initialise(self,init='exp'):
+        self.tauU = numpy.ones((self.I,self.K))
+        self.tauV = numpy.ones((self.J,self.K))
         
+        assert init in ['exp','random','kmeans'], "Unrecognised init option for F,G: %s." % init
+        self.muU, self.muV = 1./self.lambdaU, 1./self.lambdaV
+        if init == 'random':
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
+                self.muF[i,k] = Exponential(self.lambdaU[i,k]).draw()
+            for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
+                self.muV[j,k] = Exponential(self.lambdaV[j,k]).draw()     
+        
+        # Initialise the expectations and variances
         self.expU, self.varU = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
         self.expV, self.varV = numpy.zeros((self.J,self.K)), numpy.zeros((self.J,self.K))
         
@@ -91,6 +97,9 @@ class bnmf_vb:
             self.update_exp_U(i,k)
         for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
             self.update_exp_V(j,k)
+            
+        # Initialise tau using the updates
+        self.update_tau()
         self.update_exp_tau()
 
 

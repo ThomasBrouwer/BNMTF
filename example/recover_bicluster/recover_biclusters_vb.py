@@ -39,15 +39,15 @@ G = numpy.array([[1,0] for i in range(0,10)] + [[0,1] for i in range(0,10)])
 
 R = numpy.dot(F,numpy.dot(S,G.T))
 
-iterations = 200
+iterations = 50
 init = 'random'
-I, J, K, L = 20, 20, 2, 2
-fraction_unknown = 0.1
+I, J, K, L = 20, 20, 3, 2
+fraction_unknown = 0.55
 
 alpha, beta = 1., 1.
-lambdaF = numpy.ones((I,K))
-lambdaS = numpy.ones((K,L))
-lambdaG = numpy.ones((J,L))
+lambdaF = numpy.ones((I,K))*1
+lambdaS = numpy.ones((K,L))/100
+lambdaG = numpy.ones((J,L))*1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 
 M = generate_M(I,J,fraction_unknown)

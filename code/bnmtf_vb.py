@@ -9,20 +9,23 @@ We expect the following arguments:
 - priors = { 'alpha' = alpha_R, 'beta' = beta_R, 'lambdaF' = [[lambdaFik]], 'lambdaS' = [[lambdaSkl]], 'lambdaG' = [[lambdaGjl]] },
     a dictionary defining the priors over tau, F, S, G.
     
-Initialisation can be done by running the initialise() function. We initialise as follows:
-- muF[i,k], tauF[i,k] = lambdaF[i,k], 1
-- muS[k,l], tauS[k,l] = lambdaS[k,l], 1
-- muG[j,l], tauG[j,l] = lambdaG[j,l], 1
+Initialisation can be done by running the initialise() function, with argument 
+init_S for S, and init_FG for F and G:
+- tauF[i,k] = tauS[k,l] = tauG[j,l] = 1
+- init_S = 'exp'        -> muS[k,l] = 1/lambdaS[k,l]
+         = 'random'     -> muS[k,l] ~ Exp(lambdaS[k,l])
+- init_FG = 'exp'       -> muF[i,k] = 1/lambdaF[i,k], muG[j,l] = 1/lambdaG[j,l]
+          = 'random'    -> muF[i,k] ~ Exp(lambdaF[i,k]), muG[j,l] ~ Exp(lambdaG[j,l])
+          = 'kmeans'    -> muF = KMeans(R,rows)+0.2, muG = KMeans(R,columns)+0.2
 - alpha_s, beta_s using updates of model
-Alternatively, you can pass a dictionary { 'muF', 'tauF', 'muS', 'tauS', 'muG', 'tauG' }.
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,L,priors)
-    BNMF.initisalise()      (or: BNMF.initialise(values=dict))
+    BNMF.initisalise(init_S,init_FG) 
     BNMF.run(iterations)
 Or:
     BNMF = bnmf_vb(R,M,K,L,priors)
-    BNMF.train(iterations)
+    BNMF.train(init_S,init_FG,iterations)
     
 We can test the performance of our model on a test dataset, specifying our test set with a mask M. 
     performance = BNMF.predict(M_pred)
@@ -32,6 +35,7 @@ This gives a dictionary of performances,
 
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
+from distributions.exponential import Exponential
 
 import numpy, itertools, math, scipy
 from scipy.stats import norm
@@ -74,20 +78,34 @@ class bnmtf_vb:
 
 
     # Initialise and run the sampler
-    def train(self,iterations):
-        self.initialise()
+    def train(self,init_S,init_FG,iterations):
+        self.initialise(init_S,init_FG)
         return self.run(iterations)
 
 
     # Initialise U, V, and tau. 
-    def initialise(self,values={}):
-        self.muF = values['muF'] if 'muF' in values else 1./self.lambdaF # expectation of Exp(lambdaFik)
-        self.tauF = values['tauF'] if 'tauF' in values else numpy.ones((self.I,self.K))
-        self.muS = values['muS'] if 'muS' in values else 1./self.lambdaS # expectation of Exp(lambdaSkl)
-        self.tauS = values['tauS'] if 'tauS' in values else numpy.ones((self.K,self.L))
-        self.muG = values['muG'] if 'muG' in values else 1./self.lambdaG # expectation of Exp(lambdaGjl)
-        self.tauG = values['tauG'] if 'tauG' in values else numpy.ones((self.J,self.L))
+    def initialise(self,init_S='random',init_FG='random'):
+        self.tauF = numpy.ones((self.I,self.K))
+        self.tauS = numpy.ones((self.K,self.L))
+        self.tauG = numpy.ones((self.J,self.L))
         
+        assert init_S in ['exp','random'], "Unrecognised init option for S: %s." % init_S
+        self.muS = 1./self.lambdaS
+        if init_S == 'random':
+            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):  
+                self.muS[k,l] = Exponential(self.lambdaS[k,l]).draw()
+        
+        assert init_FG in ['exp','random','kmeans'], "Unrecognised init option for F,G: %s." % init_FG
+        self.muF, self.muG = 1./self.lambdaF, 1./self.lambdaG
+        if init_FG == 'random':
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
+                self.muF[i,k] = Exponential(self.lambdaF[i,k]).draw()
+            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
+                self.muG[j,l] = Exponential(self.lambdaG[j,l]).draw()
+        elif init_FG == 'kmeans':
+            assert False,'TODO kmeans initialisation.'
+        
+        # Initialise the expectations and variances
         self.expF, self.varF = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
         self.expS, self.varS = numpy.zeros((self.K,self.L)), numpy.zeros((self.K,self.L))
         self.expG, self.varG = numpy.zeros((self.J,self.L)), numpy.zeros((self.J,self.L))
@@ -100,8 +118,6 @@ class bnmtf_vb:
             self.update_exp_G(j,l)
             
         # Initialise tau using the updates
-        #self.alpha_s = values['alpha_s'] if 'alpha_s' in values else self.alpha
-        #self.beta_s = values['beta_s'] if 'beta_s' in values else self.beta
         self.update_tau()
         self.update_exp_tau()
 
@@ -111,16 +127,16 @@ class bnmtf_vb:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
-            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                self.update_F(i,k)
-                self.update_exp_F(i,k)
-                
-            self.update_tau()
-            self.update_exp_tau()
-                
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
                 self.update_exp_S(k,l)
+                
+            self.update_tau()
+            self.update_exp_tau()
+            
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
+                self.update_F(i,k)
+                self.update_exp_F(i,k)
                 
             self.update_tau()
             self.update_exp_tau()
