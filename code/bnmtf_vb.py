@@ -33,6 +33,10 @@ This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
 """
 
+import sys
+sys.path.append("/home/tab43/Documents/Projects/libraries/")
+from kmeans_missing.code.kmeans import KMeans
+
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
 from distributions.exponential import Exponential
@@ -103,7 +107,17 @@ class bnmtf_vb:
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
                 self.muG[j,l] = Exponential(self.lambdaG[j,l]).draw()
         elif init_FG == 'kmeans':
-            assert False,'TODO kmeans initialisation.'
+            print "Initialising F using KMeans."
+            kmeans_F = KMeans(self.R,self.M,self.K)
+            kmeans_F.initialise()
+            kmeans_F.cluster()
+            self.muF = kmeans_F.clustering_results + 0.2            
+            
+            print "Initialising G using KMeans."
+            kmeans_G = KMeans(self.R.T,self.M.T,self.L)   
+            kmeans_G.initialise()
+            kmeans_G.cluster()
+            self.muG = kmeans_G.clustering_results + 0.2
         
         # Initialise the expectations and variances
         self.expF, self.varF = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
