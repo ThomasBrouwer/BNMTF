@@ -89,9 +89,9 @@ class bnmtf_vb:
 
     # Initialise U, V, and tau. 
     def initialise(self,init_S='random',init_FG='random'):
-        self.tauF = numpy.ones((self.I,self.K))*10
-        self.tauS = numpy.ones((self.K,self.L))*10
-        self.tauG = numpy.ones((self.J,self.L))*10
+        self.tauF = numpy.ones((self.I,self.K))
+        self.tauS = numpy.ones((self.K,self.L))
+        self.tauG = numpy.ones((self.J,self.L))
         
         assert init_S in ['exp','random'], "Unrecognised init option for S: %s." % init_S
         self.muS = 1./self.lambdaS

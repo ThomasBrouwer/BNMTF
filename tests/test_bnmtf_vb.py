@@ -167,10 +167,10 @@ def test_initialise():
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMTF.tauF[i,k] == 1.
-        assert BNMTF.muF[i,k] == .2 or BNMTF.muF[i,k] == 1.2 
+        assert BNMTF.muF[i,k] == 0 or BNMTF.muF[i,k] == 1 
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         assert BNMTF.tauG[j,l] == 1.
-        assert BNMTF.muG[j,l] == .2 or BNMTF.muG[j,l] == 1.2 
+        assert BNMTF.muG[j,l] == 0 or BNMTF.muG[j,l] == 1 
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
         assert BNMTF.tauS[k,l] == 1.
         assert BNMTF.muS[k,l] == 1./lambdaS[k,l]

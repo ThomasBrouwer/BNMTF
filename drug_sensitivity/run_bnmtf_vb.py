@@ -17,14 +17,14 @@ import numpy, matplotlib.pyplot as plt, random
 standardised = False #standardised Sanger or unstandardised
 no_folds = 5
 
-iterations = 1000
-init_S = 'random'
-init_FG = 'kmeans'
+iterations = 20
+init_S = 'exp' #'random'
+init_FG = 'exp' #'kmeans'
 I, J, K, L = 622,139,10,5
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))
-lambdaS = numpy.ones((K,L))
+lambdaS = numpy.ones((K,L))/50
 lambdaG = numpy.ones((J,L))
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 

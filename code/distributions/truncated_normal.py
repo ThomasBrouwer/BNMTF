@@ -11,8 +11,20 @@ We compute the expectation and variance ourselves - note that we use the
 complementary error function for 1-cdf(x) = 0.5*erfc(x/sqrt(2)), as for large
 x (>8), cdf(x)=1., so we get 0. instead of something like n*e^-n.
 
+As mu gets lower (negative), and tau higher, we get draws and expectations that
+are closer to an exponential distribution with scale parameter mu * tau.
+
+The draws in this case work effectively, but computing the mean and variance
+fails due to numerical errors. As a result, the mean and variance go to 0 after
+a certain point.
+This point is: -38 * std.
+
+This means that we need to use the mean and variance of an exponential when
+|mu| gets close to 38*std.
+Therefore we use it when |mu| < 30*std.
 """
 import math, numpy, time
+import matplotlib.pyplot as plt
 from scipy.stats import truncnorm, norm
 import rtnorm
 
@@ -28,7 +40,6 @@ class TruncatedNormal:
     def draw(self):
         if self.tau == 0.:
             return 0.
-        #d = truncnorm.rvs(a=self.a, b=self.b, loc=self.mu, scale=self.sigma, size=None)
         d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=self.mu, sigma=self.sigma)[0]
         return d if (d >= 0. and d != numpy.inf and d != -numpy.inf and not numpy.isnan(d)) else 0.
         
@@ -36,20 +47,25 @@ class TruncatedNormal:
     def expectation(self):
         if self.tau == 0.:
             return 0.
-        #exp = truncnorm.moment(1,self.a,self.b,self.mu,self.sigma)
-        x = - self.mu / self.sigma
-        lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
-        exp = self.mu + self.sigma * lambdax
+        if self.mu < -30 * self.sigma:
+            exp = 1./(abs(self.mu)*self.tau)
+        else:
+            x = - self.mu / self.sigma
+            lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
+            exp = self.mu + self.sigma * lambdax
         return exp if (exp >= 0.0 and exp != numpy.inf and exp != -numpy.inf and not numpy.isnan(exp)) else 0.
         
     # Return variance. The library gives NaN for this due to b->inf, so we compute it ourselves
     def variance(self):
         if self.tau == 0.:
             return 0.
-        x = - self.mu / self.sigma
-        lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
-        deltax = lambdax*(lambdax-x)
-        var = self.sigma**2 * ( 1 - deltax )
+        if self.mu < -30 * self.sigma:
+            var = (1./(abs(self.mu)*self.tau))**2
+        else:
+            x = - self.mu / self.sigma
+            lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
+            deltax = lambdax*(lambdax-x)
+            var = self.sigma**2 * ( 1 - deltax )
         return var if (var >= 0.0 and var != numpy.inf and var != -numpy.inf and not numpy.isnan(var)) else 0.
         
     
@@ -86,4 +102,18 @@ ax[3].hist(N, bins=range(-20,20), normed=True)
 plt.show()
 '''
 
-#print TruncatedNormal(-6,1).expectation(), TruncatedNormal(-6,3000).variance(), TruncatedNormal(-6,3000).draw()
+'''
+mu = -37
+std = 1
+tau = 1./(std**2)
+print TruncatedNormal(mu,tau).expectation(), \
+      TruncatedNormal(mu,tau).variance(), \
+      TruncatedNormal(mu,tau).draw()
+      
+mus = range(-50,-10+1)
+exp_exp = [(-1./(mup*tau))**2 for mup in mus]
+exp_tn = [TruncatedNormal(mup,tau).variance() for mup in mus]
+plt.plot(mus,exp_exp,label='Exp')
+plt.plot(mus,exp_tn,label='TN')
+plt.legend()
+'''
