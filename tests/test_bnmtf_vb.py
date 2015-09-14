@@ -175,6 +175,23 @@ def test_initialise():
         assert BNMTF.tauS[k,l] == 1.
         assert BNMTF.muS[k,l] == 1./lambdaS[k,l]
         
+    # Initialise tauF, tauS, tauG using predefined values
+    tauFSG = {
+        'tauF' : 2*numpy.ones((I,K)),
+        'tauS' : 3*numpy.ones((K,L)),
+        'tauG' : 4*numpy.ones((J,L))  
+    }
+    init_S, init_FG = 'exp', 'exp'
+    
+    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF.initialise(init_S,init_FG,tauFSG)
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMTF.tauF[i,k] == 2.
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert BNMTF.tauS[k,l] == 3.
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert BNMTF.tauG[j,l] == 4.
+        
         
 """ Test computing the ELBO. """
 def test_elbo():
@@ -518,4 +535,32 @@ def test_compute_statistics():
     assert MSE_pred == BNMTF.compute_MSE(M_pred,R,R_pred)
     assert R2_pred == BNMTF.compute_R2(M_pred,R,R_pred)
     assert Rp_pred == BNMTF.compute_Rp(M_pred,R,R_pred)
+    
+    
+""" Test the model quality measures. """
+def test_log_likelihood():
+    R = numpy.array([[1,2],[3,4]],dtype=float)
+    M = numpy.array([[1,1],[0,1]])
+    I, J, K, L = 2, 2, 3, 4
+    lambdaF = 2*numpy.ones((I,K))
+    lambdaS = 3*numpy.ones((K,L))
+    lambdaG = 4*numpy.ones((J,L))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+    
+    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF.expF = numpy.ones((I,K))
+    BNMTF.expS = 2*numpy.ones((K,L))
+    BNMTF.expG = 3*numpy.ones((J,L))
+    BNMTF.explogtau = 5.
+    BNMTF.exptau = 3.
+    # expU*expV.T = [[72.]]
+    
+    log_likelihood = 3./2.*(5.-math.log(2*math.pi)) - 3./2. * (71**2 + 70**2 + 68**2)
+    AIC = log_likelihood - (2*3+3*4+2*4)
+    BIC = log_likelihood - (2*3+3*4+2*4)*math.log(3)/2.
+    
+    assert log_likelihood == BNMTF.quality('loglikelihood')
+    assert AIC == BNMTF.quality('AIC')
+    assert BIC == BNMTF.quality('BIC')
     

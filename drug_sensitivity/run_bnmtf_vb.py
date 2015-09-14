@@ -18,9 +18,15 @@ standardised = False #standardised Sanger or unstandardised
 no_folds = 5
 
 iterations = 20
-init_S = 'exp' #'random'
-init_FG = 'exp' #'kmeans'
 I, J, K, L = 622,139,10,5
+
+init_S = 'random' #'exp' #
+init_FG = 'kmeans' #'exp' #
+tauFSG = {
+    'tauF' : 100*numpy.ones((I,K)),
+    'tauS' : 100*numpy.ones((K,L)),
+    'tauG' : 100*numpy.ones((J,L))  
+}
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))
@@ -37,7 +43,7 @@ folds_training = compute_Ms(folds_test)
 
 # Run the Gibbs sampler
 BNMTF = bnmtf_vb(X_min,M,K,L,priors)
-BNMTF.initialise(init_S=init_S,init_FG=init_FG)
+BNMTF.initialise(init_S=init_S,init_FG=init_FG,tauFSG=tauFSG)
 BNMTF.run(iterations)
 
 # Also measure the performances

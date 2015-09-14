@@ -9,15 +9,16 @@ We expect the following arguments:
 - priors = { 'alpha' = alpha_R, 'beta' = beta_R, 'lambdaF' = [[lambdaFik]], 'lambdaS' = [[lambdaSkl]], 'lambdaG' = [[lambdaGjl]] },
     a dictionary defining the priors over tau, F, S, G.
     
-Initialisation can be done by running the initialise() function, with argument 
+Initialisation can be done by running the initialise(init_S,init_FG,tauFSG) function, with argument 
 init_S for S, and init_FG for F and G:
-- tauF[i,k] = tauS[k,l] = tauG[j,l] = 1
 - init_S = 'exp'        -> muS[k,l] = 1/lambdaS[k,l]
          = 'random'     -> muS[k,l] ~ Exp(lambdaS[k,l])
 - init_FG = 'exp'       -> muF[i,k] = 1/lambdaF[i,k], muG[j,l] = 1/lambdaG[j,l]
           = 'random'    -> muF[i,k] ~ Exp(lambdaF[i,k]), muG[j,l] ~ Exp(lambdaG[j,l])
           = 'kmeans'    -> muF = KMeans(R,rows)+0.2, muG = KMeans(R,columns)+0.2
+- tauF[i,k] = tauS[k,l] = tauG[j,l] = 1 if tauFSG = {}, else tauF = tauFSG['tauF'], etc.
 - alpha_s, beta_s using updates of model
+
 
 Usage of class:
     BNMF = bnmf_vb(R,M,K,L,priors)
@@ -31,6 +32,12 @@ We can test the performance of our model on a test dataset, specifying our test 
     performance = BNMF.predict(M_pred)
 This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
+    
+Finally, we can return the goodness of fit of the data using the quality(metric) function:
+- metric = 'loglikelihood' -> return p(D|theta)
+         = 'BIC'        -> return Bayesian Information Criterion
+         = 'AIC'        -> return Afaike Information Criterion
+(we want to maximise these values)
 """
 
 import sys
@@ -88,10 +95,10 @@ class bnmtf_vb:
 
 
     # Initialise U, V, and tau. 
-    def initialise(self,init_S='random',init_FG='random'):
-        self.tauF = numpy.ones((self.I,self.K))
-        self.tauS = numpy.ones((self.K,self.L))
-        self.tauG = numpy.ones((self.J,self.L))
+    def initialise(self,init_S='random',init_FG='random',tauFSG={}):
+        self.tauF = tauFSG['tauF'] if 'tauF' in tauFSG else numpy.ones((self.I,self.K))
+        self.tauS = tauFSG['tauS'] if 'tauS' in tauFSG else numpy.ones((self.K,self.L))
+        self.tauG = tauFSG['tauG'] if 'tauG' in tauFSG else numpy.ones((self.J,self.L))
         
         assert init_S in ['exp','random'], "Unrecognised init option for S: %s." % init_S
         self.muS = 1./self.lambdaS
@@ -306,3 +313,22 @@ class bnmtf_vb:
         variance_real = (M*(R-mean_real)**2).sum()
         variance_pred = (M*(R_pred-mean_pred)**2).sum()
         return covariance / float(math.sqrt(variance_real)*math.sqrt(variance_pred))
+        
+        
+    # Functions for model selection, measuring the goodness of fit vs model complexity
+    def quality(self,metric):
+        assert metric in ['loglikelihood','BIC','AIC'], 'Unrecognised metric for model quality: %s.' % metric
+        log_likelihood = self.log_likelihood()
+        if metric == 'loglikelihood':
+            return log_likelihood
+        elif metric == 'BIC':
+            # -2*loglikelihood + (no. free parameters * log(no data points))
+            return log_likelihood - 0.5 * (self.I*self.K+self.K*self.L+self.J*self.L) * math.log(self.size_Omega)
+        elif metric == 'AIC':
+            # -2*loglikelihood + 2*no. free parameters
+            return log_likelihood - (self.I*self.K+self.K*self.L+self.J*self.L)
+        
+    def log_likelihood(self):
+        # Return the likelihood of the data given the trained model's parameters
+        return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
+             - self.exptau / 2. * (self.M*( self.R - self.triple_dot(self.expF,self.expS,self.expG.T) )**2).sum()

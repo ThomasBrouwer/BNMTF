@@ -111,6 +111,20 @@ def test_initialise():
         assert abs(BNMF.expU[i,k] - (0.5 + 0.352065 / (1-0.3085))) < 0.0001
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
         assert abs(BNMF.expV[j,k] - (1./3. + 0.377383 / (1-0.3694))) < 0.0001
+        
+    # Initialise tauU, tauV using predefined values
+    tauUV = {
+        'tauU' : 2*numpy.ones((I,K)),
+        'tauV' : 3*numpy.ones((J,K))
+    }
+    init = 'exp'
+    
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.initialise(init,tauUV)
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMF.tauU[i,k] == 2.
+    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
+        assert BNMF.tauV[j,k] == 3.
     
         
 """ Test computing the ELBO. """
@@ -155,15 +169,6 @@ def test_elbo():
          - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi) + 5*2*math.log(1.-0.080756659233771066) \
          + 0.5*5*2*1./100.*(11.+81.) \
          - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi) + 3*2*math.log(1.-0.067776752211548219) \
-         + 0.5*3*2*1./101.*(12.+81.)
-         
-    print 12./2.*(explogtau - math.log(2*math.pi)), - 8./2.*(41772+19872), \
-         + 5*2*(math.log(2.) - 2.*5.), + 3*2*(math.log(3.) - 3.*6.), \
-         + 3.*numpy.log(1.) - numpy.log(math.gamma(3.)), + 2.*9. - 1.*8., \
-         - 20.*numpy.log(21.) + numpy.log(math.gamma(20.)), - 19.*9. + 21.*8., \
-         - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi), + 5*2*math.log(1.-0.080756659233771066), \
-         + 0.5*5*2*1./100.*(11.+81.), \
-         - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi), + 3*2*math.log(1.-0.067776752211548219), \
          + 0.5*3*2*1./101.*(12.+81.)
          
     BNMF = bnmf_vb(R,M,K,priors)
@@ -357,3 +362,28 @@ def test_compute_statistics():
     assert R2_pred == BNMF.compute_R2(M_pred,R,R_pred)
     assert Rp_pred == BNMF.compute_Rp(M_pred,R,R_pred)
     
+    
+""" Test the model quality measures. """
+def test_log_likelihood():
+    R = numpy.array([[1,2],[3,4]],dtype=float)
+    M = numpy.array([[1,1],[0,1]])
+    I, J, K = 2, 2, 3
+    lambdaU = 2*numpy.ones((I,K))
+    lambdaV = 3*numpy.ones((J,K))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = numpy.ones((I,K))
+    BNMF.expV = 2*numpy.ones((J,K))
+    BNMF.explogtau = 5.
+    BNMF.exptau = 3.
+    # expU*expV.T = [[6.]]
+    
+    log_likelihood = 3./2.*(5.-math.log(2*math.pi)) - 3./2. * (5**2 + 4**2 + 2**2)
+    AIC = log_likelihood - (2*3+2*3)
+    BIC = log_likelihood - (2*3+2*3)*math.log(3)/2.
+    
+    assert log_likelihood == BNMF.quality('loglikelihood')
+    assert AIC == BNMF.quality('AIC')
+    assert BIC == BNMF.quality('BIC')

@@ -8,10 +8,10 @@ We expect the following arguments:
 - priors = { 'alpha' = alpha_R, 'beta' = beta_R, 'lambdaU' = [[lambdaUik]], 'lambdaV' = [[lambdaVjk]] },
     a dictionary defining the priors over tau, U, V.
     
-Initialisation can be done by running the initialise(init) function. We initialise as follows:
-- tauU[i,k] = tauV[k,l] = 1
+Initialisation can be done by running the initialise(init,tauUV) function. We initialise as follows:
 - init = 'exp'       -> muU[i,k] = 1/lambdaU[i,k], muV[j,k] = 1/lambdaV[j,k]
        = 'random'    -> muU[i,k] ~ Exp(lambdaU[i,k]), muV[j,k] ~ Exp(lambdaV[j,k]), 
+- tauU[i,k] = tauV[j,k] = 1 if tauUV = {}, else tauU = tauUV['tauU'], tauV = tauUV['tauV']
 - alpha_s, beta_s using updates of model
 
 Usage of class:
@@ -26,6 +26,12 @@ We can test the performance of our model on a test dataset, specifying our test 
     performance = BNMF.predict(M_pred)
 This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
+    
+Finally, we can return the goodness of fit of the data using the quality(metric) function:
+- metric = 'loglikelihood' -> return p(D|theta)
+         = 'BIC'        -> return Bayesian Information Criterion
+         = 'AIC'        -> return Afaike Information Criterion
+(we want to maximise these values)
 """
 
 from distributions.gamma import Gamma
@@ -77,9 +83,9 @@ class bnmf_vb:
 
 
     # Initialise U, V, and tau. 
-    def initialise(self,init='exp'):
-        self.tauU = numpy.ones((self.I,self.K))
-        self.tauV = numpy.ones((self.J,self.K))
+    def initialise(self,init='exp',tauUV={}):
+        self.tauU = tauUV['tauU'] if 'tauU' in tauUV else numpy.ones((self.I,self.K))
+        self.tauV = tauUV['tauV'] if 'tauV' in tauUV else numpy.ones((self.J,self.K))
         
         assert init in ['exp','random','kmeans'], "Unrecognised init option for F,G: %s." % init
         self.muU, self.muV = 1./self.lambdaU, 1./self.lambdaV
@@ -209,3 +215,22 @@ class bnmf_vb:
         variance_real = (M*(R-mean_real)**2).sum()
         variance_pred = (M*(R_pred-mean_pred)**2).sum()
         return covariance / float(math.sqrt(variance_real)*math.sqrt(variance_pred))
+        
+        
+    # Functions for model selection, measuring the goodness of fit vs model complexity
+    def quality(self,metric):
+        assert metric in ['loglikelihood','BIC','AIC'], 'Unrecognised metric for model quality: %s.' % metric
+        log_likelihood = self.log_likelihood()
+        if metric == 'loglikelihood':
+            return log_likelihood
+        elif metric == 'BIC':
+            # -2*loglikelihood + (no. free parameters * log(no data points))
+            return log_likelihood - 0.5 * (self.I*self.K+self.J*self.K) * math.log(self.size_Omega)
+        elif metric == 'AIC':
+            # -2*loglikelihood + 2*no. free parameters
+            return log_likelihood - (self.I*self.K+self.J*self.K)
+        
+    def log_likelihood(self):
+        # Return the likelihood of the data given the trained model's parameters
+        return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
+             - self.exptau / 2. * (self.M*( self.R - numpy.dot(self.expU,self.expV.T))**2).sum()
