@@ -1,10 +1,12 @@
 """
 Variational Bayesian inference for non-negative matrix factorisation.
+Parallel implementation - we update each F.k and G.l in parallel.
 
 We expect the following arguments:
 - R, the matrix
 - M, the mask matrix indicating observed values (1) and unobserved ones (0)
 - K, the number of latent factors
+- P, the number of cores we can use for parallelisation
 - priors = { 'alpha' = alpha_R, 'beta' = beta_R, 'lambdaU' = [[lambdaUik]], 'lambdaV' = [[lambdaVjk]] },
     a dictionary defining the priors over tau, U, V.
     
@@ -42,11 +44,14 @@ import numpy, itertools, math, scipy
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 
-class bnmf_vb:
-    def __init__(self,R,M,K,priors):
+from multiprocessing import Pool
+
+class bnmf_vb_parallel:
+    def __init__(self,R,M,K,P,priors):
         self.R = numpy.array(R,dtype=float)
         self.M = numpy.array(M,dtype=float)
         self.K = K
+        self.P = P
         
         assert len(self.R.shape) == 2, "Input matrix R is not a two-dimensional array, " \
             "but instead %s-dimensional." % len(self.R.shape)
@@ -114,9 +119,28 @@ class bnmf_vb:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
-            for k,i in itertools.product(xrange(0,self.K),xrange(0,self.I)):
-                self.update_U(i,k)
-                self.update_exp_U(i,k)
+            for k in range(0,self.K):
+                pool = Pool(self.P)
+                parallel_arguments = [
+                    {
+                        'i' : i,
+                        'k' : k,
+                        'Mi' : self.M[i],
+                        'Ri' : self.R[i],
+                        'exptau' : self.exptau,
+                        'varVk' : self.varV[:,k],
+                        'expV' : self.expV,
+                        'lambdaUik' : self.lambdaU[i,k],
+                        'expUi' : self.expU[i]
+                    }
+                    for i in range(0,self.I)
+                ]
+                outputs = pool.map(parallel_update_U,parallel_arguments)
+                pool.terminate()
+                pool.close()
+                pool.join()
+                for (i,tauUik,muUik,expUik,varUik) in outputs:
+                    self.tauU[i,k], self.muU[i,k], self.expU[i,k], self.varU[i,k] = (tauUik,muUik,expUik,varUik)
                 
             for k,j in itertools.product(xrange(0,self.K),xrange(0,self.J)):
                 self.update_V(j,k)
@@ -234,3 +258,39 @@ class bnmf_vb:
         # Return the likelihood of the data given the trained model's parameters
         return self.size_Omega / 2. * ( self.explogtau - math.log(2*math.pi) ) \
              - self.exptau / 2. * (self.M*( self.R - numpy.dot(self.expU,self.expV.T))**2).sum()
+             
+
+""" Functions that allow us to parallelise the updates. 
+    We cannot use any state of the object in parallel, so it has to be passed
+    outside, and we need to return the new tau, mu, exp, var.               """
+    
+# parallel_update_U(i,k,self.M[i],self.R[i],self.exptau,self.varV[:,k],self.expV,self.lambdaU[i,k],self.expU[i],)
+def parallel_update_U(args):
+    i,k,Mi,Ri,exptau,varVk,expV,lambdaUik,expUi = \
+        (args['i'],args['k'], args['Mi'], args['Ri'],args['exptau'], \
+         args['varVk'],args['expV'],args['lambdaUik'],args['expUi'])
+        
+    tauUik = exptau*(Mi*( varVk + expV[:,k]**2 )).sum()
+    muUik = 1./tauUik * (-lambdaUik + exptau*(Mi * ( (Ri-numpy.dot(expUi,expV.T)+expUi[k]*expV[:,k])*expV[:,k] )).sum()) 
+    
+    tn = TruncatedNormal(muUik,tauUik)
+    expUik = tn.expectation()
+    varUik = tn.variance()
+    
+    return (i,tauUik,muUik,expUik,varUik)
+        
+'''
+def parallel_update_V(j,k,Mj,Rj,exptau):
+    def update_V(self,j,k):
+        self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
+        #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in range(0,self.I) if self.M[i,j]])
+        self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
+        #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in range(0,self.I) if self.M[i,j]]))
+        
+        
+    # Update the expectations and variances
+    def update_exp_V(self,j,k):
+        tn = TruncatedNormal(self.muV[j,k],self.tauV[j,k])
+        self.expV[j,k] = tn.expectation()
+        self.varV[j,k] = tn.variance()
+'''
