@@ -62,6 +62,13 @@ class GreedySearch:
         assert search_metric in metrics, "Unrecognised metric name: %s." % search_metric    
         
         def try_KL(K,L):
+            # First see if we already tried this combination     
+            existing = self.find_KL(search_metric,K,L)
+            if existing:
+                print "Running line search for BNMF. Already tried K = %s, L = %s." % (K,L)         
+                return existing[0][2]
+            
+            # Otherwise, we try it
             print "Running line search for BNMF. Trying K = %s, L = %s." % (K,L)
             
             priors = self.priors.copy()
@@ -94,15 +101,21 @@ class GreedySearch:
                 break
             else:
                 if performance_new_K > performance_new_L and performance_new_K > performance_new_KL:
+                    print "(%s,%s) -> (%s,%s)" % (current_K,current_L,new_K,current_L)
                     ik += 1
                     current_K = new_K
+                    performance_so_far = performance_new_K
                 elif performance_new_L > performance_new_KL:
+                    print "(%s,%s) -> (%s,%s)" % (current_K,current_L,current_K,new_L)
                     il += 1
                     current_L = new_L
+                    performance_so_far = performance_new_L
                 else:
+                    print "(%s,%s) -> (%s,%s)" % (current_K,current_L,new_K,new_L)
                     ik += 1
                     il += 1
                     current_K,current_L = new_K,new_L
+                    performance_so_far = performance_new_KL
         
         # If we reached the edge of the grid (so ik == len(self.values_K)-1 or 
         # il == len(self.values_L)-1) we keep the search going in the L or K direction (resp)
@@ -114,8 +127,11 @@ class GreedySearch:
                 if performance_so_far > performance_new_L:
                     break
                 else:
+                    print "(%s,%s) -> (%s,%s)" % (current_K,current_L,current_K,new_L)
                     il += 1
                     current_L = new_L
+                    performance_so_far = performance_new_L
+                    
         elif il == len(self.values_L)-1:
             while ik < len(self.values_K)-1:
                 print "Currently at K = %s, L = %s." % (current_K,current_L)
@@ -124,8 +140,10 @@ class GreedySearch:
                 if performance_so_far > performance_new_K:
                     break
                 else:
+                    print "(%s,%s) -> (%s,%s)" % (current_K,current_L,new_K,current_L)
                     ik += 1
                     current_K = new_K     
+                    performance_so_far = performance_new_L
                 
         print "Finished running line search for BNMF."
     
@@ -133,6 +151,11 @@ class GreedySearch:
     def all_values(self,metric):
         assert metric in metrics, "Unrecognised metric name: %s." % metric
         return self.all_performances[metric]
+        
+    
+    def find_KL(self,metric,K,L):
+        # See if we have already tried this K and L - if so, return the performance
+        return filter(lambda x: (x[0],x[1]) == (K,L), self.all_values(metric))
     
     
     def best_value(self,metric):
