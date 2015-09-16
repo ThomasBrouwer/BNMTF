@@ -1,9 +1,9 @@
 """
-Tests for the BNMF Variational Bayes algorithm.
+Tests for the BNMF Variational Bayes algorithm, with optimised matrix operation updates.
 """
 
-import numpy, math, pytest, itertools, random, pytest
-from BNMTF.code.bnmf_vb import bnmf_vb
+import numpy, math, pytest, itertools, random
+from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
 
 
 """ Test constructor """
@@ -18,17 +18,17 @@ def test_init():
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R1,M,K,priors)
+        bnmf_vb_optimised(R1,M,K,priors)
     assert str(error.value) == "Input matrix R is not a two-dimensional array, but instead 1-dimensional."
     
     R2 = numpy.ones((4,3,2))
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R2,M,K,priors)
+        bnmf_vb_optimised(R2,M,K,priors)
     assert str(error.value) == "Input matrix R is not a two-dimensional array, but instead 3-dimensional."
     
     R3 = numpy.ones((3,2))
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R3,M,K,priors)
+        bnmf_vb_optimised(R3,M,K,priors)
     assert str(error.value) == "Input matrix R is not of the same size as the indicator matrix M: (3, 2) and (2, 3) respectively."
     
     # Similarly for lambdaU, lambdaV
@@ -36,14 +36,14 @@ def test_init():
     lambdaU = numpy.ones((2+1,1))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R4,M,K,priors)
+        bnmf_vb_optimised(R4,M,K,priors)
     assert str(error.value) == "Prior matrix lambdaU has the wrong shape: (3, 1) instead of (2, 1)."
     
     lambdaU = numpy.ones((2,1))
     lambdaV = numpy.ones((3+1,1))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R4,M,K,priors)
+        bnmf_vb_optimised(R4,M,K,priors)
     assert str(error.value) == "Prior matrix lambdaV has the wrong shape: (4, 1) instead of (3, 1)."
     
     # Test getting an exception if a row or column is entirely unknown
@@ -54,10 +54,10 @@ def test_init():
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R4,M1,K,priors)
+        bnmf_vb_optimised(R4,M1,K,priors)
     assert str(error.value) == "Fully unobserved row in R, row 1."
     with pytest.raises(AssertionError) as error:
-        bnmf_vb(R4,M2,K,priors)
+        bnmf_vb_optimised(R4,M2,K,priors)
     assert str(error.value) == "Fully unobserved column in R, column 2."
     
     # Finally, a successful case
@@ -67,7 +67,7 @@ def test_init():
     lambdaV = numpy.ones((J,K))
     M = numpy.ones((I,J))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
-    BNMF = bnmf_vb(R5,M,K,priors)
+    BNMF = bnmf_vb_optimised(R5,M,K,priors)
     
     assert numpy.array_equal(BNMF.R,R5)
     assert numpy.array_equal(BNMF.M,M)
@@ -94,7 +94,7 @@ def test_initialise():
     
     # Initialisation with expectation
     init = 'exp'
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.initialise(init)
     
     assert BNMF.alpha_s == alpha + 15./2.
@@ -119,7 +119,7 @@ def test_initialise():
     }
     init = 'exp'
     
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.initialise(init,tauUV)
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMF.tauU[i,k] == 2.
@@ -171,7 +171,7 @@ def test_elbo():
          - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi) + 3*2*math.log(1.-0.067776752211548219) \
          + 0.5*3*2*1./101.*(12.+81.)
          
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.expU = expU
     BNMF.expV = expV
     BNMF.varU = varU
@@ -199,7 +199,7 @@ alpha, beta = 3, 1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
 def test_exp_square_diff():
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.expU = 1./lambdaU #[[1./2.]]
     BNMF.expV = 1./lambdaV #[[1./3.]]
     BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
@@ -209,7 +209,7 @@ def test_exp_square_diff():
     assert BNMF.exp_square_diff() == exp_square_diff
 
 def test_update_tau():
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.expU = 1./lambdaU #[[1./2.]]
     BNMF.expV = 1./lambdaV #[[1./3.]]
     BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
@@ -219,8 +219,8 @@ def test_update_tau():
     assert BNMF.beta_s == beta + 172.66666666666666/2.
     
 def test_update_U():
-    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        BNMF = bnmf_vb(R,M,K,priors)
+    for k in range(0,K):
+        BNMF = bnmf_vb_optimised(R,M,K,priors)
         BNMF.muU = numpy.zeros((I,K))
         BNMF.tauU = numpy.zeros((I,K))
         BNMF.expU = 1./lambdaU #[[1./2.]]
@@ -228,14 +228,15 @@ def test_update_U():
         BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
         BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
         BNMF.exptau = 3.
-        BNMF.update_U(i,k)
-        assert BNMF.tauU[i,k] == 3. * (M[i] * ( BNMF.expV[:,k]*BNMF.expV[:,k] + BNMF.varV[:,k] )).sum()
-        assert BNMF.muU[i,k] == (1./(3. * (M[i] * ( BNMF.expV[:,k]*BNMF.expV[:,k] + BNMF.varV[:,k] )).sum())) * \
-                                ( -2. + BNMF.exptau * (M[i]*( (BNMF.R[i] - numpy.dot(BNMF.expU[i],BNMF.expV.T) + BNMF.expU[i,k]*BNMF.expV[:,k])*BNMF.expV[:,k] )).sum() )
+        BNMF.update_U(k)
+        for i in range(0,I):
+            assert BNMF.tauU[i,k] == 3. * (M[i] * ( BNMF.expV[:,k]*BNMF.expV[:,k] + BNMF.varV[:,k] )).sum()
+            assert BNMF.muU[i,k] == (1./(3. * (M[i] * ( BNMF.expV[:,k]*BNMF.expV[:,k] + BNMF.varV[:,k] )).sum())) * \
+                                    ( -2. + BNMF.exptau * (M[i]*( (BNMF.R[i] - numpy.dot(BNMF.expU[i],BNMF.expV.T) + BNMF.expU[i,k]*BNMF.expV[:,k])*BNMF.expV[:,k] )).sum() )
 
 def test_update_V():
-    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
-        BNMF = bnmf_vb(R,M,K,priors)
+    for k in range(0,K):
+        BNMF = bnmf_vb_optimised(R,M,K,priors)
         BNMF.muV = numpy.zeros((J,K))
         BNMF.tauV = numpy.zeros((J,K))
         BNMF.expU = 1./lambdaU #[[1./2.]]
@@ -243,33 +244,36 @@ def test_update_V():
         BNMF.varU = numpy.ones((I,K))*2 #[[2.]]
         BNMF.varV = numpy.ones((J,K))*3 #[[3.]]
         BNMF.exptau = 3.
-        BNMF.update_V(j,k)
-        assert BNMF.tauV[j,k] == 3. * (M[:,j] * ( BNMF.expU[:,k]*BNMF.expU[:,k] + BNMF.varU[:,k] )).sum()
-        assert BNMF.muV[j,k] == (1./(3. * (M[:,j] * ( BNMF.expU[:,k]*BNMF.expU[:,k] + BNMF.varU[:,k] )).sum())) * \
-                                ( -3. + BNMF.exptau * (M[:,j]*( (BNMF.R[:,j] - numpy.dot(BNMF.expU,BNMF.expV[j]) + BNMF.expU[:,k]*BNMF.expV[j,k])*BNMF.expU[:,k] )).sum() )
+        BNMF.update_V(k)
+        for j in range(0,J):
+            assert BNMF.tauV[j,k] == 3. * (M[:,j] * ( BNMF.expU[:,k]*BNMF.expU[:,k] + BNMF.varU[:,k] )).sum()
+            assert BNMF.muV[j,k] == (1./(3. * (M[:,j] * ( BNMF.expU[:,k]*BNMF.expU[:,k] + BNMF.varU[:,k] )).sum())) * \
+                                    ( -3. + BNMF.exptau * (M[:,j]*( (BNMF.R[:,j] - numpy.dot(BNMF.expU,BNMF.expV[j]) + BNMF.expU[:,k]*BNMF.expV[j,k])*BNMF.expU[:,k] )).sum() )
 
 
 """ Test computing expectation, variance U, V, tau """     
 def test_update_exp_U():
-    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        BNMF = bnmf_vb(R,M,K,priors)
+    for k in range(0,K):
+        BNMF = bnmf_vb_optimised(R,M,K,priors)
         BNMF.initialise()
         BNMF.tauU = 4*numpy.ones((I,K)) # muU = [[0.5]], tauU = [[4.]]
-        BNMF.update_exp_U(i,k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
-        assert abs(BNMF.expU[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
-        assert abs(BNMF.varU[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
+        BNMF.update_exp_U(k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
+        for i in range(0,I):        
+            assert abs(BNMF.expU[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
+            assert abs(BNMF.varU[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
 
 def test_update_exp_V():
-    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
-        BNMF = bnmf_vb(R,M,K,priors)
+    for k in range(0,K):
+        BNMF = bnmf_vb_optimised(R,M,K,priors)
         BNMF.initialise() 
         BNMF.tauV = 4*numpy.ones((J,K)) # muV = [[1./3.]], tauV = [[4.]]
-        BNMF.update_exp_V(j,k) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
-        assert abs(BNMF.expV[j,k] - (1./3. + 1./2. * 0.4273551839464883)) < 0.00001
-        assert abs(BNMF.varV[j,k] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
+        BNMF.update_exp_V(k) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
+        for j in range(0,J):        
+            assert abs(BNMF.expV[j,k] - (1./3. + 1./2. * 0.4273551839464883)) < 0.00001
+            assert abs(BNMF.varV[j,k] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
     
 def test_update_exp_tau():
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.initialise()  
     assert abs(BNMF.exptau - (3+12./2.)/(1+35.4113198623/2.)) < 0.000000000001
     assert abs(BNMF.explogtau - (2.1406414779556 - math.log(1+35.4113198623/2.))) < 0.000000000001
@@ -290,7 +294,7 @@ def test_run():
     
     iterations = 2
     
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.initialise()
     BNMF.run(iterations)
     
@@ -329,7 +333,7 @@ def test_predict():
     R2 = 1. - (444408561. + 447872569. + 447660964. + 447618649) / (4.25**2+2.25**2+2.75**2+3.75**2) #mean=7.25
     Rp = 357. / ( math.sqrt(44.75) * math.sqrt(5292.) ) #mean=7.25,var=44.75, mean_pred=21147,var_pred=5292, corr=(-4.25*-63 + -2.25*21 + 2.75*21 + 3.75*21)
     
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.expU = expU
     BNMF.expV = expV
     performances = BNMF.predict(M_test)
@@ -349,7 +353,7 @@ def test_compute_statistics():
     alpha, beta = 3, 1
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     
     R_pred = numpy.array([[500,550],[1220,1342]],dtype=float)
     M_pred = numpy.array([[0,0],[1,1]])
@@ -373,7 +377,7 @@ def test_log_likelihood():
     alpha, beta = 3, 1
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     
-    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.expU = numpy.ones((I,K))
     BNMF.expV = 2*numpy.ones((J,K))
     BNMF.explogtau = 5.

@@ -118,20 +118,12 @@ class bnmf_vb_optimised:
         
         for it in range(0,iterations):
             for k in xrange(0,self.K):
-                #time1 = time.time()
                 self.update_U(k)
-                #time2 = time.time()
-                self.update_exp_U(k)
-                #time3 = time.time()
-                #print time2-time1, time3-time2               
+                self.update_exp_U(k)           
                 
             for k in xrange(0,self.K):
-                #time1 = time.time()
                 self.update_V(k)
-                #time2 = time.time()
                 self.update_exp_V(k)
-                #time3 = time.time()
-                #print time2-time1, time3-time2  
                 
             self.update_tau()
             self.update_exp_tau()
