@@ -41,7 +41,7 @@ R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
-# Run the Gibbs sampler
+# Run the VB algorithm
 #BNMF = bnmf_vb(R,M,K,priors) 
 #BNMF = bnmf_vb_parallel(R,M,K,P,priors) 
 BNMF = bnmf_vb_optimised(R,M,K,priors) 

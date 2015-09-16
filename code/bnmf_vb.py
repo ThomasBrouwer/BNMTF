@@ -91,7 +91,7 @@ class bnmf_vb:
         self.muU, self.muV = 1./self.lambdaU, 1./self.lambdaV
         if init == 'random':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
-                self.muF[i,k] = Exponential(self.lambdaU[i,k]).draw()
+                self.muU[i,k] = Exponential(self.lambdaU[i,k]).draw()
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 self.muV[j,k] = Exponential(self.lambdaV[j,k]).draw()     
         
