@@ -125,13 +125,13 @@ class bnmf_vb_parallel:
                     {
                         'i' : i,
                         'k' : k,
-                        'Mi' : self.M[i],
-                        'Ri' : self.R[i],
+                        'Mi' : numpy.copy(self.M[i]),
+                        'Ri' : numpy.copy(self.R[i]),
                         'exptau' : self.exptau,
-                        'varVk' : self.varV[:,k],
-                        'expV' : self.expV,
+                        'varVk' : numpy.copy(self.varV[:,k]),
+                        'expV' : numpy.copy(self.expV),
                         'lambdaUik' : self.lambdaU[i,k],
-                        'expUi' : self.expU[i]
+                        'expUi' : numpy.copy(self.expU[i])
                     }
                     for i in range(0,self.I)
                 ]

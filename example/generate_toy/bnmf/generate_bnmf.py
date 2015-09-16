@@ -70,7 +70,7 @@ def try_generate_M(I,J,fraction_unknown,attempts):
 if __name__ == "__main__":
     output_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-    I,J,K = 50, 40, 10 #20, 10, 5 #
+    I,J,K = 1000,500,5#50, 40, 10 #20, 10, 5 #
     fraction_unknown = 0.2
     alpha, beta = 100., 1.
     lambdaU = numpy.ones((I,K))
