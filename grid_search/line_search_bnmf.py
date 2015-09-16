@@ -39,7 +39,6 @@ class LineSearch:
         self.initUV = initUV
         self.iterations = iterations
         
-        self.BNMF_class = bnmf_vb_optimised
         self.all_performances = {
             metric : []
             for metric in metrics

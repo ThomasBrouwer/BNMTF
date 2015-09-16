@@ -1,5 +1,5 @@
 """
-Run the line search method for finding the best value for K.
+Run the line search method for finding the best value for K for BNMF.
 We use the parameters for the true priors.
 
 The BIC tends to give overly simple models, preferring K=1 oftentimes.
@@ -22,8 +22,6 @@ from BNMTF.grid_search.line_search_bnmf import LineSearch
 import numpy, matplotlib.pyplot as plt
 
 ##########
-
-input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
 iterations = 200
 I, J = 50,30
