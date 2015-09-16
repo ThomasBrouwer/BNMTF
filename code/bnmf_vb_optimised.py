@@ -1,5 +1,7 @@
 """
 Variational Bayesian inference for non-negative matrix factorisation.
+We optimise the updates s.t. we compute each column of U and V using matrix
+operations, rather than each element individually.
 
 We expect the following arguments:
 - R, the matrix
@@ -36,13 +38,14 @@ Finally, we can return the goodness of fit of the data using the quality(metric)
 
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
+from distributions.truncated_normal_vector import TruncatedNormalVector
 from distributions.exponential import Exponential
 
 import numpy, itertools, math, scipy, time
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 
-class bnmf_vb:
+class bnmf_vb_optimised:
     def __init__(self,R,M,K,priors):
         self.R = numpy.array(R,dtype=float)
         self.M = numpy.array(M,dtype=float)
@@ -99,10 +102,10 @@ class bnmf_vb:
         self.expU, self.varU = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
         self.expV, self.varV = numpy.zeros((self.J,self.K)), numpy.zeros((self.J,self.K))
         
-        for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-            self.update_exp_U(i,k)
-        for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
-            self.update_exp_V(j,k)
+        for k in xrange(0,self.K):
+            self.update_exp_U(k)
+        for k in xrange(0,self.K):
+            self.update_exp_V(k)
             
         # Initialise tau using the updates
         self.update_tau()
@@ -114,28 +117,21 @@ class bnmf_vb:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
-            time1 = time.time()
-            #for k,i in itertools.product(xrange(0,self.K),xrange(0,self.I)):
             for k in xrange(0,self.K):
                 #time1 = time.time()
-                for i in range(0,self.I):
-                    self.update_U(i,k)
+                self.update_U(k)
                 #time2 = time.time()
-                for i in range(0,self.I):
-                    self.update_exp_U(i,k)
+                self.update_exp_U(k)
                 #time3 = time.time()
-                #print time2-time1, time3-time2 
+                #print time2-time1, time3-time2               
                 
-            #for k,j in itertools.product(xrange(0,self.K),xrange(0,self.J)):
             for k in xrange(0,self.K):
                 #time1 = time.time()
-                for j in range(0,self.J):
-                    self.update_V(j,k)
+                self.update_V(k)
                 #time2 = time.time()
-                for j in range(0,self.J):
-                    self.update_exp_V(j,k)
+                self.update_exp_V(k)
                 #time3 = time.time()
-                #print time2-time1, time3-time2 
+                #print time2-time1, time3-time2  
                 
             self.update_tau()
             self.update_exp_tau()
@@ -174,29 +170,25 @@ class bnmf_vb:
         return(self.M *( ( self.R - numpy.dot(self.expU,self.expV.T) )**2 + \
                          ( numpy.dot(self.varU+self.expU**2, (self.varV+self.expV**2).T) - numpy.dot(self.expU**2,(self.expV**2).T) ) ) ).sum()
         
-    def update_U(self,i,k):       
-        self.tauU[i,k] = self.exptau*(self.M[i]*( self.varV[:,k] + self.expV[:,k]**2 )).sum()
-        #self.tauU[i,k] = self.exptau * sum([( self.varV[j,k] + self.expV[j,k]**2 ) for j in range(0,self.J) if self.M[i,j]])
-        self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*(self.M[i] * ( (self.R[i]-numpy.dot(self.expU[i],self.expV.T)+self.expU[i,k]*self.expV[:,k])*self.expV[:,k] )).sum()) 
-        #self.muU[i,k] = 1./self.tauU[i,k] * (-self.lambdaU[i,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expV[j,k] for j in range(0,self.J) if self.M[i,j]]))
-
-    def update_V(self,j,k):
-        self.tauV[j,k] = self.exptau*(self.M[:,j]*( self.varU[:,k] + self.expU[:,k]**2 )).sum()
-        #self.tauV[j,k] = self.exptau * sum([( self.varU[i,k] + self.expU[i,k]**2 ) for i in range(0,self.I) if self.M[i,j]])
-        self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*(self.M[:,j] * ( (self.R[:,j]-numpy.dot(self.expU,self.expV[j])+self.expU[:,k]*self.expV[j,k])*self.expU[:,k] )).sum()) 
-        #self.muV[j,k] = 1./self.tauV[j,k] * (-self.lambdaV[j,k] + self.exptau*sum([(self.R[i,j]-numpy.dot(self.expU[i],self.expV[j].T)+self.expU[i,k]*self.expV[j,k])*self.expU[j,k] for i in range(0,self.I) if self.M[i,j]]))
+    def update_U(self,k):       
+        self.tauU[:,k] = self.exptau*(self.M*( self.varV[:,k] + self.expV[:,k]**2 )).sum(axis=1) #sum over j, so rows
+        self.muU[:,k] = 1./self.tauU[:,k] * (-self.lambdaU[:,k] + self.exptau*(self.M * ( (self.R-numpy.dot(self.expU,self.expV.T)+numpy.outer(self.expU[:,k],self.expV[:,k]))*self.expV[:,k] )).sum(axis=1)) 
+        
+    def update_V(self,k):
+        self.tauV[:,k] = self.exptau*(self.M.T*( self.varU[:,k] + self.expU[:,k]**2 )).T.sum(axis=0) #sum over i, so columns
+        self.muV[:,k] = 1./self.tauV[:,k] * (-self.lambdaV[:,k] + self.exptau*(self.M.T * ( (self.R-numpy.dot(self.expU,self.expV.T)+numpy.outer(self.expU[:,k],self.expV[:,k])).T*self.expU[:,k] )).T.sum(axis=0)) 
         
         
     # Update the expectations and variances
-    def update_exp_U(self,i,k):
-        tn = TruncatedNormal(self.muU[i,k],self.tauU[i,k])
-        self.expU[i,k] = tn.expectation()
-        self.varU[i,k] = tn.variance()
+    def update_exp_U(self,k):
+        tn = TruncatedNormalVector(self.muU[:,k],self.tauU[:,k])
+        self.expU[:,k] = tn.expectation()
+        self.varU[:,k] = tn.variance()
         
-    def update_exp_V(self,j,k):
-        tn = TruncatedNormal(self.muV[j,k],self.tauV[j,k])
-        self.expV[j,k] = tn.expectation()
-        self.varV[j,k] = tn.variance()
+    def update_exp_V(self,k):
+        tn = TruncatedNormalVector(self.muV[:,k],self.tauV[:,k])
+        self.expV[:,k] = tn.expectation()
+        self.varV[:,k] = tn.variance()
         
     def update_exp_tau(self):
         gm = Gamma(self.alpha_s,self.beta_s)

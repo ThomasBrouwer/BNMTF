@@ -26,6 +26,7 @@ Therefore we use it when |mu| < 30*std.
 import math, numpy, time
 import matplotlib.pyplot as plt
 from scipy.stats import truncnorm, norm
+from scipy.special import erfc
 import rtnorm
 
 class TruncatedNormal:
@@ -45,25 +46,21 @@ class TruncatedNormal:
         
     # Return expectation. x = - self.mu / self.sigma; lambdax = norm.pdf(x)/(1-norm.cdf(x)); return self.mu + self.sigma * lambdax
     def expectation(self):
-        if self.tau == 0.:
-            return 0.
         if self.mu < -30 * self.sigma:
             exp = 1./(abs(self.mu)*self.tau)
         else:
             x = - self.mu / self.sigma
-            lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
+            lambdax = norm.pdf(x)/(0.5*erfc(x/math.sqrt(2)))
             exp = self.mu + self.sigma * lambdax
         return exp if (exp >= 0.0 and exp != numpy.inf and exp != -numpy.inf and not numpy.isnan(exp)) else 0.
         
     # Return variance. The library gives NaN for this due to b->inf, so we compute it ourselves
     def variance(self):
-        if self.tau == 0.:
-            return 0.
         if self.mu < -30 * self.sigma:
             var = (1./(abs(self.mu)*self.tau))**2
         else:
             x = - self.mu / self.sigma
-            lambdax = norm.pdf(x)/(0.5*math.erfc(x/math.sqrt(2)))
+            lambdax = norm.pdf(x)/(0.5*erfc(x/math.sqrt(2)))
             deltax = lambdax*(lambdax-x)
             var = self.sigma**2 * ( 1 - deltax )
         return var if (var >= 0.0 and var != numpy.inf and var != -numpy.inf and not numpy.isnan(var)) else 0.
