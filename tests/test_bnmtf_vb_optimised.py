@@ -3,7 +3,7 @@ Tests for the BNMTF Variational Bayes algorithm.
 """
 
 import numpy, math, pytest, itertools
-from BNMTF.code.bnmtf_vb import bnmtf_vb
+from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 
 
 """ Test constructor """
@@ -19,17 +19,17 @@ def test_init():
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R1,M,K,L,priors)
+        bnmtf_vb_optimised(R1,M,K,L,priors)
     assert str(error.value) == "Input matrix R is not a two-dimensional array, but instead 1-dimensional."
     
     R2 = numpy.ones((4,3,2))
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R2,M,K,L,priors)
+        bnmtf_vb_optimised(R2,M,K,L,priors)
     assert str(error.value) == "Input matrix R is not a two-dimensional array, but instead 3-dimensional."
     
     R3 = numpy.ones((3,2))
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R3,M,K,L,priors)
+        bnmtf_vb_optimised(R3,M,K,L,priors)
     assert str(error.value) == "Input matrix R is not of the same size as the indicator matrix M: (3, 2) and (2, 3) respectively."
     
     # Similarly for lambdaF, lambdaS, lambdaG
@@ -38,21 +38,21 @@ def test_init():
     lambdaF = numpy.ones((2+1,1))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R4,M,K,L,priors)
+        bnmtf_vb_optimised(R4,M,K,L,priors)
     assert str(error.value) == "Prior matrix lambdaF has the wrong shape: (3, 1) instead of (2, 1)."
     
     lambdaF = numpy.ones((2,1))
     lambdaS = numpy.ones((1+1,2+1))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R4,M,K,L,priors)
+        bnmtf_vb_optimised(R4,M,K,L,priors)
     assert str(error.value) == "Prior matrix lambdaS has the wrong shape: (2, 3) instead of (1, 2)."
     
     lambdaS = numpy.ones((1,2))
     lambdaG = numpy.ones((3,2+1))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R4,M,K,L,priors)
+        bnmtf_vb_optimised(R4,M,K,L,priors)
     assert str(error.value) == "Prior matrix lambdaG has the wrong shape: (3, 3) instead of (3, 2)."
     
     # Test getting an exception if a row or column is entirely unknown
@@ -64,10 +64,10 @@ def test_init():
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R4,M1,K,L,priors)
+        bnmtf_vb_optimised(R4,M1,K,L,priors)
     assert str(error.value) == "Fully unobserved row in R, row 1."
     with pytest.raises(AssertionError) as error:
-        bnmtf_vb(R4,M2,K,L,priors)
+        bnmtf_vb_optimised(R4,M2,K,L,priors)
     assert str(error.value) == "Fully unobserved column in R, column 2."
     
     # Finally, a successful case
@@ -78,7 +78,7 @@ def test_init():
     lambdaG = numpy.ones((J,L))
     M = numpy.ones((I,J))
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
-    BNMTF = bnmtf_vb(R5,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R5,M,K,L,priors)
     
     assert numpy.array_equal(BNMTF.R,R5)
     assert numpy.array_equal(BNMTF.M,M)
@@ -107,7 +107,7 @@ def test_initialise():
     
     # Initialisation using expectation
     init_S, init_FG = 'exp', 'exp'
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.initialise(init_S,init_FG)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -132,7 +132,7 @@ def test_initialise():
     
     # Initialisation of S using random draws from prior
     init_S, init_FG = 'random', 'exp'
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.initialise(init_S,init_FG)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -147,7 +147,7 @@ def test_initialise():
     
     # Initialisation of F and G using random draws from prior
     init_S, init_FG = 'exp', 'random'
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.initialise(init_S,init_FG)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -162,7 +162,7 @@ def test_initialise():
         
     # Initialisation of F and G using Kmeans
     init_S, init_FG = 'exp', 'kmeans'
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.initialise(init_S,init_FG)
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -183,7 +183,7 @@ def test_initialise():
     }
     init_S, init_FG = 'exp', 'exp'
     
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.initialise(init_S,init_FG,tauFSG)
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMTF.tauF[i,k] == 2.
@@ -248,7 +248,7 @@ def test_elbo():
          - 0.5*4*3*math.log(1./102.) + 0.5*4*3*math.log(2*math.pi) + 4*3*math.log(1.-0.056570004076003155) \
          + 0.5*4*3*1./102.*(13.+81.)
          
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.expF = expF
     BNMTF.expS = expS
     BNMTF.expG = expG
@@ -283,7 +283,7 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'la
 init_S, init_FG = 'exp', 'exp'
 
 def test_exp_square_diff():
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.expF = 1./lambdaF #[[1./2.]]
     BNMTF.expS = 1./lambdaS #[[1./3.]]
     BNMTF.expG = 1./lambdaG #[[1./4.]]
@@ -296,7 +296,7 @@ def test_exp_square_diff():
     assert abs(BNMTF.exp_square_diff() - exp_square_diff) < 0.000000000001
 
 def test_update_tau():
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.expF = 1./lambdaF #[[1./2.]]
     BNMTF.expS = 1./lambdaS #[[1./3.]]
     BNMTF.expG = 1./lambdaG #[[1./4.]]
@@ -308,8 +308,8 @@ def test_update_tau():
     assert abs(BNMTF.beta_s - (beta + (2749+5./6.)/2.)) < 0.000000000001
     
 def test_update_F():
-    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        BNMTF = bnmtf_vb(R,M,K,L,priors)
+    for k in range(0,K):
+        BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
         BNMTF.muF = numpy.zeros((I,K))
         BNMTF.tauF = numpy.zeros((I,K))
         BNMTF.expF = 1./lambdaF #[[1./2.]]
@@ -319,26 +319,27 @@ def test_update_F():
         BNMTF.varS = numpy.ones((K,L))*3 #[[3.]]
         BNMTF.varG = numpy.ones((J,L))*4 #[[4.]]
         BNMTF.exptau = 3.
-        BNMTF.update_F(i,k)
+        BNMTF.update_F(k)
         
-        tauFik = 3. * sum([
-            sum([BNMTF.expS[k,l]*BNMTF.expG[j,l] for l in range(0,L)])**2 \
-            + sum([(BNMTF.varS[k,l]+BNMTF.expS[k,l]**2)*(BNMTF.varG[j,l]+BNMTF.expG[j,l]**2) - BNMTF.expS[k,l]**2*BNMTF.expG[j,l]**2 for l in range(0,L)])
-        for j in range(0,J) if M[i,j]])
-        muFik = 1./tauFik * (-lambdaF[i,k] + BNMTF.exptau * sum([
-            sum([BNMTF.expS[k,l]*BNMTF.expG[j,l] for l in range(0,L)]) * \
-            (R[i,j] - sum([BNMTF.expF[i,kp]*BNMTF.expS[kp,l]*BNMTF.expG[j,l] for kp,l in itertools.product(xrange(0,K),xrange(0,L)) if kp != k]))
-            - sum([
-                BNMTF.expS[k,l] * BNMTF.varG[j,l] * sum([BNMTF.expF[i,kp] * BNMTF.expS[kp,l] for kp in range(0,K) if kp != k])
-            for l in range(0,L)])
-        for j in range(0,J) if M[i,j]]))
-            
-        assert BNMTF.tauF[i,k] == tauFik
-        assert abs(BNMTF.muF[i,k] - muFik) < 0.00000000000000001
+        for i in range(0,I):
+            tauFik = 3. * sum([
+                sum([BNMTF.expS[k,l]*BNMTF.expG[j,l] for l in range(0,L)])**2 \
+                + sum([(BNMTF.varS[k,l]+BNMTF.expS[k,l]**2)*(BNMTF.varG[j,l]+BNMTF.expG[j,l]**2) - BNMTF.expS[k,l]**2*BNMTF.expG[j,l]**2 for l in range(0,L)])
+            for j in range(0,J) if M[i,j]])
+            muFik = 1./tauFik * (-lambdaF[i,k] + BNMTF.exptau * sum([
+                sum([BNMTF.expS[k,l]*BNMTF.expG[j,l] for l in range(0,L)]) * \
+                (R[i,j] - sum([BNMTF.expF[i,kp]*BNMTF.expS[kp,l]*BNMTF.expG[j,l] for kp,l in itertools.product(xrange(0,K),xrange(0,L)) if kp != k]))
+                - sum([
+                    BNMTF.expS[k,l] * BNMTF.varG[j,l] * sum([BNMTF.expF[i,kp] * BNMTF.expS[kp,l] for kp in range(0,K) if kp != k])
+                for l in range(0,L)])
+            for j in range(0,J) if M[i,j]]))
+                
+            assert BNMTF.tauF[i,k] == tauFik
+            assert abs(BNMTF.muF[i,k] - muFik) < 0.00000000000000001
     
 def test_update_S():
-    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
-        BNMTF = bnmtf_vb(R,M,K,L,priors)
+    for k,l in itertools.product(range(0,K),range(0,L)):
+        BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
         BNMTF.muS = numpy.zeros((K,L))
         BNMTF.tauS = numpy.zeros((K,L))
         BNMTF.expF = 1./lambdaF #[[1./2.]]
@@ -364,8 +365,8 @@ def test_update_S():
         assert abs(BNMTF.muS[k,l] - muSkl) < 0.0000000000000001
     
 def test_update_G():
-    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
-        BNMTF = bnmtf_vb(R,M,K,L,priors)
+    for l in range(0,L):
+        BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
         BNMTF.muG = numpy.zeros((J,L))
         BNMTF.tauG = numpy.zeros((J,L))
         BNMTF.expF = 1./lambdaF #[[1./2.]]
@@ -375,37 +376,39 @@ def test_update_G():
         BNMTF.varS = numpy.ones((K,L))*3 #[[3.]]
         BNMTF.varG = numpy.ones((J,L))*4 #[[4.]]
         BNMTF.exptau = 3.
-        BNMTF.update_G(j,l)
+        BNMTF.update_G(l)
         
-        tauGjl = 3. * sum([
-            sum([BNMTF.expF[i,k]*BNMTF.expS[k,l] for k in range(0,K)])**2 \
-            + sum([(BNMTF.varS[k,l]+BNMTF.expS[k,l]**2)*(BNMTF.varF[i,k]+BNMTF.expF[i,k]**2) - BNMTF.expS[k,l]**2*BNMTF.expF[i,k]**2 for k in range(0,K)])
-        for i in range(0,I) if M[i,j]])
-        muGjl = 1./tauGjl * (-lambdaG[j,l] + BNMTF.exptau * sum([
-            sum([BNMTF.expF[i,k]*BNMTF.expS[k,l] for k in range(0,K)]) * \
-            (R[i,j] - sum([BNMTF.expF[i,k]*BNMTF.expS[k,lp]*BNMTF.expG[j,lp] for k,lp in itertools.product(xrange(0,K),xrange(0,L)) if lp != l]))
-            - sum([
-                BNMTF.varF[i,k] * BNMTF.expS[k,l] * sum([BNMTF.expS[k,lp] * BNMTF.expG[j,lp] for lp in range(0,L) if lp != l])
-            for k in range(0,K)])
-        for i in range(0,I) if M[i,j]]))
-        
-        assert BNMTF.tauG[j,l] == tauGjl
-        assert BNMTF.muG[j,l] == muGjl
+        for j in range(0,J):
+            tauGjl = 3. * sum([
+                sum([BNMTF.expF[i,k]*BNMTF.expS[k,l] for k in range(0,K)])**2 \
+                + sum([(BNMTF.varS[k,l]+BNMTF.expS[k,l]**2)*(BNMTF.varF[i,k]+BNMTF.expF[i,k]**2) - BNMTF.expS[k,l]**2*BNMTF.expF[i,k]**2 for k in range(0,K)])
+            for i in range(0,I) if M[i,j]])
+            muGjl = 1./tauGjl * (-lambdaG[j,l] + BNMTF.exptau * sum([
+                sum([BNMTF.expF[i,k]*BNMTF.expS[k,l] for k in range(0,K)]) * \
+                (R[i,j] - sum([BNMTF.expF[i,k]*BNMTF.expS[k,lp]*BNMTF.expG[j,lp] for k,lp in itertools.product(xrange(0,K),xrange(0,L)) if lp != l]))
+                - sum([
+                    BNMTF.varF[i,k] * BNMTF.expS[k,l] * sum([BNMTF.expS[k,lp] * BNMTF.expG[j,lp] for lp in range(0,L) if lp != l])
+                for k in range(0,K)])
+            for i in range(0,I) if M[i,j]]))
+            
+            assert BNMTF.tauG[j,l] == tauGjl
+            assert BNMTF.muG[j,l] == muGjl
 
 
 """ Test computing expectation, variance F, S, G, tau """     
 def test_update_exp_F():
-    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        BNMTF = bnmtf_vb(R,M,K,L,priors)
+    for k in range(0,K):
+        BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
         BNMTF.initialise(init_S,init_FG)
         BNMTF.tauF = 4*numpy.ones((I,K))  # muF = [[0.5]], tauF = [[4.]]
-        BNMTF.update_exp_F(i,k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
-        assert abs(BNMTF.expF[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
-        assert abs(BNMTF.varF[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
+        BNMTF.update_exp_F(k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
+        for i in range(0,I):        
+            assert abs(BNMTF.expF[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
+            assert abs(BNMTF.varF[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
 
 def test_update_exp_S():
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
-        BNMTF = bnmtf_vb(R,M,K,L,priors)
+        BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
         BNMTF.initialise(init_S,init_FG) 
         BNMTF.tauS = 4*numpy.ones((K,L)) # muS = [[1./3.]], tauS = [[4.]]
         BNMTF.update_exp_S(k,l) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
@@ -413,16 +416,17 @@ def test_update_exp_S():
         assert abs(BNMTF.varS[k,l] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
 
 def test_update_exp_G():
-    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
-        BNMTF = bnmtf_vb(R,M,K,L,priors)
+    for l in range(0,L):
+        BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
         BNMTF.initialise(init_S,init_FG) 
         BNMTF.tauG = 4*numpy.ones((J,L)) # muG = [[1./4.]], tauG = [[4.]]
-        BNMTF.update_exp_G(j,l) #-mu*sqrt(tau) = -0.5., lambda(..) = 0.352065 / (1-0.3085) = 0.5091323210412148, gamma = 0.5137818808494219
-        assert abs(BNMTF.expG[j,l] - (1./4. + 1./2. * 0.5091323210412148)) < 0.0001
-        assert abs(BNMTF.varG[j,l] - 1./4.*(1. - 0.5137818808494219)) < 0.0001
+        BNMTF.update_exp_G(l) #-mu*sqrt(tau) = -0.5., lambda(..) = 0.352065 / (1-0.3085) = 0.5091323210412148, gamma = 0.5137818808494219
+        for j in range(0,J):        
+            assert abs(BNMTF.expG[j,l] - (1./4. + 1./2. * 0.5091323210412148)) < 0.0001
+            assert abs(BNMTF.varG[j,l] - 1./4.*(1. - 0.5137818808494219)) < 0.0001
     
 def test_update_exp_tau():
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.initialise()  
     BNMTF.expF = 1./lambdaF #[[1./2.]]
     BNMTF.expS = 1./lambdaS #[[1./3.]]
@@ -455,7 +459,7 @@ def test_run():
     
     iterations = 2
     
-    BNMF = bnmtf_vb(R,M,K,L,priors)
+    BNMF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMF.initialise()
     BNMF.run(iterations)
     
@@ -501,7 +505,7 @@ def test_predict():
     R2 = 1. - ((3.-3542112.)**2 + (5.-3556224.)**2 + (10.-3556224.)**2 + (11.-3556224.)**2) / (4.25**2+2.25**2+2.75**2+3.75**2) #mean=7.25
     Rp = 357. / ( math.sqrt(44.75) * math.sqrt(5292.) ) #mean=7.25,var=44.75, mean_pred=3552696,var_pred=5292, corr=(-4.25*-63 + -2.25*21 + 2.75*21 + 3.75*21)
     
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.expF = expF
     BNMTF.expS = expS
     BNMTF.expG = expG
@@ -523,7 +527,7 @@ def test_compute_statistics():
     alpha, beta = 3, 1
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     
     R_pred = numpy.array([[500,550],[1220,1342]],dtype=float)
     M_pred = numpy.array([[0,0],[1,1]])
@@ -548,7 +552,7 @@ def test_log_likelihood():
     alpha, beta = 3, 1
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
-    BNMTF = bnmtf_vb(R,M,K,L,priors)
+    BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
     BNMTF.expF = numpy.ones((I,K))
     BNMTF.expS = 2*numpy.ones((K,L))
     BNMTF.expG = 3*numpy.ones((J,L))

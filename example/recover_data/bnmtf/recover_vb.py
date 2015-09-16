@@ -8,6 +8,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmtf_vb import bnmtf_vb
+from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
@@ -16,10 +17,10 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 1000
+iterations = 100
 init_FG = 'kmeans'
 init_S = 'random'
-I, J, K, L = 50,40,9,5 #50, 40, 10, 5
+I, J, K, L = 50, 40, 10, 5
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))
@@ -33,7 +34,8 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
-BNMTF = bnmtf_vb(R,M,K,L,priors)
+#BNMTF = bnmtf_vb(R,M,K,L,priors)
+BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
 BNMTF.initialise(init_S=init_S,init_FG=init_FG)
 
 expF = BNMTF.expF
