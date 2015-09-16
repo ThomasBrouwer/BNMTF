@@ -1,5 +1,6 @@
 """
 Class for doing model selection for BNMTF, maximising the BIC, AIC, or log likelihood.
+We try an entire grid of K,L values to find the best values.
 
 We expect the following arguments:
 - values_K      - a list of values for K
@@ -13,7 +14,7 @@ We expect the following arguments:
 - initS        - the initialisation of S - 'exp' or 'random'
 - iterations    - number of iterations to run 
 
-The line search can be started by running search().
+The grid search can be started by running search().
 
 After that, the values for each metric ('BIC','AIC','loglikelihood') can be
 obtained using all_values(metric), and the best value of K and L can be 

@@ -1,6 +1,10 @@
 """
 Run the grid search method for finding the best values for K and L for BNMTF.
 We use the parameters for the true priors.
+
+For BNMTF I find that the BIC is a better estimator - the log likelihood is 
+high for higher values for K and L than the true ones, same for the AIC. With
+the BIC we get a nice peak just below the true K and L (for true K=L=5, at K=L=4).
 """
 
 
@@ -18,8 +22,8 @@ import scipy.interpolate
 
 iterations = 1000
 I, J = 20,20
-true_K, true_L = 5, 3
-values_K, values_L = range(1,15+1), range(1,10+1)
+true_K, true_L = 5, 5
+values_K, values_L = range(1,10+1), range(1,10+1)
 
 fraction_unknown = 0.1
 attempts_M = 100
