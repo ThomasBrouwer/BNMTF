@@ -33,6 +33,7 @@ Finally, we can return the goodness of fit of the data using the quality(metric)
 - metric = 'loglikelihood' -> return p(D|theta)
          = 'BIC'        -> return Bayesian Information Criterion
          = 'AIC'        -> return Afaike Information Criterion
+         = 'MSE'        -> return Mean Square Error
 (we want to maximise these values)
 """
 
@@ -218,7 +219,7 @@ class bnmf_vb_optimised:
         
     # Functions for model selection, measuring the goodness of fit vs model complexity
     def quality(self,metric):
-        assert metric in ['loglikelihood','BIC','AIC'], 'Unrecognised metric for model quality: %s.' % metric
+        assert metric in ['loglikelihood','BIC','AIC','MSE'], 'Unrecognised metric for model quality: %s.' % metric
         log_likelihood = self.log_likelihood()
         if metric == 'loglikelihood':
             return log_likelihood
@@ -228,6 +229,9 @@ class bnmf_vb_optimised:
         elif metric == 'AIC':
             # -2*loglikelihood + 2*no. free parameters
             return log_likelihood - (self.I*self.K+self.J*self.K)
+        elif metric == 'MSE':
+            R_pred = numpy.dot(self.expU,self.expV.T)
+            return self.compute_MSE(self.M,self.R,R_pred)
         
     def log_likelihood(self):
         # Return the likelihood of the data given the trained model's parameters

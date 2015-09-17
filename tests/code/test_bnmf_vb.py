@@ -378,7 +378,7 @@ def test_log_likelihood():
     BNMF.expV = 2*numpy.ones((J,K))
     BNMF.explogtau = 5.
     BNMF.exptau = 3.
-    # expU*expV.T = [[6.]]
+    MSE = (5**2+4**2+2**2)/3. # R_pred = [[6]]
     
     log_likelihood = 3./2.*(5.-math.log(2*math.pi)) - 3./2. * (5**2 + 4**2 + 2**2)
     AIC = log_likelihood - (2*3+2*3)
@@ -387,6 +387,7 @@ def test_log_likelihood():
     assert log_likelihood == BNMF.quality('loglikelihood')
     assert AIC == BNMF.quality('AIC')
     assert BIC == BNMF.quality('BIC')
+    assert MSE == BNMF.quality('MSE')
     with pytest.raises(AssertionError) as error:
         BNMF.quality('FAIL')
     assert str(error.value) == "Unrecognised metric for model quality: FAIL."

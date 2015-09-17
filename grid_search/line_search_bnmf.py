@@ -27,7 +27,7 @@ sys.path.append(project_location)
 from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
 import numpy
 
-metrics = ['BIC','AIC','loglikelihood']
+metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class LineSearch:
     def __init__(self,values_K,R,M,priors,initUV,iterations):

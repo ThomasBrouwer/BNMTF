@@ -32,7 +32,7 @@ sys.path.append(project_location)
 from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 import numpy
 
-metrics = ['BIC','AIC','loglikelihood']
+metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class GridSearch:
     def __init__(self,values_K,values_L,R,M,priors,initS,initFG,iterations):

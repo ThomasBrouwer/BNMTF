@@ -7,6 +7,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmtf_vb import bnmtf_vb
+from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 from ml_helpers.code.mask import compute_Ms, compute_folds
 from load_data import load_Sanger
 
@@ -42,7 +43,8 @@ folds_training = compute_Ms(folds_test)
 (M_train,M_test) = (folds_training[0],folds_test[0])
 
 # Run the Gibbs sampler
-BNMTF = bnmtf_vb(X_min,M,K,L,priors)
+#BNMTF = bnmtf_vb(X_min,M,K,L,priors)
+BNMTF = bnmtf_vb_optimised(X_min,M,K,L,priors)
 BNMTF.initialise(init_S=init_S,init_FG=init_FG,tauFSG=tauFSG)
 BNMTF.run(iterations)
 

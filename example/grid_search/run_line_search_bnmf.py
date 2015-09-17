@@ -47,7 +47,11 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU[0,0]/5, 'lambdaV':lambd
 line_search = LineSearch(values_K,R,M,priors,initUV,iterations)
 line_search.search()
 
-# Plot the performances of all three metrics
+# Plot the performances of all three metrics - but MSE separately
 for metric in ['loglikelihood', 'BIC', 'AIC']:
     plt.plot(values_K, line_search.all_values(metric), label=metric)
+plt.legend(loc=3)
+
+plt.figure()
+plt.plot(values_K, line_search.all_values('MSE'), label='MSE')
 plt.legend(loc=3)
