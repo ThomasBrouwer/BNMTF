@@ -21,7 +21,7 @@ input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
 iterations = 1000
 burn_in = 500
-thinning = 5
+thinning = 2
 init = 'random'
 I, J, K, L = 100, 80, 10, 5
 

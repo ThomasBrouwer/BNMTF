@@ -116,12 +116,7 @@ class bnmtf_gibbs_optimised:
         self.all_G = numpy.zeros((iterations,self.J,self.L))  
         self.all_tau = numpy.zeros(iterations)
         
-        for it in range(0,iterations):
-            
-            time1 = time.time()       
-            
-            print "Iteration %s." % (it+1)
-            
+        for it in range(0,iterations):            
             for k in range(0,self.K):
                 tauFk = self.tauF(k)
                 muFk = self.muF(tauFk,k)
@@ -140,9 +135,9 @@ class bnmtf_gibbs_optimised:
             self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
             
             self.all_F[it], self.all_S[it], self.all_G[it], self.all_tau[it] = numpy.copy(self.F), numpy.copy(self.S), numpy.copy(self.G), self.tau
+            perf = self.predict_while_running()
+            print "Iteration %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,perf['MSE'],perf['R^2'],perf['Rp'])
         
-            print time.time() - time1  
-            
         return (self.all_F, self.all_S, self.all_G, self.all_tau)
         
 
@@ -197,6 +192,13 @@ class bnmtf_gibbs_optimised:
         Rp = self.compute_Rp(M_pred,self.R,R_pred)        
         return {'MSE':MSE,'R^2':R2,'Rp':Rp}
         
+    def predict_while_running(self):
+        R_pred = self.triple_dot(self.F,self.S,self.G.T)
+        MSE = self.compute_MSE(self.M,self.R,R_pred)
+        R2 = self.compute_R2(self.M,self.R,R_pred)    
+        Rp = self.compute_Rp(self.M,self.R,R_pred)        
+        return {'MSE':MSE,'R^2':R2,'Rp':Rp}
+        
         
     # Functions for computing MSE, R^2 (coefficient of determination), Rp (Pearson correlation)
     def compute_MSE(self,M,R,R_pred):
@@ -206,7 +208,7 @@ class bnmtf_gibbs_optimised:
         mean = (M*R).sum() / float(M.sum())
         SS_total = float((M*(R-mean)**2).sum())
         SS_res = float((M*(R-R_pred)**2).sum())
-        return 1. - SS_res / SS_total
+        return 1. - SS_res / SS_total if SS_total != 0. else numpy.inf
         
     def compute_Rp(self,M,R,R_pred):
         mean_real = (M*R).sum() / float(M.sum())

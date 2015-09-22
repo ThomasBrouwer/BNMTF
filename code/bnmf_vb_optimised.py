@@ -207,7 +207,7 @@ class bnmf_vb_optimised:
         mean = (M*R).sum() / float(M.sum())
         SS_total = float((M*(R-mean)**2).sum())
         SS_res = float((M*(R-R_pred)**2).sum())
-        return 1. - SS_res / SS_total
+        return 1. - SS_res / SS_total if SS_total != 0. else numpy.inf
         
     def compute_Rp(self,M,R,R_pred):
         mean_real = (M*R).sum() / float(M.sum())

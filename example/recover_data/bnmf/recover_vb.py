@@ -25,7 +25,7 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-iterations = 100
+iterations = 1000
 init = 'random'
 I, J, K = 100,80,10
 

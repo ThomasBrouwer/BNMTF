@@ -151,10 +151,7 @@ class bnmtf_vb_optimised:
     def run(self,iterations):
         self.all_exp_tau = []  # to check for convergence     
         
-        for it in range(0,iterations):
-            
-            time1 = time.time()            
-            
+        for it in range(0,iterations):         
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
                 self.update_exp_S(k,l)
@@ -179,9 +176,7 @@ class bnmtf_vb_optimised:
             
             perf, elbo = self.predict(self.M), self.elbo()
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
-            
-            print time.time() - time1
-            
+                        
         
     # Compute the ELBO
     def elbo(self):
@@ -287,7 +282,7 @@ class bnmtf_vb_optimised:
         mean = (M*R).sum() / float(M.sum())
         SS_total = float((M*(R-mean)**2).sum())
         SS_res = float((M*(R-R_pred)**2).sum())
-        return 1. - SS_res / SS_total
+        return 1. - SS_res / SS_total if SS_total != 0. else numpy.inf
         
     def compute_Rp(self,M,R,R_pred):
         mean_real = (M*R).sum() / float(M.sum())
