@@ -41,13 +41,13 @@ R = numpy.dot(F,numpy.dot(S,G.T))
 
 iterations = 200
 init = 'random'
-I, J, K, L = 20, 20, 2, 2
+I, J, K, L = 20, 20, 3, 2
 fraction_unknown = 0.1
 
 alpha, beta = 1., 1.
-lambdaF = numpy.ones((I,K))
-lambdaS = numpy.ones((K,L))
-lambdaG = numpy.ones((J,L))
+lambdaF = numpy.ones((I,K))*2
+lambdaS = numpy.ones((K,L))/10
+lambdaG = numpy.ones((J,L))*2
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 
 M = generate_M(I,J,fraction_unknown)
