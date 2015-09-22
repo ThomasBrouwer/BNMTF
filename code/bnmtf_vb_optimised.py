@@ -1,5 +1,7 @@
 """
 Variational Bayesian inference for non-negative matrix tri-factorisation.
+We optimise the updates s.t. we compute each column of F and G using matrix
+operations, rather than each element individually.
 
 We expect the following arguments:
 - R, the matrix
@@ -47,13 +49,14 @@ from kmeans_missing.code.kmeans import KMeans
 
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
+from distributions.truncated_normal_vector import TruncatedNormalVector
 from distributions.exponential import Exponential
 
 import numpy, itertools, math, scipy
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 
-class bnmtf_vb:
+class bnmtf_vb_optimised:
     def __init__(self,R,M,K,L,priors):
         self.R = numpy.array(R,dtype=float)
         self.M = numpy.array(M,dtype=float)
@@ -132,12 +135,12 @@ class bnmtf_vb:
         self.expS, self.varS = numpy.zeros((self.K,self.L)), numpy.zeros((self.K,self.L))
         self.expG, self.varG = numpy.zeros((self.J,self.L)), numpy.zeros((self.J,self.L))
         
-        for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-            self.update_exp_F(i,k)
+        for k in range(0,self.K):
+            self.update_exp_F(k)
         for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
             self.update_exp_S(k,l)
-        for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-            self.update_exp_G(j,l)
+        for l in range(0,self.L):
+            self.update_exp_G(l)
             
         # Initialise tau using the updates
         self.update_tau()
@@ -156,16 +159,16 @@ class bnmtf_vb:
             self.update_tau()
             self.update_exp_tau()
             
-            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                self.update_F(i,k)
-                self.update_exp_F(i,k)
+            for k in range(0,self.K):
+                self.update_F(k)
+                self.update_exp_F(k)
                 
             self.update_tau()
             self.update_exp_tau()
                 
-            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                self.update_G(j,l)
-                self.update_exp_G(j,l)
+            for l in range(0,self.L):
+                self.update_G(l)
+                self.update_exp_G(l)
                 
             self.update_tau()
             self.update_exp_tau()
@@ -213,24 +216,15 @@ class bnmtf_vb:
                (self.M*( numpy.dot(self.varF, ( numpy.dot(self.expS,self.expG.T)**2 - numpy.dot(self.expS**2,self.expG.T**2) ) ) )).sum() + \
                (self.M*( numpy.dot( numpy.dot(self.expF,self.expS)**2 - numpy.dot(self.expF**2,self.expS**2), self.varG.T ) )).sum()
     
-    def update_F(self,i,k):  
+    def update_F(self,k):  
         varSkG = numpy.dot( self.varS[k]+self.expS[k]**2 , (self.varG+self.expG**2).T ) - numpy.dot( self.expS[k]**2 , (self.expG**2).T ) # Vector of size J
-        self.tauF[i,k] = self.exptau*( numpy.dot(self.M[i], varSkG + ( numpy.dot(self.expS[k],self.expG.T) )**2 ))
-        
-        self.muF[i,k] = 1./self.tauF[i,k] * (
-            - self.lambdaF[i,k]
-            + self.exptau*( numpy.dot(self.M[i], (self.R[i]-self.triple_dot(self.expF[i],self.expS,self.expG.T)+self.expF[i,k]*numpy.dot(self.expS[k],self.expG.T) ) * numpy.dot(self.expS[k],self.expG.T) ))
-            - self.exptau*( numpy.dot( self.M[i], ( numpy.dot(self.varG, self.expS[k]*numpy.dot(self.expF[i],self.expS) ) - self.expF[i,k] * numpy.dot( self.expS[k]**2, self.varG.T ) ) ) )
+        self.tauF[:,k] = self.exptau*( self.M * ( varSkG + ( numpy.dot(self.expS[k],self.expG.T) )**2 ) ).sum(axis=1)  #sum over j, so rows
+        self.muF[:,k] = 1./self.tauF[:,k] * (
+            - self.lambdaF[:,k]
+            + self.exptau*( self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+numpy.outer(self.expF[:,k],numpy.dot(self.expS[k],self.expG.T)) ) * numpy.dot(self.expS[k],self.expG.T) )).sum(axis=1)
+            - self.exptau*( self.M * ( ( numpy.dot(self.expS[k]*numpy.dot(self.expF,self.expS), self.varG.T) - numpy.outer(self.expF[:,k], numpy.dot( self.expS[k]**2, self.varG.T )) ) ) ).sum(axis=1)
         ) 
-        # List form:
-        #self.muF[i,k] = 1./self.tauF[i,k] * (-self.lambdaF[i,k] + self.exptau * sum([
-        #    sum([self.expS[k,l]*self.expG[j,l] for l in range(0,self.L)]) * \
-        #    (self.R[i,j] - sum([self.expF[i,kp]*self.expS[kp,l]*self.expG[j,l] for kp,l in itertools.product(xrange(0,self.K),xrange(0,self.L)) if kp != k]))
-        #    - sum([
-        #        self.expS[k,l] * self.varG[j,l] * sum([self.expF[i,kp] * self.expS[kp,l] for kp in range(0,self.K) if kp != k])
-        #    for l in range(0,self.L)])
-        #for j in range(0,self.J) if self.M[i,j]]))
-    
+        
     def update_S(self,k,l):       
         self.tauS[k,l] = self.exptau*(self.M*( numpy.outer( self.varF[:,k]+self.expF[:,k]**2 , self.varG[:,l]+self.expG[:,l]**2 ) )).sum()
         self.muS[k,l] = 1./self.tauS[k,l] * (
@@ -239,48 +233,31 @@ class bnmtf_vb:
             - self.exptau*(self.M * numpy.outer( self.expF[:,k] * ( numpy.dot(self.expF,self.expS[:,l]) - self.expF[:,k]*self.expS[k,l] ), self.varG[:,l] )).sum()
             - self.exptau*(self.M * numpy.outer( self.varF[:,k], self.expG[:,l]*(numpy.dot(self.expS[k],self.expG.T) - self.expS[k,l]*self.expG[:,l]) )).sum()
         ) 
-        # List form
-        #self.muS[k,l] = 1./self.tauS[k,l] * (-self.lambdaS[k,l] + self.exptau * sum([
-        #    self.expF[i,k]*self.expG[j,l]*(self.R[i,j] - sum([self.expF[i,kp]*self.expS[kp,lp]*self.expG[j,lp] for kp,lp in itertools.product(xrange(0,self.K),xrange(0,self.L)) if (kp != k or lp != l)]))
-        #    - self.varF[i,k] * self.expG[j,l] * sum([self.expS[k,lp] * self.expG[j,lp] for lp in range(0,self.L) if lp != l])
-        #    - self.expF[i,k] * self.varG[j,l] * sum([self.expF[i,kp] * self.expS[kp,l] for kp in range(0,self.K) if kp != k])
-        #for i,j in itertools.product(xrange(0,self.I),xrange(0,self.J)) if self.M[i,j]]))
         
-            
-    def update_G(self,j,l):  
+    def update_G(self,l):  
         varFSl = numpy.dot( self.varF+self.expF**2 , self.varS[:,l]+self.expS[:,l]**2 ) - numpy.dot( self.expF**2 , self.expS[:,l]**2 ) # Vector of size I
-        self.tauG[j,l] = self.exptau*(numpy.dot(self.M[:,j], varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 ))
-        
-        self.muG[j,l] = 1./self.tauG[j,l] * (
-            - self.lambdaG[j,l] 
-            + self.exptau * numpy.dot(self.M[:,j], (self.R[:,j]-self.triple_dot(self.expF,self.expS,self.expG[j].T)+self.expG[j,l]*numpy.dot(self.expF,self.expS[:,l]) ) * numpy.dot(self.expF,self.expS[:,l]) )
-            - self.exptau * numpy.dot(self.M[:,j], numpy.dot(self.varF, self.expS[:,l]*numpy.dot(self.expS,self.expG[j])) - self.expG[j,l]*numpy.dot(self.varF,self.expS[:,l]**2) )
+        self.tauG[:,l] = self.exptau*(self.M.T * ( varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 )).T.sum(axis=0) #sum over i, so columns        
+        self.muG[:,l] = 1./self.tauG[:,l] * (
+            - self.lambdaG[:,l] 
+            + self.exptau * (self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+numpy.outer(numpy.dot(self.expF,self.expS[:,l]), self.expG[:,l]) ).T * numpy.dot(self.expF,self.expS[:,l]) ).T ).sum(axis=0)
+            - self.exptau * (self.M * ( numpy.dot(self.varF, (self.expS[:,l]*numpy.dot(self.expS,self.expG.T).T).T) - numpy.outer(numpy.dot(self.varF,self.expS[:,l]**2), self.expG[:,l]) )).sum(axis=0)
         )
-        # List form:
-        #self.muG[j,l] = 1./self.tauG[j,l] * (-self.lambdaG[j,l] + self.exptau * sum([
-        #    sum([self.expF[i,k]*self.expS[k,l] for k in range(0,self.K)]) * \
-        #    (self.R[i,j] - sum([self.expF[i,k]*self.expS[k,lp]*self.expG[j,lp] for k,lp in itertools.product(xrange(0,self.K),xrange(0,self.L)) if lp != l]))
-        #    - sum([
-        #        self.varF[i,k] * self.expS[k,l] * sum([self.expS[k,lp] * self.expG[j,lp] for lp in range(0,self.L) if lp != l])
-        #    for k in range(0,self.K)])
-        #for i in range(0,self.I) if self.M[i,j]]))
-        
 
     # Update the expectations and variances
-    def update_exp_F(self,i,k):
-        tn = TruncatedNormal(self.muF[i,k],self.tauF[i,k])
-        self.expF[i,k] = tn.expectation()
-        self.varF[i,k] = tn.variance()
+    def update_exp_F(self,k):
+        tn = TruncatedNormalVector(self.muF[:,k],self.tauF[:,k])
+        self.expF[:,k] = tn.expectation()
+        self.varF[:,k] = tn.variance()
         
     def update_exp_S(self,k,l):
         tn = TruncatedNormal(self.muS[k,l],self.tauS[k,l])
         self.expS[k,l] = tn.expectation()
         self.varS[k,l] = tn.variance()
         
-    def update_exp_G(self,j,l):
-        tn = TruncatedNormal(self.muG[j,l],self.tauG[j,l])
-        self.expG[j,l] = tn.expectation()
-        self.varG[j,l] = tn.variance()
+    def update_exp_G(self,l):
+        tn = TruncatedNormalVector(self.muG[:,l],self.tauG[:,l])
+        self.expG[:,l] = tn.expectation()
+        self.varG[:,l] = tn.variance()
         
     def update_exp_tau(self):
         gm = Gamma(self.alpha_s,self.beta_s)

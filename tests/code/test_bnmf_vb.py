@@ -2,7 +2,7 @@
 Tests for the BNMF Variational Bayes algorithm.
 """
 
-import numpy, math, pytest, itertools, random
+import numpy, math, pytest, itertools, random, pytest
 from BNMTF.code.bnmf_vb import bnmf_vb
 
 
@@ -92,12 +92,13 @@ def test_initialise():
     alpha, beta = 3, 1
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
     
-    # Initialisation without custom values
+    # Initialisation with expectation
+    init = 'exp'
     BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.initialise()
+    BNMF.initialise(init)
     
-    assert BNMF.alpha_s == alpha
-    assert BNMF.beta_s == beta
+    assert BNMF.alpha_s == alpha + 15./2.
+    assert BNMF.beta_s == beta + BNMF.exp_square_diff()/2.
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMF.tauU[i,k] == 1.
         assert BNMF.muU[i,k] == 1./lambdaU[i,k]
@@ -105,50 +106,26 @@ def test_initialise():
         assert BNMF.tauV[j,k] == 1.
         assert BNMF.muV[j,k] == 1./lambdaV[j,k]
         
-    # Test whether the expectation and variance values are correctly computed
-    assert BNMF.exptau == alpha/beta
+    assert BNMF.exptau == (alpha + 15./2.) / (beta + BNMF.exp_square_diff()/2.)
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert abs(BNMF.expU[i,k] - (0.5 + 0.352065 / (1-0.3085))) < 0.0001
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
         assert abs(BNMF.expV[j,k] - (1./3. + 0.377383 / (1-0.3694))) < 0.0001
-    
-    # Then initialise with predefined values. First override muU, tauV, alpha_s
-    values1 = {
-        'muU' : numpy.ones((I,K))*100, 
-        'tauV' : numpy.ones((J,K))*5, 
-        'alpha_s' : 12.
-    
-    }
-    BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.initialise(values1)
-    
-    assert BNMF.alpha_s == 12.
-    assert BNMF.beta_s == beta
-    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert BNMF.tauU[i,k] == 1.
-        assert BNMF.muU[i,k] == 100.
-    for j,k in itertools.product(xrange(0,J),xrange(0,K)):
-        assert BNMF.tauV[j,k] == 5.
-        assert BNMF.muV[j,k] == 1./lambdaV[j,k]
         
-    # Then override tauU, muV, beta_s
-    values2 = {
-        'tauU' : numpy.ones((I,K))*10,
-        'muV' : numpy.ones((J,K))*200,
-        'beta_s' : 13.
+    # Initialise tauU, tauV using predefined values
+    tauUV = {
+        'tauU' : 2*numpy.ones((I,K)),
+        'tauV' : 3*numpy.ones((J,K))
     }
-    BNMF = bnmf_vb(R,M,K,priors)
-    BNMF.initialise(values2)
+    init = 'exp'
     
-    assert BNMF.alpha_s == alpha
-    assert BNMF.beta_s == 13.
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.initialise(init,tauUV)
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert BNMF.tauU[i,k] == 10.
-        assert BNMF.muU[i,k] == 1./lambdaU[i,k]
+        assert BNMF.tauU[i,k] == 2.
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
-        assert BNMF.tauV[j,k] == 1.
-        assert BNMF.muV[j,k] == 200.
-        
+        assert BNMF.tauV[j,k] == 3.
+    
         
 """ Test computing the ELBO. """
 def test_elbo():
@@ -192,15 +169,6 @@ def test_elbo():
          - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi) + 5*2*math.log(1.-0.080756659233771066) \
          + 0.5*5*2*1./100.*(11.+81.) \
          - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi) + 3*2*math.log(1.-0.067776752211548219) \
-         + 0.5*3*2*1./101.*(12.+81.)
-         
-    print 12./2.*(explogtau - math.log(2*math.pi)), - 8./2.*(41772+19872), \
-         + 5*2*(math.log(2.) - 2.*5.), + 3*2*(math.log(3.) - 3.*6.), \
-         + 3.*numpy.log(1.) - numpy.log(math.gamma(3.)), + 2.*9. - 1.*8., \
-         - 20.*numpy.log(21.) + numpy.log(math.gamma(20.)), - 19.*9. + 21.*8., \
-         - 0.5*5*2*math.log(1./100.) + 0.5*5*2*math.log(2*math.pi), + 5*2*math.log(1.-0.080756659233771066), \
-         + 0.5*5*2*1./100.*(11.+81.), \
-         - 0.5*3*2*math.log(1./101.) + 0.5*3*2*math.log(2*math.pi), + 3*2*math.log(1.-0.067776752211548219), \
          + 0.5*3*2*1./101.*(12.+81.)
          
     BNMF = bnmf_vb(R,M,K,priors)
@@ -285,8 +253,8 @@ def test_update_V():
 def test_update_exp_U():
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         BNMF = bnmf_vb(R,M,K,priors)
-        values = { 'tauU' : 4*numpy.ones((I,K)) }
-        BNMF.initialise(values) # muU = [[0.5]], tauU = [[4.]]
+        BNMF.initialise()
+        BNMF.tauU = 4*numpy.ones((I,K)) # muU = [[0.5]], tauU = [[4.]]
         BNMF.update_exp_U(i,k) #-mu*sqrt(tau) = -0.5*2 = -1. lambda(1) = 0.241971 / (1-0.1587) = 0.2876155949126352. gamma = 0.37033832534958433
         assert abs(BNMF.expU[i,k] - (0.5 + 1./2. * 0.2876155949126352)) < 0.00001
         assert abs(BNMF.varU[i,k] - 1./4.*(1.-0.37033832534958433)) < 0.00001
@@ -294,8 +262,8 @@ def test_update_exp_U():
 def test_update_exp_V():
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
         BNMF = bnmf_vb(R,M,K,priors)
-        values = { 'tauV' : 4*numpy.ones((I,K)) }
-        BNMF.initialise(values) # muV = [[1./3.]], tauV = [[4.]]
+        BNMF.initialise() 
+        BNMF.tauV = 4*numpy.ones((J,K)) # muV = [[1./3.]], tauV = [[4.]]
         BNMF.update_exp_V(j,k) #-mu*sqrt(tau) = -2./3., lambda(..) = 0.319448 / (1-0.2525) = 0.4273551839464883, gamma = 
         assert abs(BNMF.expV[j,k] - (1./3. + 1./2. * 0.4273551839464883)) < 0.00001
         assert abs(BNMF.varV[j,k] - 1./4.*(1. - 0.4675359092102624)) < 0.00001
@@ -303,9 +271,8 @@ def test_update_exp_V():
 def test_update_exp_tau():
     BNMF = bnmf_vb(R,M,K,priors)
     BNMF.initialise()  
-    BNMF.update_exp_tau()
-    assert BNMF.exptau == 3.
-    assert BNMF.explogtau == 0.9227843350984671393934879099175975689578406640600764 - 0.
+    assert abs(BNMF.exptau - (3+12./2.)/(1+35.4113198623/2.)) < 0.000000000001
+    assert abs(BNMF.explogtau - (2.1406414779556 - math.log(1+35.4113198623/2.))) < 0.000000000001
     
 
 """ Test two iterations of run(), and that all values have changed. """
@@ -395,3 +362,32 @@ def test_compute_statistics():
     assert R2_pred == BNMF.compute_R2(M_pred,R,R_pred)
     assert Rp_pred == BNMF.compute_Rp(M_pred,R,R_pred)
     
+    
+""" Test the model quality measures. """
+def test_log_likelihood():
+    R = numpy.array([[1,2],[3,4]],dtype=float)
+    M = numpy.array([[1,1],[0,1]])
+    I, J, K = 2, 2, 3
+    lambdaU = 2*numpy.ones((I,K))
+    lambdaV = 3*numpy.ones((J,K))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    
+    BNMF = bnmf_vb(R,M,K,priors)
+    BNMF.expU = numpy.ones((I,K))
+    BNMF.expV = 2*numpy.ones((J,K))
+    BNMF.explogtau = 5.
+    BNMF.exptau = 3.
+    MSE = (5**2+4**2+2**2)/3. # R_pred = [[6]]
+    
+    log_likelihood = 3./2.*(5.-math.log(2*math.pi)) - 3./2. * (5**2 + 4**2 + 2**2)
+    AIC = log_likelihood - (2*3+2*3)
+    BIC = log_likelihood - (2*3+2*3)*math.log(3)/2.
+    
+    assert log_likelihood == BNMF.quality('loglikelihood')
+    assert AIC == BNMF.quality('AIC')
+    assert BIC == BNMF.quality('BIC')
+    assert MSE == BNMF.quality('MSE')
+    with pytest.raises(AssertionError) as error:
+        BNMF.quality('FAIL')
+    assert str(error.value) == "Unrecognised metric for model quality: FAIL."

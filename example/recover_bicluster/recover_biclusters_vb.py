@@ -39,15 +39,16 @@ G = numpy.array([[1,0] for i in range(0,10)] + [[0,1] for i in range(0,10)])
 
 R = numpy.dot(F,numpy.dot(S,G.T))
 
-iterations = 200
-init = 'random'
+iterations = 50
+init_S = 'random'
+init_FG = 'kmeans'
 I, J, K, L = 20, 20, 3, 2
-fraction_unknown = 0.1
+fraction_unknown = 0.6
 
 alpha, beta = 1., 1.
-lambdaF = numpy.ones((I,K))*2
-lambdaS = numpy.ones((K,L))/10
-lambdaG = numpy.ones((J,L))*2
+lambdaF = numpy.ones((I,K))*1
+lambdaS = numpy.ones((K,L))/50
+lambdaG = numpy.ones((J,L))*1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 
 M = generate_M(I,J,fraction_unknown)
@@ -55,7 +56,7 @@ M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
 BNMTF = bnmtf_vb(R,M,K,L,priors)
-BNMTF.initialise()
+BNMTF.initialise(init_S=init_S,init_FG=init_FG)
 BNMTF.run(iterations)
 
 # Also measure the performances

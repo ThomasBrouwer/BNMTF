@@ -24,12 +24,12 @@ def test_class():
     variance = sigma**2 * ( 1 - ( lambdav * ( lambdav + mu / sigma ) ) )
     assert tndist.variance() == variance  
 
-    # Also test that we get variance and exp 0 if tau is very high and mu negative
+    # Also test that we get variance and exp of an Exp if mu is less than -30*sigma
     mu = -1.
     tau = 2000.
     tndist = TruncatedNormal(mu,tau)
-    assert tndist.expectation() == 0.
-    assert tndist.variance() == 0.
+    assert tndist.expectation() == 1./2000.
+    assert tndist.variance() == (1./2000.)**2
     
 # Test a draw - simply verify it is > 0.
 # Also test whether we get inf for a very negative mean and high variance
