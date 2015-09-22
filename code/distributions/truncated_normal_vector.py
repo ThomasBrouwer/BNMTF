@@ -26,7 +26,7 @@ This means that we need to use the mean and variance of an exponential when
 |mu| gets close to 38*std.
 Therefore we use it when |mu| < 30*std.
 """
-import math, numpy
+import math, numpy, time
 import matplotlib.pyplot as plt
 from scipy.stats import truncnorm, norm
 from scipy.special import erfc
@@ -43,6 +43,8 @@ class TruncatedNormalVector:
         
     # Draw a value for x ~ TruncatedNormal(mu,tau). If we get inf we set it to 0.
     def draw(self):
+        
+        time1 = time.time()   
         draws = []
         for (mu,sigma,tau) in zip(self.mu,self.sigma,self.tau):
             if tau == 0.:
@@ -50,8 +52,11 @@ class TruncatedNormalVector:
             else:
                 d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=mu, sigma=sigma)[0]
                 d = d if (d >= 0. and d != numpy.inf and d != -numpy.inf and not numpy.isnan(d)) else 0.
-                draws.append(d)
-        return draws        
+                draws.append(d)   
+        '''
+        draws = parallel_draw(self.mu,self.sigma,self.tau)
+        '''     
+        return draws      
         
     # Return expectation. x = - self.mu / self.sigma; lambdax = norm.pdf(x)/(1-norm.cdf(x)); return self.mu + self.sigma * lambdax
     def expectation(self):
@@ -77,4 +82,25 @@ class TruncatedNormalVector:
         var = [(1./(numpy.abs(mu)*tau))**2 if mu < -30 * sigma else v for v,mu,tau,sigma in zip(var,self.mu,self.tau,self.sigma)]
         
         return [v if (v >= 0.0 and v != numpy.inf and v != -numpy.inf and not numpy.isnan(v)) else 0. for v in var]
-    
+        
+
+""" Methods for parallel draws """
+'''
+from joblib import Parallel, delayed
+import itertools
+import multiprocessing
+
+def draw(mu,sigma,tau):
+    if tau == 0.:
+        return 0
+    else:
+        d = rtnorm.rtnorm(a=0., b=numpy.inf, mu=mu, sigma=sigma)[0]
+        d = d if (d >= 0. and d != numpy.inf and d != -numpy.inf and not numpy.isnan(d)) else 0.
+        return d
+        
+def parallel_draw(mus,sigmas,taus):
+    draws = Parallel(n_jobs=-1)( #-1 = no. of machine cores
+        delayed(draw)(mu,sigma,tau) for (mu,sigma,tau) in itertools.izip(mus,sigmas,taus)
+    )
+    return draws
+'''

@@ -115,17 +115,17 @@ class bnmf_vb:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
-            time1 = time.time()
             #for k,i in itertools.product(xrange(0,self.K),xrange(0,self.I)):
             for k in xrange(0,self.K):
-                #time1 = time.time()
+                time1 = time.time()
                 for i in range(0,self.I):
                     self.update_U(i,k)
-                #time2 = time.time()
+            
+                time2 = time.time()
                 for i in range(0,self.I):
                     self.update_exp_U(i,k)
-                #time3 = time.time()
-                #print time2-time1, time3-time2 
+                time3 = time.time()
+                print time2-time1, time3-time2 
                 
             #for k,j in itertools.product(xrange(0,self.K),xrange(0,self.J)):
             for k in xrange(0,self.K):

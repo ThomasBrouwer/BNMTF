@@ -10,6 +10,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmf_gibbs import bnmf_gibbs
+from BNMTF.code.bnmf_gibbs_optimised import bnmf_gibbs_optimised
 from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
@@ -35,7 +36,8 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
-BNMF = bnmf_gibbs(R,M,K,priors)
+#BNMF = bnmf_gibbs(R,M,K,priors)
+BNMF = bnmf_gibbs_optimised(R,M,K,priors)
 BNMF.initialise(init)
 BNMF.run(iterations)
 

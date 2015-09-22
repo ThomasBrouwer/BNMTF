@@ -118,6 +118,9 @@ class bnmf_vb_optimised:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
+            
+            time1 = time.time()            
+            
             for k in xrange(0,self.K):
                 self.update_U(k)
                 self.update_exp_U(k)           
@@ -132,6 +135,9 @@ class bnmf_vb_optimised:
             
             perf, elbo = self.predict(self.M), self.elbo()
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
+            
+            time2 = time.time()            
+            print time2-time1
             
         return
         

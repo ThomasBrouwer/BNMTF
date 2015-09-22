@@ -16,7 +16,6 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmf_vb import bnmf_vb
-from BNMTF.code.bnmf_vb_parallel import bnmf_vb_parallel
 from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
 from ml_helpers.code.mask import calc_inverse_M
 
@@ -26,7 +25,7 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-iterations = 1000
+iterations = 100
 init = 'random'
 I, J, K = 100,80,10
 
