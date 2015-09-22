@@ -107,7 +107,8 @@ class bnmf_gibbs_optimised:
         self.all_V = numpy.zeros((iterations,self.J,self.K))   
         self.all_tau = numpy.zeros(iterations)
         
-        for it in range(0,iterations):       
+        for it in range(0,iterations):      
+            
             print "Iteration %s." % (it+1)
             
             for k in range(0,self.K):   

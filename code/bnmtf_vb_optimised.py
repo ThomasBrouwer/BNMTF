@@ -52,7 +52,7 @@ from distributions.truncated_normal import TruncatedNormal
 from distributions.truncated_normal_vector import TruncatedNormalVector
 from distributions.exponential import Exponential
 
-import numpy, itertools, math, scipy
+import numpy, itertools, math, scipy, time
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 
@@ -152,6 +152,9 @@ class bnmtf_vb_optimised:
         self.all_exp_tau = []  # to check for convergence     
         
         for it in range(0,iterations):
+            
+            time1 = time.time()            
+            
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
                 self.update_exp_S(k,l)
@@ -176,6 +179,8 @@ class bnmtf_vb_optimised:
             
             perf, elbo = self.predict(self.M), self.elbo()
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
+            
+            print time.time() - time1
             
         
     # Compute the ELBO

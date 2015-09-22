@@ -10,6 +10,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmtf_gibbs import bnmtf_gibbs
+from BNMTF.code.bnmtf_gibbs_optimised import bnmtf_gibbs_optimised
 from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
@@ -18,11 +19,11 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 100
-burn_in = 50
-thinning = 2
+iterations = 1000
+burn_in = 500
+thinning = 5
 init = 'random'
-I, J, K, L = 50, 40, 10, 5
+I, J, K, L = 100, 80, 10, 5
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))
@@ -36,7 +37,8 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
-BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+#BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+BNMTF = bnmtf_gibbs_optimised(R,M,K,L,priors)
 BNMTF.initialise(init)
 BNMTF.run(iterations)
 

@@ -17,10 +17,10 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 100
+iterations = 1000
 init_FG = 'kmeans'
 init_S = 'random'
-I, J, K, L = 50, 40, 10, 5
+I, J, K, L = 100, 80, 10, 5
 
 alpha, beta = 1., 1.
 lambdaF = numpy.ones((I,K))

@@ -1,5 +1,6 @@
 """
 Gibbs sampler for non-negative matrix tri-factorisation.
+Optimised to draw all columns in parallel.
 
 We expect the following arguments:
 - R, the matrix
@@ -36,10 +37,11 @@ This gives a dictionary of performances,
 from distributions.exponential import Exponential
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
+from distributions.truncated_normal_vector import TruncatedNormalVector
 
 import numpy, itertools, math, time
 
-class bnmtf_gibbs:
+class bnmtf_gibbs_optimised:
     def __init__(self,R,M,K,L,priors):
         self.R = numpy.array(R,dtype=float)
         self.M = numpy.array(M,dtype=float)
@@ -116,24 +118,24 @@ class bnmtf_gibbs:
         
         for it in range(0,iterations):
             
-            time1 = time.time()          
+            time1 = time.time()       
             
             print "Iteration %s." % (it+1)
             
-            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                tauFik = self.tauF(i,k)
-                muFik = self.muF(tauFik,i,k)
-                self.F[i,k] = TruncatedNormal(muFik,tauFik).draw()
+            for k in range(0,self.K):
+                tauFk = self.tauF(k)
+                muFk = self.muF(tauFk,k)
+                self.F[:,k] = TruncatedNormalVector(muFk,tauFk).draw()
                 
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 tauSkl = self.tauS(k,l)
                 muSkl = self.muS(tauSkl,k,l)
                 self.S[k,l] = TruncatedNormal(muSkl,tauSkl).draw()
                 
-            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                tauGjl = self.tauG(j,l)
-                muGjl = self.muG(tauGjl,j,l)
-                self.G[j,l] = TruncatedNormal(muGjl,tauGjl).draw()
+            for l in range(0,self.L):
+                tauGl = self.tauG(l)
+                muGl = self.muG(tauGl,l)
+                self.G[:,l] = TruncatedNormalVector(muGl,tauGl).draw()
                 
             self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
             
@@ -156,11 +158,11 @@ class bnmtf_gibbs:
     def beta_s(self):   
         return self.beta + 0.5*(self.M*(self.R-self.triple_dot(self.F,self.S,self.G.T))**2).sum()
         
-    def tauF(self,i,k):       
-        return self.tau * ( self.M[i] * numpy.dot(self.S[k],self.G.T)**2 ).sum()
+    def tauF(self,k):       
+        return self.tau * ( self.M * numpy.dot(self.S[k],self.G.T)**2 ).sum(axis=1)
         
-    def muF(self,tauFik,i,k):
-        return 1./tauFik * (-self.lambdaF[i,k] + self.tau*(self.M[i] * ( (self.R[i]-self.triple_dot(self.F[i],self.S,self.G.T)+self.F[i,k]*numpy.dot(self.S[k],self.G.T))*numpy.dot(self.S[k],self.G.T) )).sum()) 
+    def muF(self,tauFk,k):
+        return 1./tauFk * (-self.lambdaF[:,k] + self.tau*(self.M * ( (self.R-self.triple_dot(self.F,self.S,self.G.T)+numpy.outer(self.F[:,k],numpy.dot(self.S[k],self.G.T)))*numpy.dot(self.S[k],self.G.T) )).sum(axis=1)) 
         
     def tauS(self,k,l):       
         return self.tau * ( self.M * numpy.outer(self.F[:,k]**2,self.G[:,l]**2) ).sum()
@@ -168,11 +170,11 @@ class bnmtf_gibbs:
     def muS(self,tauSkl,k,l):
         return 1./tauSkl * (-self.lambdaS[k,l] + self.tau*(self.M * ( (self.R-self.triple_dot(self.F,self.S,self.G.T)+self.S[k,l]*numpy.outer(self.F[:,k],self.G[:,l]))*numpy.outer(self.F[:,k],self.G[:,l]) )).sum()) 
         
-    def tauG(self,j,l):       
-        return self.tau * ( self.M[:,j] * numpy.dot(self.F,self.S[:,l])**2 ).sum()
+    def tauG(self,l):       
+        return self.tau * ( self.M.T * numpy.dot(self.F,self.S[:,l])**2 ).T.sum(axis=0)
         
-    def muG(self,tauGjl,j,l):
-        return 1./tauGjl * (-self.lambdaG[j,l] + self.tau*(self.M[:,j] * ( (self.R[:,j]-self.triple_dot(self.F,self.S,self.G[j])+self.G[j,l]*numpy.dot(self.F,self.S[:,l]))*numpy.dot(self.F,self.S[:,l]) )).sum()) 
+    def muG(self,tauGl,l):
+        return 1./tauGl * (-self.lambdaG[:,l] + self.tau*(self.M * ( (self.R-self.triple_dot(self.F,self.S,self.G.T)+numpy.outer(numpy.dot(self.F,self.S[:,l]),self.G[:,l])).T * numpy.dot(self.F,self.S[:,l]) ).T).sum(axis=0)) 
         
 
     # Return the average value for U, V, tau - i.e. our approximation to the expectations. 
