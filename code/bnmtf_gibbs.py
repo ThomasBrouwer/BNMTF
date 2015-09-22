@@ -33,6 +33,10 @@ This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
 """
 
+import sys
+sys.path.append("/home/tab43/Documents/Projects/libraries/")
+from kmeans_missing.code.kmeans import KMeans
+
 from distributions.exponential import Exponential
 from distributions.gamma import Gamma
 from distributions.truncated_normal import TruncatedNormal
@@ -82,29 +86,36 @@ class bnmtf_gibbs:
 
 
     # Initialise U, V, and tau. If init='random', draw values from an Exp and Gamma distribution. If init='exp', set it to the expectation values.
-    def initialise(self,init='random'):
-        assert init in ['random','exp'], "Unknown initialisation option: %s. Should be 'random' or 'exp'." % init
-        self.F = numpy.zeros((self.I,self.K))
-        self.S = numpy.zeros((self.K,self.L))
-        self.G = numpy.zeros((self.J,self.L))
+    def initialise(self,init_S='random',init_FG='random'):
+        assert init_S in ['random','exp'], "Unknown initialisation option for S: %s. Should be 'random' or 'exp'." % init_S
+        assert init_FG in ['random','exp','kmeans'], "Unknown initialisation option for S: %s. Should be 'random', 'exp', or 'kmeans." % init_FG
         
-        if init == 'random':
-            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                self.F[i,k] = Exponential(self.lambdaF[i][k]).draw()
-            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
-                self.S[k,l] = Exponential(self.lambdaS[k][l]).draw()
+        self.S = 1./self.lambdaS
+        if init_S == 'random':
+            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):  
+                self.S[k,l] = Exponential(self.lambdaS[k,l]).draw()
+                
+        self.F, self.G = 1./self.lambdaF, 1./self.lambdaG
+        if init_FG == 'random':
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
+                self.F[i,k] = Exponential(self.lambdaF[i,k]).draw()
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                self.G[j,l] = Exponential(self.lambdaG[j][l]).draw()
-            self.tau = Gamma(self.alpha,self.beta).draw()
+                self.G[j,l] = Exponential(self.lambdaG[j,l]).draw()
+        elif init_FG == 'kmeans':
+            print "Initialising F using KMeans."
+            kmeans_F = KMeans(self.R,self.M,self.K)
+            kmeans_F.initialise()
+            kmeans_F.cluster()
+            self.F = kmeans_F.clustering_results + 0.2            
             
-        elif init == 'exp':
-            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                self.F[i,k] = 1.0/self.lambdaF[i][k]
-            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
-                self.S[k,l] = 1.0/self.lambdaS[k][l]
-            for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                self.G[j,l] = 1.0/self.lambdaG[j][l]
-            self.tau = self.alpha/self.beta
+            print "Initialising G using KMeans."
+            kmeans_G = KMeans(self.R.T,self.M.T,self.L)   
+            kmeans_G.initialise()
+            kmeans_G.cluster()
+            self.G = kmeans_G.clustering_results + 0.2
+
+        # Initialise tau using the updates
+        self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
 
 
     # Run the Gibbs sampler

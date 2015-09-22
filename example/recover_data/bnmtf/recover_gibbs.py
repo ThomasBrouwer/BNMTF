@@ -22,7 +22,8 @@ input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 iterations = 200
 burn_in = 90
 thinning = 1
-init = 'random'
+init_S = 'random'
+init_FG = 'kmeans'
 I, J, K, L = 100, 80, 10, 5
 
 alpha, beta = 1., 1.
@@ -37,9 +38,9 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
-BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-#BNMTF = bnmtf_gibbs_optimised(R,M,K,L,priors)
-BNMTF.initialise(init)
+#BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+BNMTF = bnmtf_gibbs_optimised(R,M,K,L,priors)
+BNMTF.initialise(init_S)#(init_S,init_FG)
 BNMTF.run(iterations)
 
 taus = BNMTF.all_tau

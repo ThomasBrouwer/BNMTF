@@ -107,9 +107,10 @@ def test_initialise():
     priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
     
     # First do a random initialisation - we can then only check whether values are correctly initialised
-    init = 'random'
+    init_S = 'random'
+    init_FG = 'random'
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
     
     assert BNMTF.tau >= 0.0
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -119,19 +120,41 @@ def test_initialise():
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         assert BNMTF.G[j,l] >= 0.0
         
-    # Then initialise with expectation values
-    init = 'exp'
+    # Initialisation of S using random draws from prior
+    init_S, init_FG = 'random', 'exp'
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
     
-    assert BNMTF.tau >= 0.0
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        assert BNMTF.F[i,k] >= 1./2.
+        assert BNMTF.F[i,k] == 1./lambdaF[i,k]
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
-        assert BNMTF.S[k,l] >= 1./3.
+        assert BNMTF.S[k,l] != 1./lambdaS[k,l] # test whether we overwrote the expectation
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
-        assert BNMTF.G[j,l] >= 1./4.
-    assert BNMTF.tau == 3./1.
+        assert BNMTF.G[j,l] == 1./lambdaG[j,l]
+    
+    # Initialisation of F and G using random draws from prior
+    init_S, init_FG = 'exp', 'random'
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.initialise(init_S,init_FG)
+    
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMTF.F[i,k] != 1./lambdaF[i,k] # test whether we overwrote the expectation
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert BNMTF.S[k,l] == 1./lambdaS[k,l]
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert BNMTF.G[j,l] != 1./lambdaG[j,l] # test whether we overwrote the expectation
+        
+    # Initialisation of F and G using Kmeans
+    init_S, init_FG = 'exp', 'kmeans'
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.initialise(init_S,init_FG)
+    
+    for i,k in itertools.product(xrange(0,I),xrange(0,K)):
+        assert BNMTF.F[i,k] == 0.2 or BNMTF.F[i,k] == 1.2
+    for j,l in itertools.product(xrange(0,J),xrange(0,L)):
+        assert BNMTF.G[j,l] == 0.2 or BNMTF.G[j,l] == 1.2
+    for k,l in itertools.product(xrange(0,K),xrange(0,L)):
+        assert BNMTF.S[k,l] == 1./lambdaS[k,l]
     
     
 """ Test computing values for alpha, beta, mu, tau. """
@@ -145,25 +168,28 @@ lambdaS = 3*numpy.ones((K,L))
 lambdaG = 5*numpy.ones((J,L))
 alpha, beta = 3, 1
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
-init = 'exp' 
+init_S, init_FG = 'exp', 'exp'
 # F = 1/2, S = 1/3, G = 1/5
 # R - FSG.T = [[1]] - [[4/15]] = [[11/15]]
 
 def test_alpha_s():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     alpha_s = alpha + 6.
     assert BNMTF.alpha_s() == alpha_s
 
 def test_beta_s():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     beta_s = beta + .5*(12*(11./15.)**2) #F*S = [[1/6+1/6=1/3,..]], F*S*G^T = [[1/15*4=4/15,..]]
     assert abs(BNMTF.beta_s() - beta_s) < 0.00000000000001
     
 def test_tauF():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     # S*G.T = [[4/15]], (S*G.T)^2 = [[16/225]], sum_j S*G.T = [[32/225,32/225],[48/225,48/225],[32/225,32/225],[32/225,32/225],[48/225,48/225]]
     tauF = 3.*numpy.array([[32./225.,32./225.],[48./225.,48./225.],[32./225.,32./225.],[32./225.,32./225.],[48./225.,48./225.]])
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -171,7 +197,8 @@ def test_tauF():
         
 def test_muF():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     tauF = 3.*numpy.array([[32./225.,32./225.],[48./225.,48./225.],[32./225.,32./225.],[32./225.,32./225.],[48./225.,48./225.]])
     # Rij - Fi*S*Gj + Fik(Sk*Gj) = 11/15 + 1/2 * 4/15 = 13/15
     # (Rij - Fi*S*Gj + Fik(Sk*Gj)) * (Sk*Gj) = 13/15 * 4/15 = 52/225
@@ -181,7 +208,8 @@ def test_muF():
         
 def test_tauS():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     # F outer G = [[1/10]], (F outer G)^2 = [[1/100]], sum (F outer G)^2 = [[12/100]]
     tauS = 3.*numpy.array([[3./25.,3./25.,3./25.,3./25.],[3./25.,3./25.,3./25.,3./25.]])
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
@@ -189,7 +217,8 @@ def test_tauS():
     
 def test_muS():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     tauS = 3.*numpy.array([[3./25.,3./25.,3./25.,3./25.],[3./25.,3./25.,3./25.,3./25.]])
     # Rij - Fi*S*Gj + Fik*Skl*Gjk = 11/15 + 1/2*1/3*1/5 = 23/30
     # (Rij - Fi*S*Gj + Fik*Skl*Gjk) * Fik*Gjk = 23/30 * 1/10 = 23/300
@@ -199,7 +228,8 @@ def test_muS():
         
 def test_tauG():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     # F*S = [[1/3]], (F*S)^2 = [[1/9]], sum_i F*S = [[4/9]]
     tauG = 3.*numpy.array([[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.]])
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
@@ -207,7 +237,8 @@ def test_tauG():
     
 def test_muG():
     BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-    BNMTF.initialise(init)
+    BNMTF.initialise(init_S,init_FG)
+    BNMTF.tau = 3.
     tauG = 3.*numpy.array([[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.],[4./9.,4./9.,4./9.,4./9.]])
     # Rij - Fi*S*Gj + Gjl*(Fi*Sl)) = 11/15 + 1/5 * 1/3 = 12/15 = 4/5
     # (Rij - Fi*S*Gj + Gjl*(Fi*Sl)) * (Fi*Sl) = 4/5 * 1/3 = 4/15
