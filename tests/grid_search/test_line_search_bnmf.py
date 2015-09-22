@@ -24,7 +24,7 @@ def test_init():
     assert linesearch.priors == priors
     assert linesearch.iterations == iterations
     assert linesearch.initUV == initUV
-    assert linesearch.all_performances == { 'BIC' : [], 'AIC' : [], 'loglikelihood' : [] }
+    assert linesearch.all_performances == { 'BIC' : [], 'AIC' : [], 'loglikelihood' : [], 'MSE' : [] }
     
     
 def test_search():
@@ -78,11 +78,13 @@ def test_best_value():
     linesearch.all_performances = {
         'BIC' : [10,9,8,7],
         'AIC' : [11,13,12,14],
-        'loglikelihood' : [16,15,18,17]
+        'loglikelihood' : [16,15,18,17],
+        'MSE' : [16,20,18,17]
     }
     assert linesearch.best_value('BIC') == 1
     assert linesearch.best_value('AIC') == 5
     assert linesearch.best_value('loglikelihood') == 4
+    assert linesearch.best_value('MSE') == 2
     with pytest.raises(AssertionError) as error:
         linesearch.all_values('FAIL')
     assert str(error.value) == "Unrecognised metric name: FAIL."

@@ -3,7 +3,7 @@ Test the grid search for BNMTF, in grid_search_bnmtf.py
 """
 
 from BNMTF.grid_search.greedy_search_bnmtf import GreedySearch
-import numpy, pytest
+import numpy, pytest, random
 
 
 def test_init():
@@ -47,6 +47,8 @@ def test_search():
     iterations = 1
     search_metric = 'BIC'
     
+    numpy.random.seed(0)
+    random.seed(0)
     greedysearch = GreedySearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
     greedysearch.search(search_metric)
     
@@ -54,8 +56,8 @@ def test_search():
         greedysearch.all_values('FAIL')
     assert str(error.value) == "Unrecognised metric name: FAIL."
     
-    # We go from: (1,5) -> (1,4) -> (1,3) -> (2,3), and try 9 locations
-    assert len(greedysearch.all_values('BIC')) == 9
+    # We go from: (1,5) -> (1,4) -> (1,3), and try 6 locations
+    assert len(greedysearch.all_values('BIC')) == 6
     
     
 def test_all_values():

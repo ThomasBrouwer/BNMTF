@@ -26,10 +26,9 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
 
-iterations = 100
+iterations = 1000
 init = 'random'
-I, J, K = 50,40,10 #20, 10, 5 #100, 50, 10
-P = 16                   # number of parallel threads
+I, J, K = 100,80,10
 
 alpha, beta = 1., 1. #1., 1.
 lambdaU = numpy.ones((I,K))*2
@@ -43,7 +42,6 @@ M_test = calc_inverse_M(M)
 
 # Run the VB algorithm
 #BNMF = bnmf_vb(R,M,K,priors) 
-#BNMF = bnmf_vb_parallel(R,M,K,P,priors) 
 BNMF = bnmf_vb_optimised(R,M,K,priors) 
 BNMF.initialise()
 BNMF.run(iterations)
