@@ -299,3 +299,34 @@ def test_compute_statistics():
     assert R2_pred == BNMF.compute_R2(M_pred,R,R_pred)
     assert Rp_pred == BNMF.compute_Rp(M_pred,R,R_pred)
     
+    
+""" Test the model quality measures. """
+def test_log_likelihood():
+    R = numpy.array([[1,2],[3,4]],dtype=float)
+    M = numpy.array([[1,1],[0,1]])
+    I, J, K = 2, 2, 3
+    lambdaU = 2*numpy.ones((I,K))
+    lambdaV = 3*numpy.ones((J,K))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    
+    iterations = 10
+    burnin, thinning = 4, 2
+    BNMF = bnmf_gibbs_optimised(R,M,K,priors)
+    BNMF.all_U = [numpy.ones((I,K)) for i in range(0,iterations)]
+    BNMF.all_V = [2*numpy.ones((J,K)) for i in range(0,iterations)]
+    BNMF.all_tau = [3. for i in range(0,iterations)]
+    # expU*expV.T = [[6.]]
+    
+    log_likelihood = 3./2.*(math.log(3.)-math.log(2*math.pi)) - 3./2. * (5**2 + 4**2 + 2**2)
+    AIC = log_likelihood - (2*3+2*3)
+    BIC = log_likelihood - (2*3+2*3)*math.log(3)/2.
+    MSE = (5**2+4**2+2**2)/3.
+    
+    assert log_likelihood == BNMF.quality('loglikelihood',burnin,thinning)
+    assert AIC == BNMF.quality('AIC',burnin,thinning)
+    assert BIC == BNMF.quality('BIC',burnin,thinning)
+    assert MSE == BNMF.quality('MSE',burnin,thinning)
+    with pytest.raises(AssertionError) as error:
+        BNMF.quality('FAIL',burnin,thinning)
+    assert str(error.value) == "Unrecognised metric for model quality: FAIL."

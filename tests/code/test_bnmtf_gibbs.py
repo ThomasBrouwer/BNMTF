@@ -355,3 +355,36 @@ def test_compute_statistics():
     assert R2_pred == BNMTF.compute_R2(M_pred,R,R_pred)
     assert Rp_pred == BNMTF.compute_Rp(M_pred,R,R_pred)
     
+    
+""" Test the model quality measures. """
+def test_log_likelihood():
+    R = numpy.array([[1,2],[3,4]],dtype=float)
+    M = numpy.array([[1,1],[0,1]])
+    I, J, K, L = 2, 2, 3, 4
+    lambdaF = 2*numpy.ones((I,K))
+    lambdaS = 3*numpy.ones((K,L))
+    lambdaG = 4*numpy.ones((J,L))
+    alpha, beta = 3, 1
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+    
+    iterations = 10
+    burnin, thinning = 4, 2
+    BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+    BNMTF.all_F = [numpy.ones((I,K)) for i in range(0,iterations)]
+    BNMTF.all_S = [2*numpy.ones((K,L)) for i in range(0,iterations)]
+    BNMTF.all_G = [3*numpy.ones((J,L)) for i in range(0,iterations)]
+    BNMTF.all_tau = [3. for i in range(0,iterations)]
+    # expU*expV.T = [[72.]]
+    
+    log_likelihood = 3./2.*(math.log(3)-math.log(2*math.pi)) - 3./2. * (71**2 + 70**2 + 68**2)
+    AIC = log_likelihood - (2*3+3*4+2*4)
+    BIC = log_likelihood - (2*3+3*4+2*4)*math.log(3)/2.
+    MSE = (71**2+70**2+68**2)/3.
+    
+    assert log_likelihood == BNMTF.quality('loglikelihood',burnin,thinning)
+    assert AIC == BNMTF.quality('AIC',burnin,thinning)
+    assert BIC == BNMTF.quality('BIC',burnin,thinning)
+    assert MSE == BNMTF.quality('MSE',burnin,thinning)
+    with pytest.raises(AssertionError) as error:
+        BNMTF.quality('FAIL',burnin,thinning)
+    assert str(error.value) == "Unrecognised metric for model quality: FAIL."    

@@ -19,9 +19,9 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
 
-iterations = 1000
-burn_in = 500
-thinning = 2
+iterations = 200
+burn_in = 90
+thinning = 1
 init = 'random'
 I, J, K, L = 100, 80, 10, 5
 
@@ -37,8 +37,8 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the Gibbs sampler
-#BNMTF = bnmtf_gibbs(R,M,K,L,priors)
-BNMTF = bnmtf_gibbs_optimised(R,M,K,L,priors)
+BNMTF = bnmtf_gibbs(R,M,K,L,priors)
+#BNMTF = bnmtf_gibbs_optimised(R,M,K,L,priors)
 BNMTF.initialise(init)
 BNMTF.run(iterations)
 

@@ -105,7 +105,7 @@ class bnmf_gibbs_optimised:
     def run(self,iterations):
         self.all_U = numpy.zeros((iterations,self.I,self.K))  
         self.all_V = numpy.zeros((iterations,self.J,self.K))   
-        self.all_tau = numpy.zeros(iterations)
+        self.all_tau = numpy.zeros(iterations) 
         
         for it in range(0,iterations):      
             for k in range(0,self.K):   
@@ -191,3 +191,29 @@ class bnmf_gibbs_optimised:
         variance_real = (M*(R-mean_real)**2).sum()
         variance_pred = (M*(R_pred-mean_pred)**2).sum()
         return covariance / float(math.sqrt(variance_real)*math.sqrt(variance_pred))
+        
+
+    # Functions for model selection, measuring the goodness of fit vs model complexity
+    def quality(self,metric,burn_in,thinning):
+        assert metric in ['loglikelihood','BIC','AIC','MSE'], 'Unrecognised metric for model quality: %s.' % metric
+        
+        (expU,expV,exptau) = self.approx_expectation(burn_in,thinning)
+        log_likelihood = self.log_likelihood(expU,expV,exptau)
+        
+        if metric == 'loglikelihood':
+            return log_likelihood
+        elif metric == 'BIC':
+            # -2*loglikelihood + (no. free parameters * log(no data points))
+            return log_likelihood - 0.5 * (self.I*self.K+self.J*self.K) * math.log(self.size_Omega)
+        elif metric == 'AIC':
+            # -2*loglikelihood + 2*no. free parameters
+            return log_likelihood - (self.I*self.K+self.J*self.K)
+        elif metric == 'MSE':
+            R_pred = numpy.dot(expU,expV.T)
+            return self.compute_MSE(self.M,self.R,R_pred)
+        
+    def log_likelihood(self,expU,expV,exptau):
+        # Return the likelihood of the data given the trained model's parameters
+        explogtau = math.log(exptau)
+        return self.size_Omega / 2. * ( explogtau - math.log(2*math.pi) ) \
+             - exptau / 2. * (self.M*( self.R - numpy.dot(expU,expV.T))**2).sum()
