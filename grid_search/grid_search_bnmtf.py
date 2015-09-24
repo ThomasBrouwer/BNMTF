@@ -19,6 +19,8 @@ We expect the following arguments:
 - initFG        - the initialisation of F and G - 'kmeans', 'exp' or 'random'
 - initS        - the initialisation of S - 'exp' or 'random'
 - iterations    - number of iterations to run 
+- restarts      - we run the classifier this many times and use the one with 
+                  the highest log likelihood
 
 The grid search can be started by running search().
 If we use Gibbs then we run search(burn_in,thinning).
@@ -41,7 +43,7 @@ import numpy
 metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class GridSearch:
-    def __init__(self,classifier,values_K,values_L,R,M,priors,initS,initFG,iterations):
+    def __init__(self,classifier,values_K,values_L,R,M,priors,initS,initFG,iterations,restarts=1):
         self.classifier = classifier
         self.values_K = values_K
         self.values_L = values_L
@@ -52,6 +54,8 @@ class GridSearch:
         self.initS = initS
         self.initFG = initFG
         self.iterations = iterations
+        self.restarts = restarts
+        assert self.restarts > 0, "Need at least 1 restart."
         
         self.all_performances = {
             metric : numpy.empty((len(self.values_K),len(self.values_L)))
@@ -69,15 +73,25 @@ class GridSearch:
                 priors['lambdaS'] = self.priors['lambdaS']*numpy.ones((K,L))
                 priors['lambdaG'] = self.priors['lambdaG']*numpy.ones((self.J,L))
                 
-                BNMTF = self.classifier(self.R,self.M,K,L,priors)
-                BNMTF.initialise(init_S=self.initS,init_FG=self.initFG)
-                BNMTF.run(iterations=self.iterations)
+                best_BNMTF = None
+                for r in range(0,self.restarts):
+                    print "Restart %s for K = %s, L = %s." % (r+1,K,L)    
+                    BNMTF = self.classifier(self.R,self.M,K,L,priors)
+                    BNMTF.initialise(init_S=self.initS,init_FG=self.initFG)
+                    BNMTF.run(iterations=self.iterations)
+                    
+                    args = {'metric':'loglikelihood'}
+                    if burn_in is not None and thinning is not None:
+                        args['burn_in'], args['thinning'] = burn_in, thinning
+                    
+                    if best_BNMTF is None or BNMTF.quality(**args) > best_BNMTF.quality(**args):
+                        best_BNMTF = BNMTF
                 
                 for metric in metrics:
                     if burn_in is not None and thinning is not None:
-                        quality = BNMTF.quality(metric,burn_in,thinning)
+                        quality = best_BNMTF.quality(metric,burn_in,thinning)
                     else:
-                        quality = BNMTF.quality(metric)
+                        quality = best_BNMTF.quality(metric)
                     self.all_performances[metric][ik,il] = quality
         
         print "Finished running line search for BNMF."

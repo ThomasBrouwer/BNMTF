@@ -24,6 +24,8 @@ We expect the following arguments:
 - initFG        - the initialisation of F and G - 'kmeans', 'exp' or 'random'
 - initS        - the initialisation of S - 'exp' or 'random'
 - iterations    - number of iterations to run 
+- restarts      - we run the classifier this many times and use the one with 
+                  the highest log likelihood
 
 The greedy grid search can be started by running search(search_metric), where 
 we stop searching after our specified metric's performance drops.
@@ -47,7 +49,7 @@ import numpy
 metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class GreedySearch:
-    def __init__(self,classifier,values_K,values_L,R,M,priors,initS,initFG,iterations):
+    def __init__(self,classifier,values_K,values_L,R,M,priors,initS,initFG,iterations,restarts=1):
         self.classifier = classifier
         self.values_K = values_K
         self.values_L = values_L
@@ -58,6 +60,8 @@ class GreedySearch:
         self.initS = initS
         self.initFG = initFG
         self.iterations = iterations
+        self.restarts = restarts
+        assert self.restarts > 0, "Need at least 1 restart."        
         
         self.all_performances = {
             metric : []
@@ -83,17 +87,28 @@ class GreedySearch:
             priors['lambdaS'] = self.priors['lambdaS']*numpy.ones((K,L))
             priors['lambdaG'] = self.priors['lambdaG']*numpy.ones((self.J,L))
             
-            BNMTF = self.classifier(self.R,self.M,K,L,priors)
-            BNMTF.initialise(init_S=self.initS,init_FG=self.initFG)
-            BNMTF.run(iterations=self.iterations)
+            best_BNMTF = None
+            for r in range(0,self.restarts):
+                print "Restart %s for K = %s, L = %s." % (r+1,K,L)  
+                BNMTF = self.classifier(self.R,self.M,K,L,priors)
+                BNMTF.initialise(init_S=self.initS,init_FG=self.initFG)
+                BNMTF.run(iterations=self.iterations)
+                
+                args = {'metric':'loglikelihood'}
+                if burn_in is not None and thinning is not None:
+                    args['burn_in'], args['thinning'] = burn_in, thinning
+                
+                if best_BNMTF is None or BNMTF.quality(**args) > best_BNMTF.quality(**args):
+                    best_BNMTF = BNMTF
             
             for metric in metrics:
                 if burn_in is not None and thinning is not None:
-                    quality = BNMTF.quality(metric,burn_in,thinning)
+                    quality = best_BNMTF.quality(metric,burn_in,thinning)
                 else:
-                    quality = BNMTF.quality(metric)
+                    quality = best_BNMTF.quality(metric)
                 self.all_performances[metric].append((K,L,quality))
-            return self.all_performances[search_metric][-1][2] # return the quality of the last appended value
+                
+            return self.all_performances[search_metric][-1][2] # return the quality of the last appended value (K,L,quality)
             
         # Get the initial starting point
         ik, il = 0, 0 #current indices for values of K and L

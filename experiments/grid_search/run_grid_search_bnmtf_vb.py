@@ -21,7 +21,9 @@ import scipy.interpolate
 
 ##########
 
-iterations = 200
+restarts = 5
+iterations = 1000
+
 I, J = 20,20
 true_K, true_L = 2, 2
 values_K, values_L = range(1,4+1), range(1,4+1)
@@ -45,7 +47,7 @@ M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaF,S,G need to be a single value (recall K,L is unknown)
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0]/10, 'lambdaS':lambdaS[0,0]/10, 'lambdaG':lambdaG[0,0]/10 }
-grid_search = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
+grid_search = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations,restarts)
 grid_search.search()
 
 # Plot the performances of all three metrics

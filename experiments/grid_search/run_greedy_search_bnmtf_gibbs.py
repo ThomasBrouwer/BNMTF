@@ -19,9 +19,10 @@ import scipy.interpolate
 
 ##########
 
-iterations = 1000
-burn_in = 900
-thinning = 5
+restarts = 5
+iterations = 100
+burn_in = 90
+thinning = 2
 
 I, J = 20,20
 true_K, true_L = 3,3
@@ -48,7 +49,7 @@ M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaU and lambdaV need to be a single value (recall K is unknown)
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0], 'lambdaS':lambdaS[0,0], 'lambdaG':lambdaG[0,0] }
-greedy_search = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
+greedy_search = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations,restarts)
 greedy_search.search(search_metric,burn_in,thinning)
 
 # Plot the performances of all three metrics

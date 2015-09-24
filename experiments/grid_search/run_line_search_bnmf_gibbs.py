@@ -24,9 +24,10 @@ import numpy, matplotlib.pyplot as plt
 
 ##########
 
-iterations = 200
-burn_in = 100
-thinning = 2
+restarts = 5
+iterations = 1000
+burn_in = 900
+thinning = 5
 
 I, J = 50,30
 true_K = 10
@@ -49,7 +50,7 @@ M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaU and lambdaV need to be a single value (recall K is unknown)
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU[0,0]/5, 'lambdaV':lambdaV[0,0]/5 }
-line_search = LineSearch(classifier,values_K,R,M,priors,initUV,iterations)
+line_search = LineSearch(classifier,values_K,R,M,priors,initUV,iterations,restarts)
 line_search.search(burn_in,thinning)
 
 # Plot the performances of all three metrics - but MSE separately

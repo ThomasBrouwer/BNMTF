@@ -21,12 +21,13 @@ import scipy.interpolate
 
 ##########
 
+restarts = 5
 iterations = 100
 burn_in = 90
-thinning = 2
+thinning = 1
 
 I, J = 20,20
-true_K, true_L = 2,2
+true_K, true_L = 3,3
 values_K, values_L = range(1,4+1), range(1,4+1)
 
 fraction_unknown = 0.1
@@ -48,7 +49,7 @@ M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaF,S,G need to be a single value (recall K,L is unknown)
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0], 'lambdaS':lambdaS[0,0], 'lambdaG':lambdaG[0,0] }
-grid_search = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
+grid_search = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations,restarts)
 grid_search.search(burn_in,thinning)
 
 # Plot the performances of all three metrics
@@ -64,7 +65,7 @@ for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     Ki, Li = numpy.meshgrid(Ki, Li)
     
     # Interpolate
-    rbf = scipy.interpolate.Rbf(list_values_K, list_values_L, values, function='multiquadric')
+    rbf = scipy.interpolate.Rbf(list_values_K, list_values_L, values, function='linear')
     values_i = rbf(Ki, Li)
     
     # Plot

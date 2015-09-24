@@ -16,6 +16,8 @@ We expect the following arguments:
                   where lambdaU and lambdaV are a single value.
 - initUV        - the initialisation of U and V - either 'exp' or 'random'
 - iterations    - number of iterations to run 
+- restarts      - we run the classifier this many times and use the one with 
+                  the highest log likelihood
 
 The line search can be started by running search().
 If we use Gibbs then we run search(burn_in,thinning).
@@ -36,7 +38,7 @@ import numpy
 metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class LineSearch:
-    def __init__(self,classifier,values_K,R,M,priors,initUV,iterations):
+    def __init__(self,classifier,values_K,R,M,priors,initUV,iterations,restarts=1):
         self.classifier = classifier
         self.values_K = values_K
         self.R = R
@@ -45,6 +47,8 @@ class LineSearch:
         self.priors = priors
         self.initUV = initUV
         self.iterations = iterations
+        self.restarts = restarts
+        assert self.restarts > 0, "Need at least 1 restart."
         
         self.all_performances = {
             metric : []
@@ -60,15 +64,25 @@ class LineSearch:
             priors['lambdaU'] = self.priors['lambdaU']*numpy.ones((self.I,K))
             priors['lambdaV'] = self.priors['lambdaV']*numpy.ones((self.J,K))
             
-            BNMF = self.classifier(self.R,self.M,K,priors)
-            BNMF.initialise(init=self.initUV)
-            BNMF.run(iterations=self.iterations)
+            best_BNMF = None
+            for r in range(0,self.restarts):
+                print "Restart %s for K = %s." % (r+1,K)
+                BNMF = self.classifier(self.R,self.M,K,priors)
+                BNMF.initialise(init=self.initUV)
+                BNMF.run(iterations=self.iterations)
+                
+                args = {'metric':'loglikelihood'}
+                if burn_in is not None and thinning is not None:
+                    args['burn_in'], args['thinning'] = burn_in, thinning
+                
+                if best_BNMF is None or BNMF.quality(**args) > best_BNMF.quality(**args):
+                    best_BNMF = BNMF
             
             for metric in metrics:
                 if burn_in is not None and thinning is not None:
-                    quality = BNMF.quality(metric,burn_in,thinning)
+                    quality = best_BNMF.quality(metric,burn_in,thinning)
                 else:
-                    quality = BNMF.quality(metric)
+                    quality = best_BNMF.quality(metric)
                 self.all_performances[metric].append(quality)
         
         print "Finished running line search for BNMF."
