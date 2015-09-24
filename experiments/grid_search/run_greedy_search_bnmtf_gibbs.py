@@ -12,7 +12,7 @@ sys.path.append(project_location)
 
 from BNMTF.experiments.generate_toy.bnmtf.generate_bnmtf import generate_dataset, try_generate_M
 from BNMTF.grid_search.greedy_search_bnmtf import GreedySearch
-from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
+from BNMTF.code.bnmtf_gibbs_optimised import bnmtf_gibbs_optimised
 
 import numpy, matplotlib.pyplot as plt
 import scipy.interpolate
@@ -20,6 +20,9 @@ import scipy.interpolate
 ##########
 
 iterations = 1000
+burn_in = 900
+thinning = 5
+
 I, J = 20,20
 true_K, true_L = 2, 2
 values_K, values_L = range(1,5+1), range(1,5+1)
@@ -33,7 +36,7 @@ lambdaF = numpy.ones((I,true_K))
 lambdaS = numpy.ones((true_K,true_L))
 lambdaG = numpy.ones((J,true_L))
 
-classifier = bnmtf_vb_optimised
+classifier = bnmtf_gibbs_optimised
 initFG = 'kmeans'
 initS = 'random'
 
@@ -46,7 +49,7 @@ M = try_generate_M(I,J,fraction_unknown,attempts_M)
 # Run the line search. The priors lambdaU and lambdaV need to be a single value (recall K is unknown)
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0], 'lambdaS':lambdaS[0,0], 'lambdaG':lambdaG[0,0] }
 greedy_search = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
-greedy_search.search(search_metric)
+greedy_search.search(search_metric,burn_in,thinning)
 
 # Plot the performances of all three metrics
 for metric in ['loglikelihood', 'BIC', 'AIC', 'MSE']:

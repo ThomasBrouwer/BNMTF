@@ -73,7 +73,7 @@ def try_generate_M(I,J,fraction_unknown,attempts):
 ##########
 
 if __name__ == "__main__":
-    output_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
+    output_folder = project_location+"BNMTF/experiments/generate_toy/bnmtf/"
 
     I,J,K,L = 100, 80, 10, 5
     fraction_unknown = 0.1

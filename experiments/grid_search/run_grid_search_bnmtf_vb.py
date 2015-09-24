@@ -21,10 +21,10 @@ import scipy.interpolate
 
 ##########
 
-iterations = 1000
+iterations = 200
 I, J = 20,20
-true_K, true_L = 5, 5
-values_K, values_L = range(1,20+1), range(1,20+1)
+true_K, true_L = 3, 3
+values_K, values_L = range(1,5+1), range(1,5+1)
 
 fraction_unknown = 0.1
 attempts_M = 100

@@ -23,11 +23,11 @@ import numpy, matplotlib.pyplot as plt
 
 ##########
 
-input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
+input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
 iterations = 1000
 init = 'random'
-I, J, K = 100,80,10
+I, J, K = 100,80,8
 
 alpha, beta = 1., 1. #1., 1.
 lambdaU = numpy.ones((I,K))*2
