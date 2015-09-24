@@ -18,7 +18,7 @@ We expect the following arguments:
 - iterations    - number of iterations to run 
 
 The line search can be started by running search().
-If we use Gibbs then we run search(burn_in,thinning)
+If we use Gibbs then we run search(burn_in,thinning).
 
 After that, the values for each metric ('BIC','AIC','loglikelihood') can be
 obtained using all_values(metric), and the best value of K can be returned

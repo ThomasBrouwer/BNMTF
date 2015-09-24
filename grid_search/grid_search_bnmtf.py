@@ -3,6 +3,12 @@ Class for doing model selection for BNMTF, maximising the BIC, AIC, or log likel
 We try an entire grid of K,L values to find the best values.
 
 We expect the following arguments:
+- classifier    - a class for BNMTF, with methods: 
+                    __init__(R,M,K,L,priors), 
+                    initialise(init_S,init_FG), 
+                    run(iterations), 
+                    quality(metric)         - metric in ['AIC','BIC','loglikelihood','MSE']
+                    or quality(metric,burn_in,thinning) for Gibbs
 - values_K      - a list of values for K
 - values_L      - a list of values for L
 - R             - the dataset
@@ -15,6 +21,7 @@ We expect the following arguments:
 - iterations    - number of iterations to run 
 
 The grid search can be started by running search().
+If we use Gibbs then we run search(burn_in,thinning).
 
 After that, the values for each metric ('BIC','AIC','loglikelihood') can be
 obtained using all_values(metric), and the best value of K and L can be 
@@ -29,13 +36,13 @@ project_location = "/home/tab43/Documents/Projects/libraries/"
 import sys
 sys.path.append(project_location)
 
-from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 import numpy
 
 metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class GridSearch:
-    def __init__(self,values_K,values_L,R,M,priors,initS,initFG,iterations):
+    def __init__(self,classifier,values_K,values_L,R,M,priors,initS,initFG,iterations):
+        self.classifier = classifier
         self.values_K = values_K
         self.values_L = values_L
         self.R = R
@@ -52,7 +59,7 @@ class GridSearch:
         }
     
     
-    def search(self):
+    def search(self,burn_in=None,thinning=None):
         for ik,K in enumerate(self.values_K):
             for il,L in enumerate(self.values_L):
                 print "Running line search for BNMF. Trying K = %s, L = %s." % (K,L)
@@ -62,12 +69,15 @@ class GridSearch:
                 priors['lambdaS'] = self.priors['lambdaS']*numpy.ones((K,L))
                 priors['lambdaG'] = self.priors['lambdaG']*numpy.ones((self.J,L))
                 
-                BNMF = bnmtf_vb_optimised(self.R,self.M,K,L,priors)
-                BNMF.initialise(init_S=self.initS,init_FG=self.initFG)
-                BNMF.run(iterations=self.iterations)
+                BNMTF = self.classifier(self.R,self.M,K,L,priors)
+                BNMTF.initialise(init_S=self.initS,init_FG=self.initFG)
+                BNMTF.run(iterations=self.iterations)
                 
                 for metric in metrics:
-                    quality = BNMF.quality(metric)
+                    if burn_in is not None and thinning is not None:
+                        quality = BNMTF.quality(metric,burn_in,thinning)
+                    else:
+                        quality = BNMTF.quality(metric)
                     self.all_performances[metric][ik,il] = quality
         
         print "Finished running line search for BNMF."
