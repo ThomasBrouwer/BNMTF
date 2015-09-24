@@ -3,8 +3,10 @@ Test the grid search for BNMTF, in grid_search_bnmtf.py
 """
 
 from BNMTF.grid_search.greedy_search_bnmtf import GreedySearch
+from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 import numpy, pytest, random
 
+classifier = bnmtf_vb_optimised
 
 def test_init():
     I,J = 10,9
@@ -17,7 +19,7 @@ def test_init():
     initS = 'random'
     iterations = 11
     
-    greedysearch = GreedySearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    greedysearch = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     assert greedysearch.I == I
     assert greedysearch.J == J
     assert numpy.array_equal(greedysearch.values_K, values_K)
@@ -49,7 +51,7 @@ def test_search():
     
     numpy.random.seed(0)
     random.seed(0)
-    greedysearch = GreedySearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    greedysearch = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     greedysearch.search(search_metric)
     
     with pytest.raises(AssertionError) as error:
@@ -71,7 +73,7 @@ def test_all_values():
     initS = 'random'
     iterations = 11
     
-    greedysearch = GreedySearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    greedysearch = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     greedysearch.all_performances = {
         'BIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,40.),(5,3,20.)],
         'AIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,25.),(5,3,20.)],
@@ -96,7 +98,7 @@ def test_best_value():
     initS = 'random'
     iterations = 11
     
-    greedysearch = GreedySearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    greedysearch = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     greedysearch.all_performances = {
         'BIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,40.),(5,3,20.)],
         'AIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,25.),(5,3,20.)],

@@ -3,8 +3,10 @@ Test the grid search for BNMTF, in grid_search_bnmtf.py
 """
 
 from BNMTF.grid_search.grid_search_bnmtf import GridSearch
+from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
 import numpy, pytest
 
+classifier = bnmtf_vb_optimised
 
 def test_init():
     I,J = 10,9
@@ -17,7 +19,7 @@ def test_init():
     initS = 'random'
     iterations = 11
     
-    gridsearch = GridSearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    gridsearch = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     assert gridsearch.I == I
     assert gridsearch.J == J
     assert numpy.array_equal(gridsearch.values_K, values_K)
@@ -46,7 +48,7 @@ def test_search():
     initS = 'random'
     iterations = 1
     
-    gridsearch = GridSearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    gridsearch = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     gridsearch.search()
     
     
@@ -61,7 +63,7 @@ def test_all_values():
     initS = 'random'
     iterations = 11
     
-    gridsearch = GridSearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    gridsearch = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     gridsearch.all_performances = {
         'BIC' : [[10,9,8],[11,12,13],[17,16,15],[13,13,13]],
         'AIC' : [[8,8,8],[7,7,7],[10,11,15],[6,6,6]],
@@ -86,7 +88,7 @@ def test_best_value():
     initS = 'random'
     iterations = 11
     
-    gridsearch = GridSearch(values_K,values_L,R,M,priors,initS,initFG,iterations)
+    gridsearch = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     gridsearch.all_performances = {
         'BIC' : [[10,9,8],[11,12,13],[17,16,15],[13,13,13]],
         'AIC' : [[8,8,8],[7,7,7],[10,11,15],[6,6,6]],

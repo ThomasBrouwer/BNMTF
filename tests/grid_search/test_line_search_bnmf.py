@@ -3,8 +3,10 @@ Test the line search for BNMF, in line_search_bnmf.py
 """
 
 from BNMTF.grid_search.line_search_bnmf import LineSearch
+from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
 import numpy, pytest
 
+classifier = bnmf_vb_optimised
 
 def test_init():
     I,J = 10,9
@@ -15,7 +17,7 @@ def test_init():
     initUV = 'exp'
     iterations = 11
     
-    linesearch = LineSearch(values_K,R,M,priors,initUV,iterations)
+    linesearch = LineSearch(classifier,values_K,R,M,priors,initUV,iterations)
     assert linesearch.I == I
     assert linesearch.J == J
     assert numpy.array_equal(linesearch.values_K, values_K)
@@ -38,7 +40,7 @@ def test_search():
     initUV = 'exp'
     iterations = 1
     
-    linesearch = LineSearch(values_K,R,M,priors,initUV,iterations)
+    linesearch = LineSearch(classifier,values_K,R,M,priors,initUV,iterations)
     linesearch.search()
     
     
@@ -51,7 +53,7 @@ def test_all_values():
     initUV = 'exp'
     iterations = 11
     
-    linesearch = LineSearch(values_K,R,M,priors,initUV,iterations)
+    linesearch = LineSearch(classifier,values_K,R,M,priors,initUV,iterations)
     linesearch.all_performances = {
         'BIC' : [10,9,8,7],
         'AIC' : [11,13,12,14],
@@ -74,7 +76,7 @@ def test_best_value():
     initUV = 'exp'
     iterations = 11
     
-    linesearch = LineSearch(values_K,R,M,priors,initUV,iterations)
+    linesearch = LineSearch(classifier,values_K,R,M,priors,initUV,iterations)
     linesearch.all_performances = {
         'BIC' : [10,9,8,7],
         'AIC' : [11,13,12,14],

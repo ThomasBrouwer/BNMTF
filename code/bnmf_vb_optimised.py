@@ -115,7 +115,10 @@ class bnmf_vb_optimised:
 
     # Run the Gibbs sampler
     def run(self,iterations):
-        self.all_exp_tau = []  # to check for convergence     
+        self.all_exp_tau = []  # to check for convergence    
+        self.all_MSE = [] # for plotting convergence
+        self.all_R2 = []
+        self.all_Rp = []
         
         for it in range(0,iterations):
             
