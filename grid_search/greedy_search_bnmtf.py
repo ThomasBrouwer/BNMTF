@@ -107,15 +107,15 @@ class GreedySearch:
             performance_new_L = try_KL(current_K,new_L)
             performance_new_KL = try_KL(new_K,new_L)
             
-            if performance_so_far > max(performance_new_K,performance_new_L,performance_new_KL):
+            if performance_so_far < min(performance_new_K,performance_new_L,performance_new_KL):
                 break
             else:
-                if performance_new_K > performance_new_L and performance_new_K > performance_new_KL:
+                if performance_new_K < performance_new_L and performance_new_K < performance_new_KL:
                     print "(%s,%s) -> (%s,%s)" % (current_K,current_L,new_K,current_L)
                     ik += 1
                     current_K = new_K
                     performance_so_far = performance_new_K
-                elif performance_new_L > performance_new_KL:
+                elif performance_new_L < performance_new_KL:
                     print "(%s,%s) -> (%s,%s)" % (current_K,current_L,current_K,new_L)
                     il += 1
                     current_L = new_L
@@ -134,7 +134,7 @@ class GreedySearch:
                 print "Currently at K = %s, L = %s." % (current_K,current_L)
                 new_L = self.values_L[il+1]
                 performance_new_L = try_KL(current_K,new_L)
-                if performance_so_far > performance_new_L:
+                if performance_so_far < performance_new_L:
                     break
                 else:
                     print "(%s,%s) -> (%s,%s)" % (current_K,current_L,current_K,new_L)
@@ -147,7 +147,7 @@ class GreedySearch:
                 print "Currently at K = %s, L = %s." % (current_K,current_L)
                 new_K = self.values_K[ik+1]
                 performance_new_K = try_KL(new_K,current_L)
-                if performance_so_far > performance_new_K:
+                if performance_so_far < performance_new_K:
                     break
                 else:
                     print "(%s,%s) -> (%s,%s)" % (current_K,current_L,new_K,current_L)

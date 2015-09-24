@@ -21,7 +21,7 @@ import scipy.interpolate
 
 iterations = 1000
 I, J = 20,20
-true_K, true_L = 2, 2
+true_K, true_L = 3, 3
 values_K, values_L = range(1,5+1), range(1,5+1)
 
 fraction_unknown = 0.1
@@ -44,7 +44,7 @@ search_metric = 'AIC'
 M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaU and lambdaV need to be a single value (recall K is unknown)
-priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0], 'lambdaS':lambdaS[0,0], 'lambdaG':lambdaG[0,0] }
+priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0]/10, 'lambdaS':lambdaS[0,0]/10, 'lambdaG':lambdaG[0,0]/10 }
 greedy_search = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
 greedy_search.search(search_metric)
 

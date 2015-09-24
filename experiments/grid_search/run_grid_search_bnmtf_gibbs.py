@@ -21,9 +21,9 @@ import scipy.interpolate
 
 ##########
 
-iterations = 1000
-burn_in = 900
-thinning = 5
+iterations = 100
+burn_in = 90
+thinning = 2
 
 I, J = 20,20
 true_K, true_L = 2,2
@@ -64,7 +64,7 @@ for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     Ki, Li = numpy.meshgrid(Ki, Li)
     
     # Interpolate
-    rbf = scipy.interpolate.Rbf(list_values_K, list_values_L, values, function='linear')
+    rbf = scipy.interpolate.Rbf(list_values_K, list_values_L, values, function='multiquadric')
     values_i = rbf(Ki, Li)
     
     # Plot

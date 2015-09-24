@@ -23,8 +23,8 @@ import scipy.interpolate
 
 iterations = 200
 I, J = 20,20
-true_K, true_L = 3, 3
-values_K, values_L = range(1,5+1), range(1,5+1)
+true_K, true_L = 2, 2
+values_K, values_L = range(1,4+1), range(1,4+1)
 
 fraction_unknown = 0.1
 attempts_M = 100
@@ -44,7 +44,7 @@ initS = 'random'
 M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaF,S,G need to be a single value (recall K,L is unknown)
-priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0], 'lambdaS':lambdaS[0,0], 'lambdaG':lambdaG[0,0] }
+priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF[0,0]/10, 'lambdaS':lambdaS[0,0]/10, 'lambdaG':lambdaG[0,0]/10 }
 grid_search = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
 grid_search.search()
 
@@ -66,8 +66,9 @@ for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, vmin=min(values), vmax=max(values), origin='lower',
-           extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
+    plt.imshow(values_i, #cmap='jet_r',
+               vmin=min(values), vmax=max(values), origin='lower',
+               extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
     plt.scatter(list_values_K, list_values_L, c=values)
     plt.colorbar()
     plt.title("Metric: %s." % metric)   

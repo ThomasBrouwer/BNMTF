@@ -58,8 +58,8 @@ def test_search():
         greedysearch.all_values('FAIL')
     assert str(error.value) == "Unrecognised metric name: FAIL."
     
-    # We go from: (1,5) -> (2,5) -> (4,5) -> (5,5), and try 8 locations
-    assert len(greedysearch.all_values('BIC')) == 8
+    # We go from: (1,5) -> (1,4) -> (1,3), and try 6 locations
+    assert len(greedysearch.all_values('BIC')) == 6
     
     
 def test_all_values():

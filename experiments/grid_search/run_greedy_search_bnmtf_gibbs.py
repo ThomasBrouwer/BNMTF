@@ -24,7 +24,7 @@ burn_in = 900
 thinning = 5
 
 I, J = 20,20
-true_K, true_L = 2, 2
+true_K, true_L = 3,3
 values_K, values_L = range(1,5+1), range(1,5+1)
 
 fraction_unknown = 0.1
