@@ -2,6 +2,12 @@
 Class for doing model selection for BNMF, maximising the BIC, AIC, or log likelihood.
 
 We expect the following arguments:
+- classifier    - a class for BNMF, with methods: 
+                    __init__(R,M,K,priors), 
+                    initialise(initUV), 
+                    run(iterations), 
+                    quality(metric)         - metric in ['AIC','BIC','loglikelihood','MSE']
+                    or quality(metric,burn_in,thinning) for Gibbs
 - values_K      - a list of values for K
 - R             - the dataset
 - M             - the mask matrix
@@ -12,6 +18,7 @@ We expect the following arguments:
 - iterations    - number of iterations to run 
 
 The line search can be started by running search().
+If we use Gibbs then we run search(burn_in,thinning)
 
 After that, the values for each metric ('BIC','AIC','loglikelihood') can be
 obtained using all_values(metric), and the best value of K can be returned
@@ -24,13 +31,13 @@ project_location = "/home/tab43/Documents/Projects/libraries/"
 import sys
 sys.path.append(project_location)
 
-from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
 import numpy
 
 metrics = ['BIC','AIC','loglikelihood','MSE']
 
 class LineSearch:
-    def __init__(self,values_K,R,M,priors,initUV,iterations):
+    def __init__(self,classifier,values_K,R,M,priors,initUV,iterations):
+        self.classifier = classifier
         self.values_K = values_K
         self.R = R
         self.M = M
@@ -45,7 +52,7 @@ class LineSearch:
         }
     
     
-    def search(self):
+    def search(self,burn_in=None,thinning=None):
         for K in self.values_K:
             print "Running line search for BNMF. Trying K = %s." % K
                         
@@ -53,12 +60,15 @@ class LineSearch:
             priors['lambdaU'] = self.priors['lambdaU']*numpy.ones((self.I,K))
             priors['lambdaV'] = self.priors['lambdaV']*numpy.ones((self.J,K))
             
-            BNMF = bnmf_vb_optimised(self.R,self.M,K,priors)
+            BNMF = self.classifier(self.R,self.M,K,priors)
             BNMF.initialise(init=self.initUV)
             BNMF.run(iterations=self.iterations)
             
             for metric in metrics:
-                quality = BNMF.quality(metric)
+                if burn_in is not None and thinning is not None:
+                    quality = BNMF.quality(metric,burn_in,thinning)
+                else:
+                    quality = BNMF.quality(metric)
                 self.all_performances[metric].append(quality)
         
         print "Finished running line search for BNMF."
