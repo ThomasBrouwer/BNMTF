@@ -24,12 +24,12 @@ import numpy, matplotlib.pyplot as plt
 
 ##########
 
-restarts = 5
+restarts = 10
 iterations = 1000
-burn_in = 900
+burn_in = 800
 thinning = 5
 
-I, J = 50,30
+I, J = 100, 80
 true_K = 10
 values_K = range(1,20+1)
 
@@ -46,15 +46,28 @@ initUV = 'random'
 
 # Generate data
 (_,_,_,_,R) = generate_dataset(I,J,true_K,lambdaU,lambdaV,tau)
-M = try_generate_M(I,J,fraction_unknown,attempts_M)
+M = numpy.ones((I,J))
+#M = try_generate_M(I,J,fraction_unknown,attempts_M)
 
 # Run the line search. The priors lambdaU and lambdaV need to be a single value (recall K is unknown)
-priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU[0,0]/5, 'lambdaV':lambdaV[0,0]/5 }
+priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU[0,0]/10, 'lambdaV':lambdaV[0,0]/10 }
 line_search = LineSearch(classifier,values_K,R,M,priors,initUV,iterations,restarts)
 line_search.search(burn_in,thinning)
 
 # Plot the performances of all three metrics - but MSE separately
-for metric in ['loglikelihood', 'BIC', 'AIC', 'MSE']:
+metrics = ['loglikelihood', 'BIC', 'AIC', 'MSE']
+for metric in metrics:
     plt.figure()
     plt.plot(values_K, line_search.all_values(metric), label=metric)
     plt.legend(loc=3)
+    
+# Also print out all values in a dictionary
+all_values = {}
+for metric in metrics:
+    all_values[metric] = line_search.all_values(metric)
+    
+print "all_values = %s" % all_values
+
+'''
+
+'''
