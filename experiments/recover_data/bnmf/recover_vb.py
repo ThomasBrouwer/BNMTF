@@ -15,7 +15,6 @@ project_location = "/home/tab43/Documents/Projects/libraries/"
 import sys
 sys.path.append(project_location)
 
-from BNMTF.code.bnmf_vb import bnmf_vb
 from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
 from ml_helpers.code.mask import calc_inverse_M
 
@@ -25,13 +24,13 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
-iterations = 100
+iterations = 1000
 init = 'random'
 I, J, K = 100,80,10
 
 alpha, beta = 1., 1. #1., 1.
-lambdaU = numpy.ones((I,K))*2
-lambdaV = numpy.ones((J,K))*2
+lambdaU = numpy.ones((I,K))/10.
+lambdaV = numpy.ones((J,K))/10.
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
 # Load in data
@@ -40,7 +39,6 @@ M = numpy.loadtxt(input_folder+"M.txt")
 M_test = calc_inverse_M(M)
 
 # Run the VB algorithm
-#BNMF = bnmf_vb(R,M,K,priors) 
 BNMF = bnmf_vb_optimised(R,M,K,priors) 
 BNMF.initialise()
 BNMF.run(iterations)

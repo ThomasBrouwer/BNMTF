@@ -71,8 +71,8 @@ if __name__ == "__main__":
     output_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
     I,J,K = 100, 80, 10 #20, 10, 5 #
-    fraction_unknown = 0.2
-    alpha, beta = 100., 1.
+    fraction_unknown = 0.1
+    alpha, beta = 1., 1.
     lambdaU = numpy.ones((I,K))
     lambdaV = numpy.ones((I,K))
     tau = alpha / beta

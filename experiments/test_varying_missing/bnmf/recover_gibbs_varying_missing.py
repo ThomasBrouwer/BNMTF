@@ -1,6 +1,7 @@
 """
-Test the performance of Gibbs sampling for recovering a toy dataset, where we
+Test the performance of Gibbs sampling for recovering a toy dataset, where we 
 vary the fraction of entries that are missing.
+We repeat this 10 times per fraction and average that.
 
 We use the correct number of latent factors and same priors as used to generate the data.
 
@@ -11,8 +12,9 @@ project_location = "/home/tab43/Documents/Projects/libraries/"
 import sys
 sys.path.append(project_location)
 
-from BNMTF.code.bnmf_gibbs import bnmf_gibbs
-from ml_helpers.code.mask import generate_M, calc_inverse_M
+from BNMTF.code.bnmf_gibbs_optimised import bnmf_gibbs_optimised
+from BNMTF.experiments.generate_toy.bnmf.generate_bnmf import try_generate_M
+from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
 
@@ -20,23 +22,34 @@ import numpy, matplotlib.pyplot as plt
 
 fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ]
 
-input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
+input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
-iterations = 2000
-init = 'random'
-I,J,K = 100, 50, 10 #20,10,3 #
+repeats = 10 # number of times we try each fraction
+iterations = 1000
+burn_in = 800
+thinning = 5
+
+init_UV = 'random'
+I,J,K = 100, 80, 10
 
 alpha, beta = 1., 1.
-lambdaU = numpy.ones((I,K))
-lambdaV = numpy.ones((J,K))/2.    
+lambdaU = numpy.ones((I,K))/10.
+lambdaV = numpy.ones((J,K))/10.    
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
+metrics = ['MSE', 'R^2', 'Rp']
+
+#'''
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 
-# Generate matrices M
-Ms = [ generate_M(I,J,fraction) for fraction in fractions_unknown ]
-Ms_test = [ calc_inverse_M(M) for M in Ms ]
+# Generate matrices M - one list of M's for each fraction
+M_attempts = 100
+all_Ms = [ 
+    [try_generate_M(I,J,fraction,M_attempts) for r in range(0,repeats)]
+    for fraction in fractions_unknown
+]
+all_Ms_test = [ [calc_inverse_M(M) for M in Ms] for Ms in all_Ms ]
 
 # Make sure each M has no empty rows or columns
 def check_empty_rows_columns(M,fraction):
@@ -47,75 +60,56 @@ def check_empty_rows_columns(M,fraction):
     for j,c in enumerate(sums_columns):
         assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction)
         
-for M,fraction in zip(Ms,fractions_unknown):
-    check_empty_rows_columns(M,fraction)
+for Ms,fraction in zip(all_Ms,fractions_unknown):
+    for M in Ms:
+        check_empty_rows_columns(M,fraction)
 
 
-# For each M, run the Gibbs sampler.
-# From informal experiments, the Gibbs sampler seems to converge around:
-# (Missing -> Burn_in): 0.1 -> 400, 0.5 -> 400 , 0.8 -> 1000
-burn_in = 1000
-thinning = 10
+# We now run the Gibbs sampler on each of the M's for each fraction.
+all_performances = {metric:[] for metric in metrics} 
+average_performances = {metric:[] for metric in metrics} # averaged over repeats
+for (fraction,Ms,Ms_test) in zip(fractions_unknown,all_Ms,all_Ms_test):
+    print "Trying fraction %s." % fraction
+    
+    # Run the algorithm <repeats> times and store all the performances
+    for metric in metrics:
+        all_performances[metric].append([])
+    for (repeat,M,M_test) in zip(range(0,repeats),Ms,Ms_test):
+        print "Repeat %s of fraction %s." % (repeat+1, fraction)
+    
+        BNMF = bnmf_gibbs_optimised(R,M,K,priors)
+        BNMF.initialise()
+        BNMF.run(iterations)
+    
+        # Measure the performances
+        performances = BNMF.predict(M_test,burn_in,thinning)
+        for metric in metrics:
+            # Add this metric's performance to the list of <repeat> performances for this fraction
+            all_performances[metric][-1].append(performances[metric])
+            
+    # Compute the average across attempts
+    for metric in metrics:
+        average_performances[metric].append(sum(all_performances[metric][-1])/repeats)
+    
+ 
+    
+print "repeats=%s \nfractions_unknown = %s \nall_performances = %s \naverage_performances = %s" % \
+    (repeats,fractions_unknown,all_performances,average_performances)
 
-all_performances = []
-all_taus = []
-for i,(M,M_test) in enumerate(zip(Ms,Ms_test)):
-    print "Trying fraction %s." % fractions_unknown[i]
-    
-    # Run the Gibbs sampler
-    BNMF = bnmf_gibbs(R,M,K,priors)
-    BNMF.initialise(init)
-    BNMF.run(iterations)
-    
-    taus = BNMF.all_tau
-    all_taus.append(taus)
-    
-    # Approximate the expectations
-    (exp_U, exp_V, exp_tau) = BNMF.approx_expectation(burn_in,thinning)
-    
-    # Measure the performances
-    performances = BNMF.predict(M_test,burn_in,thinning)
-    all_performances.append(performances)
-    
-print "All performances versus fraction of entries missing: %s." % zip(fractions_unknown,all_performances)
 
 '''
-All performances versus fraction of entries missing: 
-    [(0.1, {'R^2': 0.9921454405020191, 'MSE': 1.5400714505804483, 'Rp': 0.9961135617253799}), 
-     (0.2, {'R^2': 0.9911386335643347, 'MSE': 1.6136231501335585, 'Rp': 0.99556067260698711}), 
-     (0.3, {'R^2': 0.9895838528353407, 'MSE': 1.6932177761546994, 'Rp': 0.99478499889866945}), 
-     (0.4, {'R^2': 0.9878531525010826, 'MSE': 2.1472553993061561, 'Rp': 0.99392327919808154}), 
-     (0.5, {'R^2': 0.9842400585194657, 'MSE': 2.6212716028727727, 'Rp': 0.9921031732459934}), 
-     (0.6, {'R^2': 0.9770611102580021, 'MSE': 3.8908012819922386, 'Rp': 0.98848001493734927}), 
-     (0.7, {'R^2': 0.9384162598941842, 'MSE': 10.30881561182588, 'Rp': 0.96946300290582577}), 
-     (0.8, {'R^2': 0.7018702769103564, 'MSE': 50.590578325606941, 'Rp': 0.84127450698768969}), 
-     (0.9, {'R^2': 0.6173081425136743, 'MSE': 65.01506935310023, 'Rp': 0.78611127067071707})]
+repeats=10 
+fractions_unknown = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9] 
+all_performances = {'R^2': [[0.9626604755609737, 0.9603787311650034, 0.955591655257068, 0.9663508033695062, 0.9577839110006067, 0.9644403383690842, 0.9596783108168987, 0.9666094936468191, 0.9691771427784676, 0.9641675239201252], [0.962468385505943, 0.9602455983574255, 0.9602991339174196, 0.9593766752397161, 0.9647849030758828, 0.9616506813432171, 0.9617671506245631, 0.9598060697463329, 0.9610005333662207, 0.9624650811552582], [0.954778446164413, 0.9621067439774655, 0.9523553049168686, 0.9574800620231362, 0.959867571118596, 0.9575520390048355, 0.960484985070348, 0.9577437775162354, 0.9603077848708809, 0.9577478215684656], [0.9579521408928631, 0.9517928166329961, 0.952145306805017, 0.9506513642018861, 0.951781825132771, 0.9538353876227507, 0.9569615435171671, 0.9532632559421764, 0.9551637515500949, 0.9520401953431608], [0.9467063685093521, 0.9467968179896844, 0.9541562869425009, 0.947441831568444, 0.9418411415686906, 0.9373357753195922, 0.9427962320703145, 0.9472292661333436, 0.9394095762288359, 0.9492698951059422], [0.8966190670119877, 0.9011059381799048, 0.9301404125287748, 0.9165143764665863, 0.9223183933460702, 0.9132696314797007, 0.9108125674606494, 0.9283114849430399, 0.8914435332886943, 0.8986676197549808], [0.7145788416516814, 0.77373258717216, 0.7326690975924758, 0.8124325957099922, 0.729806978815355, 0.7575722283605735, 0.8130402082225157, 0.7488645875522285, 0.720456558455631, 0.8094763621968231], [0.5444652324539367, 0.5103280249074915, 0.4112098005647581, 0.5546090346653341, 0.49251881319504953, 0.5819848169177988, 0.5222952535115717, 0.2974574189182677, 0.47339440795053345, 0.43202947088438626], [-0.6362803956028773, -0.9536070158704435, -4.813328071744938, 0.04887957249156971, 0.049726003052194656, -1.328184023576347, -0.401718692424492, -1.6995822292725866, -0.21546236277014796, -2.0516610589619586]], 'MSE': [[1.359345375734484, 1.4826412469656569, 1.5651155242894879, 1.320863579203035, 1.5313029242822085, 1.375868493142181, 1.45965709873376, 1.4172620308914785, 1.4298066263742926, 1.5726206726670213], [1.5058864258732985, 1.5607275716872611, 1.5631774244706012, 1.5377878322368093, 1.4186280636726973, 1.4648531800022053, 1.4321705043682604, 1.6224378707560556, 1.4342347822308488, 1.4972267520806832], [1.8132092558838095, 1.5660963093749463, 1.8323126128374678, 1.6720620593050906, 1.5978027194515427, 1.6285130699866079, 1.6146928644178202, 1.6016876433020868, 1.5328668004307635, 1.6655371080094179], [1.6187007773688991, 1.8039524417203494, 1.8462012471106899, 1.9508854626756382, 1.8296704117440568, 1.7658902433783985, 1.7416580670686777, 1.8118530538407722, 1.7595698153549972, 1.8955072643224278], [2.1107022229607111, 2.0735063159020797, 1.9257030716595811, 2.0531814304663829, 2.2839518860970842, 2.5081380849499122, 2.1676933516701693, 2.0658486732006782, 2.3264121486129588, 2.0242734047167978], [4.0864451456665831, 3.9519534261692724, 2.8509106776093094, 3.391622520534304, 3.2186715299208464, 3.4373288870023591, 3.4928833099320773, 2.7966970987816633, 4.252549283307367, 3.933774374169098], [11.150796293834381, 9.1410642567908074, 10.474713298121015, 7.3528299006474542, 10.679031739262573, 9.7037262007881893, 7.4475591427983003, 10.116012610367816, 10.937075859444153, 7.5201827738389095], [17.898036682097757, 19.421971539949105, 23.161888547819164, 17.656104342542275, 19.840412279218476, 16.82332164133884, 18.908792195142848, 26.770065791889461, 20.633893632342634, 21.831420808155887], [64.901400270030194, 75.956183935148971, 227.94509073604496, 37.730815068822402, 37.353556849595371, 91.478665600043684, 55.34224521405325, 105.1702489654392, 47.068175116844188, 118.97012847408851]], 'Rp': [[0.98115771467591484, 0.98005040141058741, 0.97761081964449914, 0.9830517458977085, 0.97866670860248706, 0.98218117490054435, 0.97988259854571369, 0.98317539584704416, 0.98452716149362962, 0.98201701737956049], [0.98107805110940627, 0.97996095381430115, 0.97996026690643212, 0.97955607364563091, 0.98227711195922263, 0.98064692698603251, 0.98074646169510449, 0.97975029368703204, 0.98038932595180517, 0.98105649771641124], [0.97714117135382572, 0.98090288334951414, 0.97601891708398669, 0.97862210295910512, 0.9797313864849797, 0.97856575351705155, 0.98006131589163847, 0.97870706773226734, 0.97999482686215167, 0.97866737471225229], [0.97876302542177263, 0.97573510584804091, 0.97579869743339653, 0.97503464755728431, 0.97564546854766765, 0.97669959422348762, 0.97824942086623901, 0.97635855708853003, 0.97733637642908378, 0.97575377256336548], [0.97303282344079178, 0.97304179371298682, 0.97681466124585448, 0.97336667055280479, 0.9705566449255113, 0.96818167843388148, 0.97103068541425319, 0.97339234629560123, 0.9693113682172102, 0.97431760858488337], [0.94761505297099247, 0.94957835755852582, 0.96450276369684174, 0.95737607508571532, 0.96069107959054545, 0.9557574017567575, 0.9550230138532152, 0.96349158002221169, 0.94492922464960694, 0.9485913123677755], [0.86284162472036374, 0.88372816849040969, 0.86536986036349828, 0.90496048718824729, 0.86531101573124736, 0.87654574100636462, 0.90361850995027349, 0.87501484440942412, 0.86877906719804454, 0.90377287343748913], [0.77144545485609395, 0.75862357862028162, 0.74381246517671784, 0.77970993414477174, 0.75016017258581336, 0.78696077997990466, 0.75811653422882008, 0.71477053073704222, 0.74884053206087842, 0.75595089817411343], [0.59017916361567924, 0.55797907953349812, 0.3465682807148584, 0.60069890730764675, 0.65308231479493728, 0.53757258564475585, 0.55220553514241466, 0.50253299988344902, 0.62346606191676768, 0.52083793987668614]]} 
+average_performances = {'R^2': [0.96268383858845541, 0.96138642123319795, 0.95804245362312446, 0.95355875876408835, 0.94529831914367013, 0.91092030244603905, 0.7612630045729436, 0.48202922739691278, -1.2001218274680026], 'MSE': [1.4514483572283605, 1.503713040737872, 1.6524780442999556, 1.8023888784584909, 2.1539410590236354, 3.5412836253092879, 9.4522992075893608, 20.294590746049646, 86.191651023011076], 'Rp': [0.98123207383976896, 0.9805421963471378, 0.97884127999467707, 0.97653746659788676, 0.97230462808237783, 0.95475558615521872, 0.88099421924953636, 0.75683908805644373, 0.54851228684306919]}
 '''
 
 
-# Also plot the MSE and R^2
-f, axarr = plt.subplots(3, sharex=True)
-x = fractions_unknown
-axarr[0].set_title('Performance versus fraction missing')
-axarr[0].plot(x, [perf['MSE'] for perf in all_performances])
-axarr[0].set_ylabel("MSE")
-axarr[1].plot(x, [perf['R^2'] for perf in all_performances])    
-axarr[1].set_ylabel("R^2")
-axarr[2].plot(x, [perf['Rp'] for perf in all_performances]) 
-axarr[2].set_ylabel("Rp")
-axarr[2].set_xlabel("Fraction missing")
-
-print [perf['MSE'] for perf in all_performances]
-print [perf['R^2'] for perf in all_performances]
-#[0.14373635782712518, 0.17190904074733043, 0.19943426989940219, 0.21467319819848943, 0.33897862021632874, 0.6229985820084063, 4.4345153093047891, 58.824620998308362]
-#[0.9990278157101131, 0.9987109092532906, 0.9986621065260793, 0.9984237679884446, 0.9976315034428627, 0.995569455182919, 0.9686873007784057, 0.5984791846575044]
-
-
-# And plot tau for each fraction, so we see whether that has converged
-f2, axarr2 = plt.subplots(len(fractions_unknown), sharex=True)
-x2 = range(1,len(all_taus[0])+1)
-axarr2[0].set_title('Convergence of values')
-for i,taus in enumerate(all_taus):
-    axarr2[i].plot(x2, taus)
-    axarr2[i].set_ylabel("Fraction %s" % fractions_unknown[i])
-axarr2[len(fractions_unknown)-1].set_xlabel("Iterations")
+# Plot the MSE, R^2 and Rp
+for metric in metrics:
+    plt.figure()
+    x = fractions_unknown
+    y = average_performances[metric]
+    plt.plot(x,y)
+    plt.xlabel("Fraction missing")
+    plt.ylabel(metric)
