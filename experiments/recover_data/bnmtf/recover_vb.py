@@ -15,7 +15,7 @@ import numpy, matplotlib.pyplot as plt
 
 ##########
 
-input_folder = project_location+"BNMTF/example/generate_toy/bnmtf/"
+input_folder = project_location+"BNMTF/experiments/generate_toy/bnmtf/"
 
 iterations = 100
 init_FG = 'kmeans'

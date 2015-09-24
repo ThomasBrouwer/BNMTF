@@ -29,6 +29,9 @@ We can test the performance of our model on a test dataset, specifying our test 
 This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
     
+The performances of all iterations are stored in BNMF.all_performances, which 
+is a dictionary from 'MSE', 'R^2', or 'Rp' to a list of performances.
+    
 Finally, we can return the goodness of fit of the data using the quality(metric) function:
 - metric = 'loglikelihood' -> return p(D|theta)
          = 'BIC'        -> return Bayesian Information Criterion
@@ -115,10 +118,12 @@ class bnmf_vb_optimised:
 
     # Run the Gibbs sampler
     def run(self,iterations):
-        self.all_exp_tau = []  # to check for convergence    
-        self.all_MSE = [] # for plotting convergence
-        self.all_R2 = []
-        self.all_Rp = []
+        self.all_exp_tau = []  # to check for convergence 
+        
+        metrics = ['MSE','R^2','Rp']
+        self.all_performances = {} # for plotting convergence of metrics
+        for metric in metrics:
+            self.all_performances[metric] = []
         
         for it in range(0,iterations):
             
@@ -135,6 +140,9 @@ class bnmf_vb_optimised:
             self.all_exp_tau.append(self.exptau)
             
             perf, elbo = self.predict(self.M), self.elbo()
+            for metric in metrics:
+                self.all_performances[metric].append(perf[metric])
+                
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
             
         return

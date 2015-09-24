@@ -32,6 +32,16 @@ We can test the performance of our model on a test dataset, specifying our test 
     performance = BNMF.predict(M_pred,burn_in,thinning)
 This gives a dictionary of performances,
     performance = { 'MSE', 'R^2', 'Rp' }
+    
+The performances of all iterations are stored in BNMF.all_performances, which 
+is a dictionary from 'MSE', 'R^2', or 'Rp' to a list of performances.
+    
+Finally, we can return the goodness of fit of the data using the quality(metric) function:
+- metric = 'loglikelihood' -> return p(D|theta)
+         = 'BIC'        -> return Bayesian Information Criterion
+         = 'AIC'        -> return Afaike Information Criterion
+         = 'MSE'        -> return Mean Square Error
+(we want to maximise these values)
 """
 
 from distributions.exponential import Exponential
@@ -107,6 +117,11 @@ class bnmf_gibbs_optimised:
         self.all_V = numpy.zeros((iterations,self.J,self.K))   
         self.all_tau = numpy.zeros(iterations) 
         
+        metrics = ['MSE','R^2','Rp']
+        self.all_performances = {} # for plotting convergence of metrics
+        for metric in metrics:
+            self.all_performances[metric] = []
+        
         for it in range(0,iterations):      
             for k in range(0,self.K):   
                 tauUk = self.tauU(k)
@@ -121,7 +136,11 @@ class bnmf_gibbs_optimised:
             self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
             
             self.all_U[it], self.all_V[it], self.all_tau[it] = numpy.copy(self.U), numpy.copy(self.V), self.tau
+            
             perf = self.predict_while_running()
+            for metric in metrics:
+                self.all_performances[metric].append(perf[metric])
+                
             print "Iteration %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,perf['MSE'],perf['R^2'],perf['Rp'])
             
         return (self.all_U, self.all_V, self.all_tau)
