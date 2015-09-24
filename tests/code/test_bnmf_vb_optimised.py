@@ -385,8 +385,8 @@ def test_log_likelihood():
     # expU*expV.T = [[6.]]
     
     log_likelihood = 3./2.*(5.-math.log(2*math.pi)) - 3./2. * (5**2 + 4**2 + 2**2)
-    AIC = log_likelihood - (2*3+2*3)
-    BIC = log_likelihood - (2*3+2*3)*math.log(3)/2.
+    AIC = -2*log_likelihood + 2*(2*3+2*3)
+    BIC = -2*log_likelihood + (2*3+2*3)*math.log(3)
     MSE = (5**2+4**2+2**2)/3.
     
     assert log_likelihood == BNMF.quality('loglikelihood')

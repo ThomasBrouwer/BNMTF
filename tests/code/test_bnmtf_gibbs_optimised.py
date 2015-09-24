@@ -408,8 +408,8 @@ def test_log_likelihood():
     # expU*expV.T = [[72.]]
     
     log_likelihood = 3./2.*(math.log(3)-math.log(2*math.pi)) - 3./2. * (71**2 + 70**2 + 68**2)
-    AIC = log_likelihood - (2*3+3*4+2*4)
-    BIC = log_likelihood - (2*3+3*4+2*4)*math.log(3)/2.
+    AIC = -2*log_likelihood + 2*(2*3+3*4+2*4)
+    BIC = -2*log_likelihood + (2*3+3*4+2*4)*math.log(3)
     MSE = (71**2+70**2+68**2)/3.
     
     assert log_likelihood == BNMTF.quality('loglikelihood',burnin,thinning)

@@ -237,10 +237,10 @@ class bnmf_vb_optimised:
             return log_likelihood
         elif metric == 'BIC':
             # -2*loglikelihood + (no. free parameters * log(no data points))
-            return log_likelihood - 0.5 * (self.I*self.K+self.J*self.K) * math.log(self.size_Omega)
+            return - 2 * log_likelihood + (self.I*self.K+self.J*self.K) * math.log(self.size_Omega)
         elif metric == 'AIC':
             # -2*loglikelihood + 2*no. free parameters
-            return log_likelihood - (self.I*self.K+self.J*self.K)
+            return - 2 * log_likelihood + 2 * (self.I*self.K+self.J*self.K)
         elif metric == 'MSE':
             R_pred = numpy.dot(self.expU,self.expV.T)
             return self.compute_MSE(self.M,self.R,R_pred)

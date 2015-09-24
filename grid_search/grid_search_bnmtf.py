@@ -1,5 +1,5 @@
 """
-Class for doing model selection for BNMTF, maximising the BIC, AIC, or log likelihood.
+Class for doing model selection for BNMTF, minimising the BIC, AIC, or MSE.
 We try an entire grid of K,L values to find the best values.
 
 We expect the following arguments:
@@ -23,8 +23,8 @@ We expect the following arguments:
 The grid search can be started by running search().
 If we use Gibbs then we run search(burn_in,thinning).
 
-After that, the values for each metric ('BIC','AIC','loglikelihood') can be
-obtained using all_values(metric), and the best value of K and L can be 
+After that, the values for each metric ('BIC','AIC','loglikelihood','MSE') can 
+be obtained using all_values(metric), and the best value of K and L can be 
 returned using best_value(metric).
 
 all_values returns a 2D array of size (len(values_K),len(values_L)).
@@ -90,5 +90,5 @@ class GridSearch:
     
     def best_value(self,metric):
         assert metric in metrics, "Unrecognised metric name: %s." % metric
-        index, row_length = numpy.argmax(self.all_values(metric)), len(self.values_L)
+        index, row_length = numpy.argmin(self.all_values(metric)), len(self.values_L)
         return (self.values_K[index / row_length], self.values_L[index % row_length])

@@ -91,12 +91,12 @@ def test_best_value():
     gridsearch = GridSearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     gridsearch.all_performances = {
         'BIC' : [[10,9,8],[11,12,13],[17,16,15],[13,13,13]],
-        'AIC' : [[8,8,8],[7,7,7],[10,11,15],[6,6,6]],
+        'AIC' : [[8,8,8],[7,7,7],[10,11,15],[6,5,6]],
         'loglikelihood' : [[10,12,13],[17,18,29],[5,4,3],[3,2,1]]
     }
-    assert gridsearch.best_value('BIC') == (4,5)
-    assert gridsearch.best_value('AIC') == (4,3)
-    assert gridsearch.best_value('loglikelihood') == (2,3)
+    assert gridsearch.best_value('BIC') == (1,3)
+    assert gridsearch.best_value('AIC') == (5,4)
+    assert gridsearch.best_value('loglikelihood') == (5,3)
     with pytest.raises(AssertionError) as error:
         gridsearch.all_values('FAIL')
     assert str(error.value) == "Unrecognised metric name: FAIL."

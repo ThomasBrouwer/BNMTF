@@ -83,10 +83,10 @@ def test_best_value():
         'loglikelihood' : [16,15,18,17],
         'MSE' : [16,20,18,17]
     }
-    assert linesearch.best_value('BIC') == 1
-    assert linesearch.best_value('AIC') == 5
-    assert linesearch.best_value('loglikelihood') == 4
-    assert linesearch.best_value('MSE') == 2
+    assert linesearch.best_value('BIC') == 5
+    assert linesearch.best_value('AIC') == 1
+    assert linesearch.best_value('loglikelihood') == 2
+    assert linesearch.best_value('MSE') == 1
     with pytest.raises(AssertionError) as error:
         linesearch.all_values('FAIL')
     assert str(error.value) == "Unrecognised metric name: FAIL."

@@ -58,8 +58,8 @@ def test_search():
         greedysearch.all_values('FAIL')
     assert str(error.value) == "Unrecognised metric name: FAIL."
     
-    # We go from: (1,5) -> (1,4) -> (1,3), and try 6 locations
-    assert len(greedysearch.all_values('BIC')) == 6
+    # We go from: (1,5) -> (2,5) -> (4,5) -> (5,5), and try 8 locations
+    assert len(greedysearch.all_values('BIC')) == 8
     
     
 def test_all_values():
@@ -100,9 +100,9 @@ def test_best_value():
     
     greedysearch = GreedySearch(classifier,values_K,values_L,R,M,priors,initS,initFG,iterations)
     greedysearch.all_performances = {
-        'BIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,40.),(5,3,20.)],
-        'AIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,25.),(5,3,20.)],
-        'loglikelihood' : [(1,2,10.),(2,2,50.),(2,3,30.),(2,4,40.),(5,3,20.)]
+        'BIC' : [(1,2,10.),(2,2,20.),(2,3,30.),(2,4,5.),(5,3,20.)],
+        'AIC' : [(1,2,10.),(2,2,20.),(2,3,4.),(2,4,25.),(5,3,20.)],
+        'loglikelihood' : [(1,2,10.),(2,2,8.),(2,3,30.),(2,4,40.),(5,3,20.)]
     }
     assert greedysearch.best_value('BIC') == (2,4)
     assert greedysearch.best_value('AIC') == (2,3)

@@ -1,5 +1,5 @@
 """
-Class for doing model selection for BNMF, maximising the BIC, AIC, or log likelihood.
+Class for doing model selection for BNMF, minimising the BIC, AIC, or MSE.
 
 We expect the following arguments:
 - classifier    - a class for BNMF, with methods: 
@@ -20,8 +20,8 @@ We expect the following arguments:
 The line search can be started by running search().
 If we use Gibbs then we run search(burn_in,thinning).
 
-After that, the values for each metric ('BIC','AIC','loglikelihood') can be
-obtained using all_values(metric), and the best value of K can be returned
+After that, the values for each metric ('BIC','AIC','loglikelihood','MSE') can 
+be obtained using all_values(metric), and the best value of K can be returned
 using best_value(metric).
 
 We use the optimised Variational Bayes algorithm for BNMF.
@@ -81,4 +81,4 @@ class LineSearch:
     
     def best_value(self,metric):
         assert metric in metrics, "Unrecognised metric name: %s." % metric
-        return self.values_K[self.all_values(metric).index(max(self.all_values(metric)))]
+        return self.values_K[self.all_values(metric).index(min(self.all_values(metric)))]

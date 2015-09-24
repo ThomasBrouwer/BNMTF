@@ -1,5 +1,5 @@
 """
-Class for doing model selection for BNMTF, maximising the BIC, AIC, or log likelihood.
+Class for doing model selection for BNMTF, minimising the BIC, AIC, or MSE.
 Instead of trying an entire grid, we do an optimised search:
 - Say we just tried values K,L.
 - Let K' and L' be the next values in our grid.
@@ -29,8 +29,8 @@ The greedy grid search can be started by running search(search_metric), where
 we stop searching after our specified metric's performance drops.
 If we use Gibbs then we run search(search_metric,burn_in,thinning).
 
-After that, the values for each metric ('BIC','AIC','loglikelihood') can be
-obtained using all_values(metric), and the best value of K and L can be 
+After that, the values for each metric ('BIC','AIC','loglikelihood','MSE') can 
+be obtained using all_values(metric), and the best value of K and L can be 
 returned using best_value(metric).
 
 all_values(metric) returns a list of tuples detailing the performances: (K,L,metric).
@@ -171,5 +171,5 @@ class GreedySearch:
     def best_value(self,metric):
         assert metric in metrics, "Unrecognised metric name: %s." % metric
         performances_metric = self.all_performances[metric] # This is a list of (K,L,metric) tuples
-        (best_K,best_L,best_metric) = max(performances_metric,key=lambda x: x[2])
+        (best_K,best_L,best_metric) = min(performances_metric,key=lambda x: x[2])
         return (best_K,best_L)
