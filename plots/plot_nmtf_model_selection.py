@@ -21,7 +21,7 @@ list_values_K = [1.0, 2.0, 1.0, 2.0, 3.0, 2.0, 3.0, 4.0, 3.0, 4.0, 5.0, 4.0, 5.0
 list_values_L = [1.0, 1.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0, 5.0, 5.0]
 
 """ First plot the grid search """
-metrics = ['BIC', 'AIC','MSE']
+metrics = ['BIC']#, 'AIC','MSE']
 '''
 for metric in metrics:
     # Make three lists of indices X,Y,Z (K,L,metric)
@@ -40,10 +40,10 @@ for metric in metrics:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, #cmap='jet_r',
+    plt.imshow(values_i, cmap='jet_r',
                vmin=min(values), vmax=max(values), origin='lower',
                extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
-    plt.scatter(list_values_K, list_values_L, c=values)
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r', s=50)
     plt.colorbar()
     plt.title("Grid Search VB %s" % metric)   
     plt.xlabel("K")     
@@ -58,8 +58,8 @@ for metric in metrics:
     values = vb_greedy_all_values[metric]
     
     # Set up a regular grid of interpolation points
-    Ki, Li = (numpy.linspace(min(list_values_K), max(list_values_K), 100), 
-              numpy.linspace(min(list_values_L), max(list_values_L), 100))
+    Ki, Li = (numpy.linspace(min(values_K), max(values_K), 100), 
+              numpy.linspace(min(values_L), max(values_L), 100))
     Ki, Li = numpy.meshgrid(Ki, Li)
     
     # Interpolate
@@ -68,9 +68,10 @@ for metric in metrics:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, vmin=min(values), vmax=max(values), origin='lower',
-           extent=[min(list_values_K)-1, max(list_values_K)+1, min(list_values_L)-1, max(list_values_L)+1])
-    plt.scatter(list_values_K, list_values_L, c=values)
+    plt.imshow(values_i, cmap='jet_r',
+               vmin=min(values), vmax=max(values), origin='lower',
+               extent=[min(values_K)-1, max(values_K)+1, min(values_L)-1, max(values_L)+1])
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r', s=50)
     plt.colorbar()
     plt.title("Metric: %s." % metric)   
     plt.xlabel("K")     

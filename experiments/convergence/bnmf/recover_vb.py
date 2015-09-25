@@ -4,7 +4,7 @@ using VB.
 
 We can plot the MSE, R2 and Rp as it converges, on the entire dataset.
 
-We have I=100, J=80, K=10, and 10% test data.
+We have I=100, J=80, K=10, and no test data.
 We give flatter priors (1/10) than what was used to generate the data (1).
 """
 

@@ -70,9 +70,10 @@ for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, vmin=min(values), vmax=max(values), origin='lower',
-           extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
-    plt.scatter(list_values_K, list_values_L, c=values)
+    plt.imshow(values_i, cmap='jet_r',
+               vmin=min(values), vmax=max(values), origin='lower',
+               extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r')
     plt.colorbar()
     plt.title("Metric: %s." % metric)   
     plt.xlabel("K")     

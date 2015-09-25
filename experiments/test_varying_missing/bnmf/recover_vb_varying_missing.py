@@ -33,6 +33,8 @@ lambdaU = numpy.ones((I,K))/10.
 lambdaV = numpy.ones((J,K))/10.    
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
+init_UV = 'random'
+
 metrics = ['MSE', 'R^2', 'Rp']
 
 #'''
@@ -74,7 +76,7 @@ for (fraction,Ms,Ms_test) in zip(fractions_unknown,all_Ms,all_Ms_test):
         print "Repeat %s of fraction %s." % (repeat+1, fraction)
     
         BNMF = bnmf_vb_optimised(R,M,K,priors)
-        BNMF.initialise()
+        BNMF.initialise(init_UV)
         BNMF.run(iterations)
     
         # Measure the performances

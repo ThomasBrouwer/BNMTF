@@ -69,9 +69,10 @@ for metric in metrics:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, vmin=min(values), vmax=max(values), origin='lower',
-           extent=[min(list_values_K)-1, max(list_values_K)+1, min(list_values_L)-1, max(list_values_L)+1])
-    plt.scatter(list_values_K, list_values_L, c=values)
+    plt.imshow(values_i, cmap='jet_r',
+               vmin=min(values), vmax=max(values), origin='lower',
+               extent=[min(list_values_K)-1, max(list_values_K)+1, min(list_values_L)-1, max(list_values_L)+1])
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r')
     plt.colorbar()
     plt.title("Metric: %s." % metric)   
     plt.xlabel("K")     

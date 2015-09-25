@@ -18,9 +18,9 @@ vb_all_values = {'MSE': [9.6549057058769172, 6.9884484321573099, 5.1934558411893
 metrics = ['BIC', 'AIC', 'MSE']
 for metric in metrics:
     plt.figure()
-    plt.title("Plot of %s against different values of K for VB-NMF" % metric)
-    plt.xlabel("K")
-    plt.ylabel(metric)
+    #plt.title("Plot of %s against different values of K for VB-NMF" % metric)
+    plt.xlabel("K", fontsize=16)
+    plt.ylabel(metric, fontsize=16)
     
     plt.plot(values_K, vb_all_values[metric], linestyle='-', marker='o', label=metric)
     #plt.legend(loc=3)

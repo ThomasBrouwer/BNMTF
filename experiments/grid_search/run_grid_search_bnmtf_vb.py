@@ -21,8 +21,8 @@ import scipy.interpolate
 
 ##########
 
-restarts = 2 #5
-iterations = 100 #1000
+restarts = 5
+iterations = 1000
 
 I, J = 100,80
 true_K, true_L = 5, 5
@@ -31,7 +31,7 @@ values_K, values_L = range(1,10+1), range(1,10+1)
 #fraction_unknown = 0.1
 attempts_M = 100
 
-alpha, beta = 100., 1. #1., 1.
+alpha, beta = 1., 1. #1., 1.
 tau = alpha / beta
 lambdaF = numpy.ones((I,true_K))
 lambdaS = numpy.ones((true_K,true_L))
@@ -70,10 +70,10 @@ for metric in metrics:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, #cmap='jet_r',
+    plt.imshow(values_i, cmap='jet_r',
                vmin=min(values), vmax=max(values), origin='lower',
                extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
-    plt.scatter(list_values_K, list_values_L, c=values)
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r')
     plt.colorbar()
     plt.title("Metric: %s." % metric)   
     plt.xlabel("K")     
