@@ -37,9 +37,9 @@ avr_performances = [
 
 for metric in metrics:
     plt.figure()
-    plt.title("Performances (%s) for different fractions of missing values" % metric)
-    plt.xlabel("Fraction missing")
-    plt.ylabel(metric)
+    #plt.title("Performances (%s) for different fractions of missing values" % metric)
+    plt.xlabel("Fraction missing", fontsize=16)
+    plt.ylabel(metric, fontsize=16)
     
     x = fractions_unknown
     for method, avr_performance in zip(methods,avr_performances):

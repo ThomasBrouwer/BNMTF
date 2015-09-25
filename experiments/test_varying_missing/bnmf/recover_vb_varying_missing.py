@@ -1,11 +1,11 @@
 """
 Test the performance of Variational Bayes for recovering a toy dataset, where 
-we vary the fraction of entries that are missing.
-We repeat this 10 times per fraction and average that.
+we vary the level of noise, and use 10% test data.
+We repeat this 10 times per noise level and average that.
 
 We use the correct number of latent factors and same priors as used to generate the data.
 
-I, J, K = 100, 50, 10
+I, J, K = 100, 80, 10
 """
 
 project_location = "/home/tab43/Documents/Projects/libraries/"
@@ -37,9 +37,11 @@ init_UV = 'random'
 
 metrics = ['MSE', 'R^2', 'Rp']
 
+
 #'''
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
+
 
 # Generate matrices M - one list of M's for each fraction
 M_attempts = 100
@@ -48,6 +50,7 @@ all_Ms = [
     for fraction in fractions_unknown
 ]
 all_Ms_test = [ [calc_inverse_M(M) for M in Ms] for Ms in all_Ms ]
+
 
 # Make sure each M has no empty rows or columns
 def check_empty_rows_columns(M,fraction):

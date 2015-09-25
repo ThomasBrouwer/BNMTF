@@ -78,7 +78,7 @@ for (fraction,Ms,Ms_test) in zip(fractions_unknown,all_Ms,all_Ms_test):
         print "Repeat %s of fraction %s." % (repeat+1, fraction)
     
         BNMF = bnmf_gibbs_optimised(R,M,K,priors)
-        BNMF.initialise()
+        BNMF.initialise(init_UV)
         BNMF.run(iterations)
     
         # Measure the performances

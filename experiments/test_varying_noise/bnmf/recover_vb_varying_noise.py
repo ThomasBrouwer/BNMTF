@@ -1,10 +1,11 @@
 """
 Test the performance of Variational Bayes for recovering a toy dataset, where 
-we vary the fraction of entries that are missing, and the amount of noise.
+we vary the fraction of entries that are missing.
+We repeat this 10 times per fraction and average that.
 
-We use the correct number of latent factors and same priors as used to generate the data.
+We use the correct number of latent factors and flatter priors than used to generate the data.
 
-I, J, K = 100, 50, 10
+I, J, K = 100, 80, 10
 
 The noise levels indicate the percentage of noise, compared to the amount of 
 variance in the dataset - i.e. the inverse of the Signal to Noise ratio:
@@ -17,172 +18,115 @@ project_location = "/home/tab43/Documents/Projects/libraries/"
 import sys
 sys.path.append(project_location)
 
-from BNMTF.code.bnmf_vb import bnmf_vb
-from BNMTF.example.generate_toy.bnmf.generate_bnmf import generate_dataset, add_noise
-from ml_helpers.code.mask import generate_M, calc_inverse_M
+from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
+from BNMTF.experiments.generate_toy.bnmf.generate_bnmf import add_noise, try_generate_M
+from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
 
 ##########
 
-fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.65, 0.7, 0.75, 0.8 ]
-noise_ratios = [ 0.01, 0.1, 0.2, 0.5, 1. ] # 1/SNR
+fraction_unknown = 0.1
+noise_ratios = [ 0, 0.01, 0.05, 0.1, 0.2, 0.5, 1. ] # 1/SNR
 
-input_folder = project_location+"BNMTF/example/generate_toy/bnmf/"
+input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
+repeats = 10
 iterations = 1000
-I,J,K = 100, 50, 10
+I,J,K = 100, 80, 10
 
 alpha, beta = 1., 1.
-lambdaU = numpy.ones((I,K))
-lambdaV = numpy.ones((J,K))  
+lambdaU = numpy.ones((I,K))/10.
+lambdaV = numpy.ones((J,K))/10.
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 
-# For each tau, generate a dataset, and mask matrices
+init_UV = 'random'
+
+metrics = ['MSE', 'R^2', 'Rp']
+
+
+# Load in data
+R_true = numpy.loadtxt(input_folder+"R_true.txt")
+
+
+# For each noise ratio, generate mask matrices for each attempt
+M_attempts = 100
+all_Ms = [ 
+    [try_generate_M(I,J,fraction_unknown,M_attempts) for r in range(0,repeats)]
+    for noise in noise_ratios
+]
+all_Ms_test = [ [calc_inverse_M(M) for M in Ms] for Ms in all_Ms ]
+
+# Make sure each M has no empty rows or columns
+def check_empty_rows_columns(M,fraction):
+    sums_columns = M.sum(axis=0)
+    sums_rows = M.sum(axis=1)
+    for i,c in enumerate(sums_rows):
+        assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction)
+    for j,c in enumerate(sums_columns):
+        assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction)
+        
+for Ms in all_Ms:
+    for M in Ms:
+        check_empty_rows_columns(M,fraction_unknown)
+
+
+# For each noise ratio, add that level of noise to the true R
 all_R = []
-all_Ms = []
-all_Ms_test = []
+variance_signal = R_true.var()
 for noise in noise_ratios:
-    (_,_,_,true_R,_) = generate_dataset(I,J,K,lambdaU,lambdaV,alpha/beta)
-    
-    variance_signal = true_R.var()
     tau = 1. / (variance_signal * noise)
     print "Noise: %s%%. Variance in dataset is %s. Adding noise with variance %s." % (100.*noise,variance_signal,1./tau)
     
-    R = add_noise(true_R,tau)
-    
-    Ms = [ generate_M(I,J,fraction) for fraction in fractions_unknown ]
-    Ms_test = [ calc_inverse_M(M) for M in Ms ]
-    
+    R = add_noise(R_true,tau)
     all_R.append(R)
-    all_Ms.append(Ms)
-    all_Ms_test.append(Ms_test)
     
-    # Make sure each M has no empty rows or columns
-    def check_empty_rows_columns(M,fraction):
-        sums_columns = M.sum(axis=0)
-        sums_rows = M.sum(axis=1)
-        for i,c in enumerate(sums_rows):
-            assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction)
-        for j,c in enumerate(sums_columns):
-            assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction)
-            
-    for M,fraction in zip(Ms,fractions_unknown):
-        check_empty_rows_columns(M,fraction)
-        
-print "Generated datasets and mask matrices."
-       
-       
-# For each level of noise, and for each fraction of missing data, run the VB algorithm.
-# Then plot this, and convergence of tau as well.
-all_performances_per_noise = []
-for noise,R in zip(noise_ratios,all_R):
-    all_performances = []    
-    all_exp_taus = []
     
-    for fraction,M,M_test in zip(fractions_unknown,Ms,Ms_test):
-        print "Trying fraction %s with noise level %s." % (fraction,noise)
-        
-        # Run the Gibbs sampler
-        BNMF = bnmf_vb(R,M,K,priors)
-        BNMF.initialise()
+# We now run the VB algorithm on each of the M's for each noise ratio    
+all_performances = {metric:[] for metric in metrics} 
+average_performances = {metric:[] for metric in metrics} # averaged over repeats
+for (noise,R,Ms,Ms_test) in zip(noise_ratios,all_R,all_Ms,all_Ms_test):
+    print "Trying noise ratio %s." % noise
+    
+    # Run the algorithm <repeats> times and store all the performances
+    for metric in metrics:
+        all_performances[metric].append([])
+    for (repeat,M,M_test) in zip(range(0,repeats),Ms,Ms_test):
+        print "Repeat %s of noise ratio %s." % (repeat+1, noise)
+    
+        BNMF = bnmf_vb_optimised(R,M,K,priors)
+        BNMF.initialise(init_UV)
         BNMF.run(iterations)
-        
-        all_exp_taus.append(BNMF.all_exp_tau)
-        
+    
         # Measure the performances
         performances = BNMF.predict(M_test)
-        all_performances.append(performances)
-        
-    all_performances_per_noise.append(all_performances)
-    
-    # Plot the tau values to check convergence
-    f2, axarr2 = plt.subplots(len(fractions_unknown), sharex=True)
-    x2 = range(1,len(all_exp_taus[0])+1)
-    axarr2[0].set_title('Convergence of expectations tau with noise level %s' % noise)
-    for i,taus in enumerate(all_exp_taus):
-        axarr2[i].plot(x2, taus)
-        axarr2[i].set_ylabel("Fraction %s" % fractions_unknown[i])
-    axarr2[len(fractions_unknown)-1].set_xlabel("Iterations")
+        for metric in metrics:
+            # Add this metric's performance to the list of <repeat> performances for this noise ratio
+            all_performances[metric][-1].append(performances[metric])
+            
+    # Compute the average across attempts
+    for metric in metrics:
+        average_performances[metric].append(sum(all_performances[metric][-1])/repeats)
     
 
-print "All performances versus noise level and fraction of entries missing: %s." \
-    % zip(noise_ratios,[zip(fractions_unknown,all_performances) for all_performances in all_performances_per_noise])
+    
+print "repeats=%s \nnoise_ratios = %s \nall_performances = %s \naverage_performances = %s" % \
+    (repeats,noise_ratios,all_performances,average_performances)
 
 
 '''
-All performances versus noise level and fraction of entries missing: 
-    [(0.01, 
-          [(0.1, {'R^2': 0.9813514113028342, 'MSE': 0.46519571731198306, 'Rp': 0.99067442794248151}), 
-           (0.2, {'R^2': 0.9836021377749169, 'MSE': 0.43767609296635923, 'Rp': 0.99183056727404095}), 
-           (0.3, {'R^2': 0.9821183627463833, 'MSE': 0.47560766221874073, 'Rp': 0.99106099291142224}), 
-           (0.4, {'R^2': 0.9797698468452392, 'MSE': 0.55998143797213018, 'Rp': 0.9898427549665515}), 
-           (0.5, {'R^2': 0.9752813347589498, 'MSE': 0.7084988261572196, 'Rp': 0.98763851104532607}), 
-           (0.6, {'R^2': 0.9658019875232262, 'MSE': 1.0004155248794668, 'Rp': 0.98279620617542351}), 
-           (0.65, {'R^2': 0.8993480809397417, 'MSE': 2.7701583685550983, 'Rp': 0.94899632278357948}), 
-           (0.7, {'R^2': 0.8100281505398775, 'MSE': 5.1920019923799616, 'Rp': 0.90268653373999708}), 
-           (0.75, {'R^2': 0.7011657736414094, 'MSE': 8.2132317305124207, 'Rp': 0.84125068483195042}), 
-           (0.8, {'R^2': 0.6518355062677148, 'MSE': 9.6726726121259237, 'Rp': 0.81207839088435108})]), 
-     (0.1, 
-          [(0.1, {'R^2': 0.8752862644117714, 'MSE': 3.1944133653345976, 'Rp': 0.9356055948306945}), 
-           (0.2, {'R^2': 0.8586842612994123, 'MSE': 3.5733234205236761, 'Rp': 0.92676759244741513}), 
-           (0.3, {'R^2': 0.8522091067142935, 'MSE': 3.750698351585998, 'Rp': 0.92337637716904319}), 
-           (0.4, {'R^2': 0.8250469556357851, 'MSE': 4.3521220507526399, 'Rp': 0.90861135236116808}), 
-           (0.5, {'R^2': 0.8135353131034527, 'MSE': 4.7286670414440142, 'Rp': 0.90255454808274971}), 
-           (0.6, {'R^2': 0.7063923486899412, 'MSE': 7.2380461267024803, 'Rp': 0.84314107066483679}), 
-           (0.65, {'R^2': 0.6097206931841236, 'MSE': 9.9666361641482144, 'Rp': 0.78636650054530277}), 
-           (0.7, {'R^2': 0.5208403884141831, 'MSE': 11.817431542398976, 'Rp': 0.73196242602957096}), 
-           (0.75, {'R^2': 0.4644208497179746, 'MSE': 13.628425165727615, 'Rp': 0.68889184319356145}), 
-           (0.8, {'R^2': 0.5099958012866396, 'MSE': 12.054322232178622, 'Rp': 0.72297259466029651})]), 
-     (0.2, 
-          [(0.1, {'R^2': 0.7957358763989716, 'MSE': 6.9008703174757233, 'Rp': 0.89270141958488947}), 
-           (0.2, {'R^2': 0.7617660556501171, 'MSE': 7.5384678375366905, 'Rp': 0.8729067235912229}), 
-           (0.3, {'R^2': 0.7568066904182987, 'MSE': 7.5845379726301898, 'Rp': 0.87020459518089155}), 
-           (0.4, {'R^2': 0.73482238175516, 'MSE': 8.5315638181193556, 'Rp': 0.8574563060559427}), 
-           (0.5, {'R^2': 0.6834181664554696, 'MSE': 10.253731191991815, 'Rp': 0.82797035700515609}), 
-           (0.6, {'R^2': 0.6207981478357999, 'MSE': 12.524578919084066, 'Rp': 0.79030853615464713}), 
-           (0.65, {'R^2': 0.5505919154610631, 'MSE': 14.259652265234134, 'Rp': 0.75272695961261615}), 
-           (0.7, {'R^2': 0.5276860640286306, 'MSE': 15.35152524050849, 'Rp': 0.73556320507653805}), 
-           (0.75, {'R^2': 0.5056885482807768, 'MSE': 15.405479499080686, 'Rp': 0.71877060189076447}), 
-           (0.8, {'R^2': 0.45827686379966137, 'MSE': 17.219390045612222, 'Rp': 0.6933801724470966})]), 
-     (0.5, 
-          [(0.1, {'R^2': 0.5789789987637582, 'MSE': 18.48431142672824, 'Rp': 0.76564309718879742}), 
-           (0.2, {'R^2': 0.5111005357976071, 'MSE': 20.700410600785489, 'Rp': 0.71685518662393211}), 
-           (0.3, {'R^2': 0.4836296231676913, 'MSE': 21.248856271226796, 'Rp': 0.69799542300994988}), 
-           (0.4, {'R^2': 0.47200296988741186, 'MSE': 24.136448973437673, 'Rp': 0.69132080843198696}), 
-           (0.5, {'R^2': 0.4601116683738895, 'MSE': 22.615114726336483, 'Rp': 0.68193251048191994}), 
-           (0.6, {'R^2': 0.4391008991885297, 'MSE': 23.534159247514253, 'Rp': 0.66884534168040721}), 
-           (0.65, {'R^2': 0.4047218643868299, 'MSE': 25.189960224918494, 'Rp': 0.64201902541640121}), 
-           (0.7, {'R^2': 0.3695974988583959, 'MSE': 26.232692669926063, 'Rp': 0.61661478386972535}), 
-           (0.75, {'R^2': 0.3798379262380439, 'MSE': 26.064489256250688, 'Rp': 0.62750737425752201}), 
-           (0.8, {'R^2': 0.33222069338714577, 'MSE': 28.608484355410067, 'Rp': 0.60651748375210446})]), 
-     (1.0, 
-          [(0.1, {'R^2': 0.4014396600890896, 'MSE': 21.910642570335153, 'Rp': 0.63446454406263586}), 
-           (0.2, {'R^2': 0.318067037779596, 'MSE': 24.124318519753711, 'Rp': 0.57008923420318758}), 
-           (0.3, {'R^2': 0.3104620140613499, 'MSE': 25.391758947542431, 'Rp': 0.56895529498156072}), 
-           (0.4, {'R^2': 0.26651399339421555, 'MSE': 26.858396043461571, 'Rp': 0.52886994522252173}), 
-           (0.5, {'R^2': 0.23555252309532992, 'MSE': 28.430627019637242, 'Rp': 0.4998350011832256}), 
-           (0.6, {'R^2': 0.22282087772781234, 'MSE': 28.912465173869254, 'Rp': 0.48313611962313197}), 
-           (0.65, {'R^2': 0.20602136983203034, 'MSE': 29.688522877292865, 'Rp': 0.46991404877965076}), 
-           (0.7, {'R^2': 0.19685205719184706, 'MSE': 29.213874882969197, 'Rp': 0.46677770729542389}), 
-           (0.75, {'R^2': 0.17381120933911443, 'MSE': 30.348405500903272, 'Rp': 0.43737940030792155}), 
-           (0.8, {'R^2': 0.17982908825610722, 'MSE': 30.026068094329894, 'Rp': 0.45248178814955542})])].
+repeats=10 
+noise_ratios = [0, 0.01, 0.05, 0.1, 0.2, 0.5, 1.0] 
+all_performances = {'R^2': [[0.9999999549332508, 0.999999904885915, 0.999999817783978, 0.999999979138143, 0.9999999474198323, 0.9999999694400835, 0.9999999834809596, 0.9999999823358431, 0.9999996133002866, 0.9999999770507794], [0.9849627395198031, 0.9864381787765951, 0.9867679041561732, 0.9871932579082453, 0.9850915707653997, 0.9854969206362098, 0.9891138184331488, 0.9867899288682696, 0.9876279762854675, 0.9867680469881884], [0.941353569785272, 0.9355957530924336, 0.9294551311318793, 0.943074921770021, 0.931340311719775, 0.9384670890206103, 0.9405999303293585, 0.9375661015613784, 0.9233730235952935, 0.9188262874236086], [0.8874856636123989, 0.8733324350410653, 0.8773632444696763, 0.8865270597457613, 0.8723799730795367, 0.8641310375813999, 0.8837293050487771, 0.8757755840222915, 0.8891228584614231, 0.8752011030227372], [0.7761176019632071, 0.7916926428614209, 0.7797247548415855, 0.8087231667501644, 0.7758591543521262, 0.7759859363590513, 0.7708213253468608, 0.7857956754838404, 0.7831797765460526, 0.8052727682561247], [0.5437758804282625, 0.6152319198009373, 0.5959083130331708, 0.6138787082128204, 0.5647238868105593, 0.5840966692652938, 0.5726035611407931, 0.5936414696274798, 0.5449193937007886, 0.6049986012270756], [0.4141746136823119, 0.398915474642492, 0.3909465251966805, 0.35511596546414315, 0.3911377428098317, 0.39001934282594686, 0.392432508213599, 0.38380352885076996, 0.3234048730251119, 0.43606908046880766]], 'MSE': [[1.49349680226629e-06, 3.2288628422069126e-06, 6.6835938719945685e-06, 8.1825180808357987e-07, 2.1276038914595764e-06, 1.1939940710388033e-06, 5.9153918144689819e-07, 5.776024221480372e-07, 1.4862246568155412e-05, 1.0275443457788901e-06], [0.49523354509260253, 0.50648759714348424, 0.4847044964164835, 0.54449676380626211, 0.53904058591279846, 0.46607817215881431, 0.47508501652750523, 0.50733775225159716, 0.5101966654711394, 0.51201475277549913], [2.4333805600053657, 2.6065455482944508, 2.7457345855116442, 2.679006317581019, 2.5311866071980131, 2.5925204248467084, 2.5122008776588034, 2.4122655475428356, 2.7902187714289419, 2.7834626880417157], [5.0240498915378833, 5.0012188783498353, 5.4635185036132636, 4.3712868922397865, 5.2394523351657583, 5.1732331416304396, 4.7106294980114569, 4.7830348546687471, 5.0744116446102234, 5.3616368032600699], [9.7240166124382998, 9.4396275721476144, 9.167377129588191, 8.8327215161894745, 9.1506551447404689, 9.6850005226373828, 9.8246062595266963, 10.186230657803707, 9.089441036811623, 10.354654981925069], [23.848397770086844, 22.697370393419391, 20.387459031612067, 24.356006531652085, 24.196879223165443, 25.061255575483692, 24.137762612531887, 23.854884209784316, 24.003809249684537, 23.542226611505885], [46.78424378212668, 45.790371652822017, 44.933350394620014, 45.5312314951614, 45.603914916878374, 45.741615123510016, 47.083177430377809, 49.787110903958485, 52.386996752119124, 47.442716091216013]], 'Rp': [[0.99999997747839575, 0.99999995296405753, 0.99999990985609233, 0.99999998960628778, 0.99999997394584939, 0.99999998473751128, 0.99999999176145682, 0.99999999118737182, 0.99999980804361599, 0.99999998856197736], [0.99248386235276098, 0.99320337136594572, 0.99337612825461785, 0.99362433918521043, 0.99251962549009964, 0.99277617279670205, 0.99456808604047731, 0.9933742682844986, 0.99379761755727902, 0.99339898326473974], [0.97036237832924943, 0.96727066139620799, 0.9643344409932153, 0.97123599034831742, 0.96534472656054959, 0.96879903373414555, 0.96986924121505291, 0.96842234884274492, 0.96122847617049789, 0.95874758901968815], [0.94214072231702073, 0.93454371140072967, 0.9368315254747438, 0.94179411383794764, 0.93402672283094001, 0.9299400371656108, 0.94007208623557759, 0.93614158279056447, 0.94305876242440756, 0.93576878916461426], [0.88156192509763098, 0.89002998680679835, 0.88304390625749463, 0.90025076238785218, 0.88105087419577821, 0.88157548550690157, 0.87955230410955332, 0.88655974206802357, 0.88520761412991655, 0.89775664199853544], [0.73868609174204802, 0.78480690209143777, 0.77270963036741458, 0.78363550345943001, 0.75153914676224942, 0.76667425300034575, 0.7584635559233599, 0.77185300036223681, 0.73976244331788854, 0.77855175780932606], [0.64422906454464968, 0.63471374891537835, 0.63132157207359429, 0.60277633319977897, 0.63239397534274089, 0.63039871659694002, 0.63202598925460884, 0.62372093802046991, 0.57818897632203181, 0.66139101462845751]]} 
+average_performances = {'R^2': [0.99999991297690705, 0.98662503423375014, 0.933965211942963, 0.8785048264085068, 0.78531728027604353, 0.58337784032471807, 0.38760196551796949], 'MSE': [3.2604735804578965e-06, 0.50406753475561861, 2.6086521928109501, 5.0202472443087469, 9.5454331433808512, 23.608605120892616, 47.108472854278993], 'Rp': [0.99999995681426168, 0.99331224545923313, 0.96656148866096692, 0.93743180536421566, 0.88665892425584847, 0.76466822848357363, 0.62711603288986506]}
 '''
 
 
-# Plot the MSE and R^2 for each noise level, as the fraction of missing values varies.
-# So we get n lines in each plot for n noise levels.
-f, axarr = plt.subplots(3, sharex=True)
-x = fractions_unknown
-axarr[0].set_title('Performance versus fraction missing')
-for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
-    axarr[0].plot(x, [perf['MSE'] for perf in all_performances],label="Noise %s%%" % (100.*noise))
-    axarr[0].legend(loc="upper left")
-axarr[0].set_ylabel("MSE")
-for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
-    axarr[1].plot(x, [perf['R^2'] for perf in all_performances],label="Noise %s%%" % (100.*noise))   
-axarr[1].set_ylabel("R^2")
-for noise,all_performances in zip(noise_ratios,all_performances_per_noise):
-    axarr[2].plot(x, [perf['Rp'] for perf in all_performances],label="Noise %s%%" % (100.*noise)) 
-axarr[2].set_ylabel("Rp")
-axarr[2].set_xlabel("Fraction missing")
+# Plot the MSE, R^2 and Rp
+for metric in metrics:
+    plt.figure()
+    x = noise_ratios
+    y = average_performances[metric]
+    plt.plot(x,y)
+    plt.xlabel("Noise ratios missing")
+    plt.ylabel(metric)
