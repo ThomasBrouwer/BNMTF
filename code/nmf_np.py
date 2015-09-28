@@ -21,12 +21,9 @@ We expect the following arguments:
     
 Initialisation can be done by running the initialise(init,tauUV) function. We initialise as follows:
 - init_UV = 'ones'          -> U[i,k] = V[j,k] = 1
-          = 'random'        -> muU[i,k] ~ U(0,1), muV[j,k] ~ U(0,1), 
-          = 'exponential'   -> muU[i,k] ~ Exp(expo_prior), muV[j,k] ~ Exp(expo_prior) 
+          = 'random'        -> U[i,k] ~ U(0,1), V[j,k] ~ U(0,1), 
+          = 'exponential'   -> U[i,k] ~ Exp(expo_prior), V[j,k] ~ Exp(expo_prior) 
   where expo_prior is an additional parameter (default 1)
-- tauU[i,k] = tauV[j,k] = 1 if tauUV = {}, else tauU = tauUV['tauU'], tauV = tauUV['tauV']
-- alpha_s, beta_s using updates of model
-
 """
 
 from distributions.exponential import Exponential
