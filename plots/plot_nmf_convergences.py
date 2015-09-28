@@ -35,7 +35,7 @@ avr_performances = [
 for metric in metrics:
     plt.figure()
     #plt.title("Performances (%s) for different fractions of missing values" % metric)
-    plt.xlabel("Fraction missing", fontsize=16)
+    plt.xlabel("Iterations", fontsize=16)
     plt.ylabel(metric, fontsize=16)
     
     x = iterations
