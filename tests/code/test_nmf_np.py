@@ -129,6 +129,36 @@ def test_update():
         nmf.update_V(k)
         for j in range(0,J):
             assert abs(new_V[j][k] - nmf.V[j,k]) < 0.00001
+    
+    # Also if I = J
+    I,J,K = 2,2,3
+    R = [[1,2],[3,4]]
+    M = [[1,1],[0,1]]
+    
+    U = numpy.array([[1,2,3],[4,5,6]],dtype='f') #2x3
+    V = numpy.array([[7,8,9],[10,11,12]],dtype='f') #2x3
+    R_pred = numpy.array([[50,68],[122,167]],dtype='f') #2x2
+    
+    nmf = NMF(R,M,K)
+    def reset_2():
+        nmf.U = numpy.copy(U)
+        nmf.V = numpy.copy(V)
+        
+    for k in range(0,K):
+        reset_2()
+        nmf.update_U(k)    
+        for i in range(0,I):
+            new_Uik = U[i][k] * sum( [V[j][k] * R[i][j] / R_pred[i,j] for j in range(0,J) if M[i][j] ]) \
+                              / sum( [V[j][k] for j in range(0,J) if M[i][j] ])
+            assert abs(new_Uik - nmf.U[i,k]) < 0.00001
+            
+    for k in range(0,K):
+        reset_2()
+        nmf.update_V(k)    
+        for j in range(0,J):
+            new_Vjk = V[j][k] * sum( [U[i][k] * R[i][j] / R_pred[i,j] for i in range(0,I) if M[i][j] ]) \
+                              / sum( [U[i][k] for i in range(0,I) if M[i][j] ])
+            assert abs(new_Vjk - nmf.V[j,k]) < 0.00001
 
 
 """ Test iterations - whether we get no exception """

@@ -94,6 +94,10 @@ class NMF:
 
     """ Updates for U and V """    
     def update_U(self,k):
+        
+        print self.M * (self.V[:,k] * ( self.R / numpy.dot(self.U,self.V.T) ) )
+        print self.M * self.V[:,k]
+        
         self.U[:,k] = self.U[:,k] * (self.M * (self.V[:,k] * ( self.R / numpy.dot(self.U,self.V.T) ) )).sum(axis=1) / (self.M * self.V[:,k]).sum(axis=1)
         
     def update_V(self,k):
