@@ -20,13 +20,16 @@ We expect the following arguments:
 - K, the number of latent factors
     
 Initialisation can be done by running the initialise(init,tauUV) function. We initialise as follows:
-- init_UV = 'ones'       -> U[i,k] = V[j,k] = 1
-          = 'random'     -> muU[i,k] ~ U(0,1), muV[j,k] ~ Exp(0,1), 
+- init_UV = 'ones'          -> U[i,k] = V[j,k] = 1
+          = 'random'        -> muU[i,k] ~ U(0,1), muV[j,k] ~ U(0,1), 
+          = 'exponential'   -> muU[i,k] ~ Exp(expo_prior), muV[j,k] ~ Exp(expo_prior) 
+  where expo_prior is an additional parameter (default 1)
 - tauU[i,k] = tauV[j,k] = 1 if tauUV = {}, else tauU = tauUV['tauU'], tauV = tauUV['tauV']
 - alpha_s, beta_s using updates of model
 
 """
 
+from distributions.exponential import Exponential
 import numpy, math, itertools
 
 class NMF:
@@ -65,14 +68,21 @@ class NMF:
 
 
     """ Initialise U and V """    
-    def initialise(self,init_UV='random'):
-        assert init_UV in ['ones','random'], "Unrecognised init option for U,V: %s." % init_UV
+    def initialise(self,init_UV='random',expo_prior=1.):
+        assert init_UV in ['ones','random','exponential'], "Unrecognised init option for U,V: %s." % init_UV
         if init_UV == 'ones':
             self.U = numpy.ones((self.I,self.K))
             self.V = numpy.ones((self.J,self.K))
         elif init_UV == 'random':
             self.U = numpy.random.rand(self.I,self.K)
             self.V = numpy.random.rand(self.J,self.K)
+        elif init_UV == 'exponential':
+            self.U = numpy.empty((self.I,self.K))
+            self.V = numpy.empty((self.J,self.K))
+            for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
+                self.U[i,k] = Exponential(expo_prior).draw()
+            for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
+                self.V[j,k] = Exponential(expo_prior).draw()
     
     
     """ Update U and V for a number of iterations, printing the MSE and divergence each iteration. """
@@ -94,10 +104,6 @@ class NMF:
 
     """ Updates for U and V """    
     def update_U(self,k):
-        
-        print self.M * (self.V[:,k] * ( self.R / numpy.dot(self.U,self.V.T) ) )
-        print self.M * self.V[:,k]
-        
         self.U[:,k] = self.U[:,k] * (self.M * (self.V[:,k] * ( self.R / numpy.dot(self.U,self.V.T) ) )).sum(axis=1) / (self.M * self.V[:,k]).sum(axis=1)
         
     def update_V(self,k):
