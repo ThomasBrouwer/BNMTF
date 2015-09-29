@@ -48,10 +48,10 @@ import sys
 sys.path.append("/home/tab43/Documents/Projects/libraries/")
 from kmeans_missing.code.kmeans import KMeans
 
-from distributions.exponential import Exponential
-from distributions.gamma import Gamma
-from distributions.truncated_normal import TruncatedNormal
-from distributions.truncated_normal_vector import TruncatedNormalVector
+from distributions.exponential import exponential_draw
+from distributions.gamma import gamma_draw
+from distributions.truncated_normal import TN_draw
+from distributions.truncated_normal_vector import TN_vector_draw
 
 import numpy, itertools, math, time
 
@@ -105,14 +105,14 @@ class bnmtf_gibbs_optimised:
         self.S = 1./self.lambdaS
         if init_S == 'random':
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):  
-                self.S[k,l] = Exponential(self.lambdaS[k,l]).draw()
+                self.S[k,l] = exponential_draw(self.lambdaS[k,l])
                 
         self.F, self.G = 1./self.lambdaF, 1./self.lambdaG
         if init_FG == 'random':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
-                self.F[i,k] = Exponential(self.lambdaF[i,k]).draw()
+                self.F[i,k] = exponential_draw(self.lambdaF[i,k])
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                self.G[j,l] = Exponential(self.lambdaG[j,l]).draw()
+                self.G[j,l] = exponential_draw(self.lambdaG[j,l])
         elif init_FG == 'kmeans':
             print "Initialising F using KMeans."
             kmeans_F = KMeans(self.R,self.M,self.K)
@@ -127,7 +127,7 @@ class bnmtf_gibbs_optimised:
             self.G = kmeans_G.clustering_results + 0.2
 
         # Initialise tau using the updates
-        self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+        self.tau = gamma_draw(self.alpha_s(),self.beta_s())
 
 
     # Run the Gibbs sampler
@@ -146,19 +146,19 @@ class bnmtf_gibbs_optimised:
             for k in range(0,self.K):
                 tauFk = self.tauF(k)
                 muFk = self.muF(tauFk,k)
-                self.F[:,k] = TruncatedNormalVector(muFk,tauFk).draw()
+                self.F[:,k] = TN_vector_draw(muFk,tauFk)
                 
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 tauSkl = self.tauS(k,l)
                 muSkl = self.muS(tauSkl,k,l)
-                self.S[k,l] = TruncatedNormal(muSkl,tauSkl).draw()
+                self.S[k,l] = TN_draw(muSkl,tauSkl)
                 
             for l in range(0,self.L):
                 tauGl = self.tauG(l)
                 muGl = self.muG(tauGl,l)
-                self.G[:,l] = TruncatedNormalVector(muGl,tauGl).draw()
+                self.G[:,l] = TN_vector_draw(muGl,tauGl)
                 
-            self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+            self.tau = gamma_draw(self.alpha_s(),self.beta_s())
             
             self.all_F[it], self.all_S[it], self.all_G[it], self.all_tau[it] = numpy.copy(self.F), numpy.copy(self.S), numpy.copy(self.G), self.tau
             

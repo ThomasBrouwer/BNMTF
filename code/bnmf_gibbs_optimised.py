@@ -44,9 +44,9 @@ Finally, we can return the goodness of fit of the data using the quality(metric)
 (we want to maximise these values)
 """
 
-from distributions.exponential import Exponential
-from distributions.gamma import Gamma
-from distributions.truncated_normal_vector import TruncatedNormalVector
+from distributions.exponential import exponential_draw
+from distributions.gamma import gamma_draw
+from distributions.truncated_normal_vector import TN_vector_draw
 
 import numpy, itertools, math, time
 
@@ -98,10 +98,10 @@ class bnmf_gibbs_optimised:
         
         if init == 'random':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
-                self.U[i,k] = Exponential(self.lambdaU[i][k]).draw()
+                self.U[i,k] = exponential_draw(self.lambdaU[i][k])
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
-                self.V[j,k] = Exponential(self.lambdaV[j][k]).draw()
-            self.tau = Gamma(self.alpha,self.beta).draw()
+                self.V[j,k] = exponential_draw(self.lambdaV[j][k])
+            self.tau = gamma_draw(self.alpha,self.beta)
             
         elif init == 'exp':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
@@ -126,14 +126,14 @@ class bnmf_gibbs_optimised:
             for k in range(0,self.K):   
                 tauUk = self.tauU(k)
                 muUk = self.muU(tauUk,k)
-                self.U[:,k] = TruncatedNormalVector(muUk,tauUk).draw()
+                self.U[:,k] = TN_vector_draw(muUk,tauUk)
                 
             for k in range(0,self.K):
                 tauVk = self.tauV(k)
                 muVk = self.muV(tauVk,k)
-                self.V[:,k] = TruncatedNormalVector(muVk,tauVk).draw()
+                self.V[:,k] = TN_vector_draw(muVk,tauVk)
                 
-            self.tau = Gamma(self.alpha_s(),self.beta_s()).draw()
+            self.tau = gamma_draw(self.alpha_s(),self.beta_s())
             
             self.all_U[it], self.all_V[it], self.all_tau[it] = numpy.copy(self.U), numpy.copy(self.V), self.tau
             

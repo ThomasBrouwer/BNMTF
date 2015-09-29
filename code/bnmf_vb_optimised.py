@@ -40,10 +40,9 @@ Finally, we can return the goodness of fit of the data using the quality(metric)
 (we want to maximise these values)
 """
 
-from distributions.gamma import Gamma
-from distributions.truncated_normal import TruncatedNormal
-from distributions.truncated_normal_vector import TruncatedNormalVector
-from distributions.exponential import Exponential
+from distributions.gamma import gamma_expectation, gamma_expectation_log
+from distributions.truncated_normal_vector import TN_vector_expectation, TN_vector_variance
+from distributions.exponential import exponential_draw
 
 import numpy, itertools, math, scipy, time
 from scipy.stats import norm
@@ -94,13 +93,13 @@ class bnmf_vb_optimised:
         self.tauU = tauUV['tauU'] if 'tauU' in tauUV else numpy.ones((self.I,self.K))
         self.tauV = tauUV['tauV'] if 'tauV' in tauUV else numpy.ones((self.J,self.K))
         
-        assert init in ['exp','random','kmeans'], "Unrecognised init option for F,G: %s." % init
+        assert init in ['exp','random'], "Unrecognised init option for F,G: %s." % init
         self.muU, self.muV = 1./self.lambdaU, 1./self.lambdaV
         if init == 'random':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
-                self.muU[i,k] = Exponential(self.lambdaU[i,k]).draw()
+                self.muU[i,k] = exponential_draw(self.lambdaU[i,k])
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
-                self.muV[j,k] = Exponential(self.lambdaV[j,k]).draw()     
+                self.muV[j,k] = exponential_draw(self.lambdaV[j,k])    
         
         # Initialise the expectations and variances
         self.expU, self.varU = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
@@ -126,10 +125,9 @@ class bnmf_vb_optimised:
             self.all_performances[metric] = []
         
         for it in range(0,iterations):
-            
             for k in xrange(0,self.K):
                 self.update_U(k)
-                self.update_exp_U(k)           
+                self.update_exp_U(k)    
                 
             for k in xrange(0,self.K):
                 self.update_V(k)
@@ -186,19 +184,22 @@ class bnmf_vb_optimised:
         
     # Update the expectations and variances
     def update_exp_U(self,k):
-        tn = TruncatedNormalVector(self.muU[:,k],self.tauU[:,k])
-        self.expU[:,k] = tn.expectation()
-        self.varU[:,k] = tn.variance()
+        #tn = TruncatedNormalVector(self.muU[:,k],self.tauU[:,k])
+        #self.expU[:,k] = tn.expectation()
+        #self.varU[:,k] = tn.variance()
+        self.expU[:,k] = TN_vector_expectation(self.muU[:,k],self.tauU[:,k])
+        self.varU[:,k] = TN_vector_variance(self.muU[:,k],self.tauU[:,k])
         
     def update_exp_V(self,k):
-        tn = TruncatedNormalVector(self.muV[:,k],self.tauV[:,k])
-        self.expV[:,k] = tn.expectation()
-        self.varV[:,k] = tn.variance()
+        #tn = TruncatedNormalVector(self.muV[:,k],self.tauV[:,k])
+        #self.expV[:,k] = tn.expectation()
+        #self.varV[:,k] = tn.variance()
+        self.expV[:,k] = TN_vector_expectation(self.muV[:,k],self.tauV[:,k])
+        self.varV[:,k] = TN_vector_variance(self.muV[:,k],self.tauV[:,k])
         
     def update_exp_tau(self):
-        gm = Gamma(self.alpha_s,self.beta_s)
-        self.exptau = gm.expectation()
-        self.explogtau = gm.expectation_log()
+        self.exptau = gamma_expectation(self.alpha_s,self.beta_s)
+        self.explogtau = gamma_expectation_log(self.alpha_s,self.beta_s)
 
 
     # Compute the expectation of U and V, and use it to predict missing values

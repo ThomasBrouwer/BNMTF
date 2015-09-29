@@ -20,7 +20,7 @@ import numpy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
-iterations = 200
+iterations = 10
 I, J, K = 100,80,10
 
 init_UV = 'exponential'

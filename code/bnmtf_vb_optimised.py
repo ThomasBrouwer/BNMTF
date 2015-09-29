@@ -50,10 +50,10 @@ import sys
 sys.path.append("/home/tab43/Documents/Projects/libraries/")
 from kmeans_missing.code.kmeans import KMeans
 
-from distributions.gamma import Gamma
-from distributions.truncated_normal import TruncatedNormal
-from distributions.truncated_normal_vector import TruncatedNormalVector
-from distributions.exponential import Exponential
+from distributions.gamma import gamma_expectation, gamma_expectation_log
+from distributions.truncated_normal import TN_expectation, TN_variance
+from distributions.truncated_normal_vector import TN_vector_expectation, TN_vector_variance
+from distributions.exponential import exponential_draw
 
 import numpy, itertools, math, scipy, time
 from scipy.stats import norm
@@ -111,15 +111,15 @@ class bnmtf_vb_optimised:
         self.muS = 1./self.lambdaS
         if init_S == 'random':
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):  
-                self.muS[k,l] = Exponential(self.lambdaS[k,l]).draw()
+                self.muS[k,l] = exponential_draw(self.lambdaS[k,l])
         
         assert init_FG in ['exp','random','kmeans'], "Unrecognised init option for F,G: %s." % init_FG
         self.muF, self.muG = 1./self.lambdaF, 1./self.lambdaG
         if init_FG == 'random':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
-                self.muF[i,k] = Exponential(self.lambdaF[i,k]).draw()
+                self.muF[i,k] = exponential_draw(self.lambdaF[i,k])
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                self.muG[j,l] = Exponential(self.lambdaG[j,l]).draw()
+                self.muG[j,l] = exponential_draw(self.lambdaG[j,l])
         elif init_FG == 'kmeans':
             print "Initialising F using KMeans."
             kmeans_F = KMeans(self.R,self.M,self.K)
@@ -267,24 +267,20 @@ class bnmtf_vb_optimised:
 
     # Update the expectations and variances
     def update_exp_F(self,k):
-        tn = TruncatedNormalVector(self.muF[:,k],self.tauF[:,k])
-        self.expF[:,k] = tn.expectation()
-        self.varF[:,k] = tn.variance()
+        self.expF[:,k] = TN_vector_expectation(self.muF[:,k],self.tauF[:,k])
+        self.varF[:,k] = TN_vector_variance(self.muF[:,k],self.tauF[:,k])
         
     def update_exp_S(self,k,l):
-        tn = TruncatedNormal(self.muS[k,l],self.tauS[k,l])
-        self.expS[k,l] = tn.expectation()
-        self.varS[k,l] = tn.variance()
+        self.expS[k,l] = TN_expectation(self.muS[k,l],self.tauS[k,l])
+        self.varS[k,l] = TN_variance(self.muS[k,l],self.tauS[k,l])
         
     def update_exp_G(self,l):
-        tn = TruncatedNormalVector(self.muG[:,l],self.tauG[:,l])
-        self.expG[:,l] = tn.expectation()
-        self.varG[:,l] = tn.variance()
+        self.expG[:,l] = TN_vector_expectation(self.muG[:,l],self.tauG[:,l])
+        self.varG[:,l] = TN_vector_variance(self.muG[:,l],self.tauG[:,l])
         
     def update_exp_tau(self):
-        gm = Gamma(self.alpha_s,self.beta_s)
-        self.exptau = gm.expectation()
-        self.explogtau = gm.expectation_log()
+        self.exptau = gamma_expectation(self.alpha_s,self.beta_s)
+        self.explogtau = gamma_expectation_log(self.alpha_s,self.beta_s)
 
 
     # Compute the expectation of U and V, and use it to predict missing values

@@ -35,7 +35,7 @@ import sys
 sys.path.append("/home/thomas/Documenten/PhD/")#("/home/tab43/Documents/Projects/libraries/")
 from kmeans_missing.code.kmeans import KMeans
 
-from distributions.exponential import Exponential
+from distributions.exponential import exponential_draw
 
 import numpy,itertools,math,time
 
@@ -87,7 +87,7 @@ class NMTF:
         elif init_S == 'exponential':
             self.S = numpy.empty((self.K,self.L))
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):        
-                self.S[k,l] = Exponential(expo_prior).draw()
+                self.S[k,l] = exponential_draw(expo_prior)
         
         if init_FG == 'ones':
             self.F = numpy.ones((self.I,self.K))
@@ -99,9 +99,9 @@ class NMTF:
             self.F = numpy.empty((self.I,self.K))
             self.G = numpy.empty((self.J,self.L))
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
-                self.F[i,k] = Exponential(expo_prior).draw()
+                self.F[i,k] = exponential_draw(expo_prior)
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
-                self.G[j,l] = Exponential(expo_prior).draw()
+                self.G[j,l] = exponential_draw(expo_prior)
         elif init_FG == 'kmeans':
             print "Initialising F using KMeans."
             kmeans_F = KMeans(self.R,self.M,self.K)

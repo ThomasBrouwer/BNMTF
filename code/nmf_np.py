@@ -26,8 +26,8 @@ Initialisation can be done by running the initialise(init,tauUV) function. We in
   where expo_prior is an additional parameter (default 1)
 """
 
-from distributions.exponential import Exponential
-import numpy, math, itertools
+from distributions.exponential import exponential_draw
+import numpy, math, itertools, time
 
 class NMF:
     def __init__(self,R,M,K):
@@ -77,9 +77,9 @@ class NMF:
             self.U = numpy.empty((self.I,self.K))
             self.V = numpy.empty((self.J,self.K))
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
-                self.U[i,k] = Exponential(expo_prior).draw()
+                self.U[i,k] = exponential_draw(expo_prior)
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
-                self.V[j,k] = Exponential(expo_prior).draw()
+                self.V[j,k] = exponential_draw(expo_prior)
     
     
     """ Update U and V for a number of iterations, printing the MSE and divergence each iteration. """
