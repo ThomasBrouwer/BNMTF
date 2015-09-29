@@ -19,19 +19,22 @@ import scipy.interpolate
 standardised = False #standardised Sanger or unstandardised
 no_folds = 5
 
+restarts = 1
 iterations = 10
 I, J = 622,139
 values_K = range(1,2+1)
 values_L = range(1,2+1)
 
 alpha, beta = 1., 1.
-lambdaF = 1
-lambdaS = 1
-lambdaG = 1
+lambdaF = 1./10.
+lambdaS = 1./10.
+lambdaG = 1./10.
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 
 initFG = 'kmeans'
 initS = 'random'
+
+classifier = bnmtf_vb_optimised
 
 # Load in data
 (_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised)
@@ -42,10 +45,11 @@ folds_training = compute_Ms(folds_test)
 
 # Run the line search
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
-grid_search = GridSearch(values_K,values_L,X_min,M,priors,initS,initFG,iterations)
+grid_search = GridSearch(classifier,values_K,values_L,X_min,M,priors,initS,initFG,iterations,restarts=restarts)
 grid_search.search()
 
-# Plot the performances of all three metrics
+# Plot the performances of all metrics
+metrics = ['loglikelihood', 'BIC', 'AIC','MSE']
 for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     # Make three lists of indices X,Y,Z (K,L,metric)
     values = numpy.array(grid_search.all_values(metric)).flatten()
@@ -63,9 +67,10 @@ for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     
     # Plot
     plt.figure()
-    plt.imshow(values_i, vmin=min(values), vmax=max(values), origin='lower',
-           extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
-    plt.scatter(list_values_K, list_values_L, c=values)
+    plt.imshow(values_i, cmap='jet_r',
+               vmin=min(values), vmax=max(values), origin='lower',
+               extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r')
     plt.colorbar()
     plt.title("Metric: %s." % metric)   
     plt.xlabel("K")     
@@ -75,3 +80,15 @@ for metric in ['loglikelihood', 'BIC', 'AIC','MSE']:
     # Print the best value
     best_K,best_L = grid_search.best_value(metric)
     print "Best K,L for metric %s: %s,%s." % (metric,best_K,best_L)
+    
+    
+# Also print out all values in a dictionary
+all_values = {}
+for metric in metrics:
+    all_values[metric] = list(grid_search.all_values(metric).flatten())
+    
+print "all_values = %s \nvalues_K=%s \nvalues_L=%s" % (all_values,values_K,values_L)
+
+'''
+
+'''
