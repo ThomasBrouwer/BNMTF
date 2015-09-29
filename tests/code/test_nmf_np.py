@@ -1,5 +1,5 @@
 """
-Unit tests for the methods in the NMF class (/code/nmf.py).
+Unit tests for the methods in the NMF class (/code/nmf_np.py).
 """
 
 import numpy, math, pytest, itertools
@@ -50,11 +50,12 @@ def test_init():
     assert numpy.array_equal(M,nmf.M)
     assert nmf.I == I
     assert nmf.J == J
+    assert nmf.K == K
     assert numpy.array_equal(R_excl_unknown,nmf.R_excl_unknown)
     
         
     
-""" Test initialisation of W, H """   
+""" Test initialisation of U, V """   
 def test_initialisation():
     I,J = 2,3
     R = numpy.ones((I,J))

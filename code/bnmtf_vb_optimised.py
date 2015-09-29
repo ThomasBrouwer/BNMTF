@@ -230,29 +230,39 @@ class bnmtf_vb_optimised:
     
     def update_F(self,k):  
         varSkG = numpy.dot( self.varS[k]+self.expS[k]**2 , (self.varG+self.expG**2).T ) - numpy.dot( self.expS[k]**2 , (self.expG**2).T ) # Vector of size J
-        self.tauF[:,k] = self.exptau*( self.M * ( varSkG + ( numpy.dot(self.expS[k],self.expG.T) )**2 ) ).sum(axis=1)  #sum over j, so rows
+        self.tauF[:,k] = self.exptau * numpy.dot( varSkG + ( numpy.dot(self.expS[k],self.expG.T) )**2 , self.M.T ) 
+        
+        diff_term = (self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+numpy.outer(self.expF[:,k],numpy.dot(self.expS[k],self.expG.T)) ) * numpy.dot(self.expS[k],self.expG.T) )).sum(axis=1)        
+        cov_term = ( self.M * ( ( numpy.dot(self.expS[k]*numpy.dot(self.expF,self.expS), self.varG.T) - numpy.outer(self.expF[:,k], numpy.dot( self.expS[k]**2, self.varG.T )) ) ) ).sum(axis=1)
         self.muF[:,k] = 1./self.tauF[:,k] * (
             - self.lambdaF[:,k]
-            + self.exptau*( self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+numpy.outer(self.expF[:,k],numpy.dot(self.expS[k],self.expG.T)) ) * numpy.dot(self.expS[k],self.expG.T) )).sum(axis=1)
-            - self.exptau*( self.M * ( ( numpy.dot(self.expS[k]*numpy.dot(self.expF,self.expS), self.varG.T) - numpy.outer(self.expF[:,k], numpy.dot( self.expS[k]**2, self.varG.T )) ) ) ).sum(axis=1)
+            + self.exptau * diff_term
+            - self.exptau * cov_term
         ) 
         
     def update_S(self,k,l):       
         self.tauS[k,l] = self.exptau*(self.M*( numpy.outer( self.varF[:,k]+self.expF[:,k]**2 , self.varG[:,l]+self.expG[:,l]**2 ) )).sum()
+        
+        diff_term = (self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+self.expS[k,l]*numpy.outer(self.expF[:,k],self.expG[:,l]) ) * numpy.outer(self.expF[:,k],self.expG[:,l]) )).sum()
+        cov_term_G = (self.M * numpy.outer( self.expF[:,k] * ( numpy.dot(self.expF,self.expS[:,l]) - self.expF[:,k]*self.expS[k,l] ), self.varG[:,l] )).sum()
+        cov_term_F = (self.M * numpy.outer( self.varF[:,k], self.expG[:,l]*(numpy.dot(self.expS[k],self.expG.T) - self.expS[k,l]*self.expG[:,l]) )).sum()        
         self.muS[k,l] = 1./self.tauS[k,l] * (
             - self.lambdaS[k,l] 
-            + self.exptau*(self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+self.expS[k,l]*numpy.outer(self.expF[:,k],self.expG[:,l]) ) * numpy.outer(self.expF[:,k],self.expG[:,l]) )).sum()
-            - self.exptau*(self.M * numpy.outer( self.expF[:,k] * ( numpy.dot(self.expF,self.expS[:,l]) - self.expF[:,k]*self.expS[k,l] ), self.varG[:,l] )).sum()
-            - self.exptau*(self.M * numpy.outer( self.varF[:,k], self.expG[:,l]*(numpy.dot(self.expS[k],self.expG.T) - self.expS[k,l]*self.expG[:,l]) )).sum()
+            + self.exptau * diff_term
+            - self.exptau * cov_term_G
+            - self.exptau * cov_term_F
         ) 
         
     def update_G(self,l):  
         varFSl = numpy.dot( self.varF+self.expF**2 , self.varS[:,l]+self.expS[:,l]**2 ) - numpy.dot( self.expF**2 , self.expS[:,l]**2 ) # Vector of size I
-        self.tauG[:,l] = self.exptau*(self.M.T * ( varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 )).T.sum(axis=0) #sum over i, so columns        
+        self.tauG[:,l] = self.exptau * numpy.dot( ( varFSl + ( numpy.dot(self.expF,self.expS[:,l]) )**2 ).T, self.M) #sum over i, so columns        
+        
+        diff_term = (self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+numpy.outer(numpy.dot(self.expF,self.expS[:,l]), self.expG[:,l]) ).T * numpy.dot(self.expF,self.expS[:,l]) ).T ).sum(axis=0)
+        cov_term = (self.M * ( numpy.dot(self.varF, (self.expS[:,l]*numpy.dot(self.expS,self.expG.T).T).T) - numpy.outer(numpy.dot(self.varF,self.expS[:,l]**2), self.expG[:,l]) )).sum(axis=0)
         self.muG[:,l] = 1./self.tauG[:,l] * (
             - self.lambdaG[:,l] 
-            + self.exptau * (self.M * ( (self.R-self.triple_dot(self.expF,self.expS,self.expG.T)+numpy.outer(numpy.dot(self.expF,self.expS[:,l]), self.expG[:,l]) ).T * numpy.dot(self.expF,self.expS[:,l]) ).T ).sum(axis=0)
-            - self.exptau * (self.M * ( numpy.dot(self.varF, (self.expS[:,l]*numpy.dot(self.expS,self.expG.T).T).T) - numpy.outer(numpy.dot(self.varF,self.expS[:,l]**2), self.expG[:,l]) )).sum(axis=0)
+            + self.exptau * diff_term
+            - self.exptau * cov_term
         )
 
     # Update the expectations and variances

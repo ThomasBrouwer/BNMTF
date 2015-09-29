@@ -81,23 +81,23 @@ class NMTF:
         assert init_FG in ['ones','random','exponential','kmeans'], "Unrecognised init option for F,G: %s." % init_FG
         
         if init_S == 'ones':
-            self.S = numpy.ones((self.I,self.K))
+            self.S = numpy.ones((self.K,self.L))
         elif init_S == 'random':
-            self.S = numpy.random.rand(self.I,self.K)
+            self.S = numpy.random.rand(self.K,self.L)
         elif init_S == 'exponential':
-            self.S = numpy.empty((self.I,self.K))
+            self.S = numpy.empty((self.K,self.L))
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):        
                 self.S[k,l] = Exponential(expo_prior).draw()
         
         if init_FG == 'ones':
             self.F = numpy.ones((self.I,self.K))
-            self.G = numpy.ones((self.J,self.K))
+            self.G = numpy.ones((self.J,self.L))
         elif init_FG == 'random':
             self.F = numpy.random.rand(self.I,self.K)
-            self.G = numpy.random.rand(self.J,self.K)
+            self.G = numpy.random.rand(self.J,self.L)
         elif init_FG == 'exponential':
             self.F = numpy.empty((self.I,self.K))
-            self.G = numpy.empty((self.J,self.K))
+            self.G = numpy.empty((self.J,self.L))
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
                 self.F[i,k] = Exponential(expo_prior).draw()
             for j,l in itertools.product(xrange(0,self.J),xrange(0,self.L)):
@@ -107,13 +107,13 @@ class NMTF:
             kmeans_F = KMeans(self.R,self.M,self.K)
             kmeans_F.initialise()
             kmeans_F.cluster()
-            self.muF = kmeans_F.clustering_results #+ 0.2            
+            self.F = kmeans_F.clustering_results + 0.2            
             
             print "Initialising G using KMeans."
             kmeans_G = KMeans(self.R.T,self.M.T,self.L)   
             kmeans_G.initialise()
             kmeans_G.cluster()
-            self.muG = kmeans_G.clustering_results #+ 0.2
+            self.G = kmeans_G.clustering_results + 0.2
         
         
     """ Update F, S, G for a number of iterations, printing the performances each iteration. """
@@ -121,10 +121,10 @@ class NMTF:
         assert hasattr(self,'F') and hasattr(self,'S') and hasattr(self,'G'), \
             "F, S and G have not been initialised - please run NMTF.initialise() first."        
         
-        self.F = numpy.array(self.F,dtype=float)
-        self.S = numpy.array(self.S,dtype=float)
-        self.G = numpy.array(self.G,dtype=float)
-        
+        self.all_performances = {} # for plotting convergence of metrics
+        for metric in self.metrics:
+            self.all_performances[metric] = []
+            
         for it in range(1,iterations+1):
             # Doing S first gives more interpretable results (F,G ~= [0,1] rather than [0,20])
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
@@ -145,25 +145,25 @@ class NMTF:
         return numpy.dot(M1,numpy.dot(M2,M3))
         
     def update_F(self,k):
-        R_pred_i = numpy.dot(self.F[i],self.SG)
-        SG_row = self.M[i,:] * self.SG[k,:]   
-        numerator = (self.R[i,:] * SG_row / R_pred_i).sum()
-        denominator = SG_row.sum()
-        self.F[i][k] = self.F[i][k] * numerator / denominator
+        R_pred = self.triple_dot(self.F,self.S,self.G.T)
+        SG = numpy.dot(self.S[k],self.G.T)
+        numerator = (self.M * self.R / R_pred * SG).sum(axis=1)
+        denominator = (self.M * SG).sum(axis=1)
+        self.F[:,k] = self.F[:,k] * numerator / denominator
         
     def update_G(self,l):
-        R_pred_j = numpy.dot(self.FS,self.G[j])
-        FS_row = self.M[:,j] * self.FS[:,l]
-        numerator = (self.R[:,j] * FS_row / R_pred_j).sum()
-        denominator = FS_row.sum()
-        self.G[j][l] = self.G[j][l] * numerator / denominator
+        R_pred = self.triple_dot(self.F,self.S,self.G.T)
+        FS = numpy.dot(self.F,self.S[:,l])
+        numerator = ((self.M * self.R / R_pred).T * FS).T.sum(axis=0)
+        denominator = (self.M.T * FS).T.sum(axis=0)
+        self.G[:,l] = self.G[:,l] * numerator / denominator
         
     def update_S(self,k,l):
         R_pred = self.triple_dot(self.F,self.S,self.G.T)
         F_times_G = self.M * numpy.outer(self.F[:,k], self.G[:,l])   
         numerator = (self.R * F_times_G / R_pred).sum()
         denominator = F_times_G.sum()
-        self.S[k][l] = self.S[k][l] * numerator / denominator
+        self.S[k,l] = self.S[k,l] * numerator / denominator
            
            
     ''' Functions for computing MSE, R^2 (coefficient of determination), Rp (Pearson correlation) '''
