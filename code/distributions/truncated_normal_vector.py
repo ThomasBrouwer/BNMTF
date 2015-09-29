@@ -70,8 +70,12 @@ def TN_vector_variance(mus,taus):
     
     # Exp variance - overwrite value if mu < -30*sigma
     var = [(1./(numpy.abs(mu)*tau))**2 if mu < -30 * sigma else v for v,mu,tau,sigma in zip(var,mus,taus,sigmas)]
-    return [v if (v >= 0.0 and v != numpy.inf and v != -numpy.inf and not numpy.isnan(v)) else 0. for v in var]
-        
+    return [v if (v >= 0.0 and v != numpy.inf and v != -numpy.inf and not numpy.isnan(v)) else 0. for v in var]      
+       
+# TN mode
+def TN_vector_mode(mus):
+    zeros = numpy.zeros(len(mus))
+    return numpy.maximum(zeros,mus)   
        
 
 """ Methods for parallel draws """

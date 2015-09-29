@@ -54,6 +54,7 @@ def TN_expectation(mu,tau):
         exp = mu + sigma * lambdax
     return exp if (exp >= 0.0 and exp != numpy.inf and exp != -numpy.inf and not numpy.isnan(exp)) else 0.
        
+# TN variance
 def TN_variance(mu,tau):
     sigma = numpy.float64(1.0) / math.sqrt(tau)
     if mu < -30 * sigma:
@@ -65,6 +66,11 @@ def TN_variance(mu,tau):
         var = sigma**2 * ( 1 - deltax )
     return var if (var >= 0.0 and var != numpy.inf and var != -numpy.inf and not numpy.isnan(var)) else 0.       
        
+# TN mode
+def TN_mode(mu):
+    return max(0.0,mu)     
+       
+
 
 '''
 # Draw 10000 values and plot. Also plot pdf of Truncated Normal, and regular Normal.

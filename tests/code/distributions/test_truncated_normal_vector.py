@@ -1,7 +1,7 @@
 """
 Test the class for Truncated Normal draws and expectations in truncated_normal_vector.py.
 """
-from BNMTF.code.distributions.truncated_normal_vector import TN_vector_draw, TN_vector_expectation, TN_vector_variance
+from BNMTF.code.distributions.truncated_normal_vector import TN_vector_draw, TN_vector_expectation, TN_vector_variance, TN_vector_mode
 from scipy.stats import norm
 import numpy
 
@@ -34,3 +34,9 @@ def test_draw():
     for i in range(0,100):
         v1,v2 = TN_vector_draw(mu,tau)
         assert v1 >= 0.0 and v2 == 0.0
+        
+# Test the mode
+def test_mode():
+    # Positive mean
+    mus = [1.0, -2.0]
+    assert numpy.array_equal(TN_vector_mode(mus), [1.0, 0.0])

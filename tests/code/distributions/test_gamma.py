@@ -1,7 +1,7 @@
 """
 Test the class for Gamma draws and expectations in gamma.py.
 """
-from BNMTF.code.distributions.gamma import gamma_draw, gamma_expectation, gamma_expectation_log
+from BNMTF.code.distributions.gamma import gamma_draw, gamma_expectation, gamma_expectation_log, gamma_mode
 
 def test_expectation():
     alpha = 2.0
@@ -23,3 +23,10 @@ def test_draw():
     beta = 3.0
     for i in range(0,100):
         assert gamma_draw(alpha,beta) >= 0.0
+        
+# Test median
+def test_median():
+    alpha = 2.0
+    beta = 3.0
+    median = 1./3.
+    assert gamma_mode(alpha,beta) == median

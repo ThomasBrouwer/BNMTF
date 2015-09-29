@@ -22,8 +22,13 @@ def gamma_expectation(alpha,beta):
 def gamma_expectation_log(alpha,beta):   
     alpha, beta = float(alpha), float(beta)      
     return digamma(alpha) - math.log(beta)
-        
-        
+   
+# Gamma mode
+def gamma_mode(alpha,beta):
+    alpha, beta = float(alpha), float(beta)
+    return (alpha-1) / beta
+
+
 '''
 # Do 1000 draws and plot them
 import matplotlib.pyplot as plt
