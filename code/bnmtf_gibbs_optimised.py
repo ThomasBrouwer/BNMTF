@@ -126,7 +126,7 @@ class bnmtf_gibbs_optimised:
             kmeans_G.cluster()
             self.G = kmeans_G.clustering_results + 0.2
 
-        self.tau = self.alpha/self.beta
+        self.tau = self.alpha_s() / self.beta_s()
 
 
     # Run the Gibbs sampler
@@ -135,12 +135,14 @@ class bnmtf_gibbs_optimised:
         self.all_S = numpy.zeros((iterations,self.K,self.L))   
         self.all_G = numpy.zeros((iterations,self.J,self.L))  
         self.all_tau = numpy.zeros(iterations)
+        self.all_times = [] # to plot performance against time
         
         metrics = ['MSE','R^2','Rp']
         self.all_performances = {} # for plotting convergence of metrics
         for metric in metrics:
             self.all_performances[metric] = []
         
+        time_start = time.time()
         for it in range(0,iterations):            
             for k in range(0,self.K):
                 tauFk = self.tauF(k)
@@ -167,6 +169,9 @@ class bnmtf_gibbs_optimised:
                 
             print "Iteration %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,perf['MSE'],perf['R^2'],perf['Rp'])
         
+            time_iteration = time.time()
+            self.all_times.append(time_iteration-time_start)            
+            
         return (self.all_F, self.all_S, self.all_G, self.all_tau)
         
 

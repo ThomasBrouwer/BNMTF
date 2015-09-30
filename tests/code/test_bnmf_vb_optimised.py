@@ -97,10 +97,10 @@ def test_initialise():
     BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.initialise(init)
     
-    #assert BNMF.alpha_s == alpha + 15./2.
-    assert BNMF.alpha_s == alpha 
-    #assert BNMF.beta_s == beta + BNMF.exp_square_diff()/2.
-    assert BNMF.beta_s == beta 
+    assert BNMF.alpha_s == alpha + 15./2.
+    #assert BNMF.alpha_s == alpha 
+    assert BNMF.beta_s == beta + BNMF.exp_square_diff()/2.
+    #assert BNMF.beta_s == beta 
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert BNMF.tauU[i,k] == 1.
@@ -109,8 +109,8 @@ def test_initialise():
         assert BNMF.tauV[j,k] == 1.
         assert BNMF.muV[j,k] == 1./lambdaV[j,k]
         
-    #assert BNMF.exptau == (alpha + 15./2.) / (beta + BNMF.exp_square_diff()/2.)
-    assert BNMF.exptau == alpha / beta
+    assert BNMF.exptau == (alpha + 15./2.) / (beta + BNMF.exp_square_diff()/2.)
+    #assert BNMF.exptau == alpha / beta
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert abs(BNMF.expU[i,k] - (0.5 + 0.352065 / (1-0.3085))) < 0.0001
@@ -280,10 +280,10 @@ def test_update_exp_V():
 def test_update_exp_tau():
     BNMF = bnmf_vb_optimised(R,M,K,priors)
     BNMF.initialise()  
-    #assert abs(BNMF.exptau - (3+12./2.)/(1+35.4113198623/2.)) < 0.000000000001
-    assert abs(BNMF.exptau - 3./1.) < 0.000000000001
-    #assert abs(BNMF.explogtau - (2.1406414779556 - math.log(1+35.4113198623/2.))) < 0.000000000001
-    assert abs(BNMF.explogtau - (0.922784335098467 - math.log(1))) < 0.000000000001
+    assert abs(BNMF.exptau - (3+12./2.)/(1+35.4113198623/2.)) < 0.000000000001
+    #assert abs(BNMF.exptau - 3./1.) < 0.000000000001
+    assert abs(BNMF.explogtau - (2.1406414779556 - math.log(1+35.4113198623/2.))) < 0.000000000001
+    #assert abs(BNMF.explogtau - (0.922784335098467 - math.log(1))) < 0.000000000001
     
 
 """ Test two iterations of run(), and that all values have changed. """

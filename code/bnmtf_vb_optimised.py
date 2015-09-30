@@ -146,34 +146,30 @@ class bnmtf_vb_optimised:
             self.update_exp_G(l)
             
         # Initialise tau using the updates
-        #self.update_tau()
-        self.alpha_s, self.beta_s = self.alpha, self.beta
+        self.update_tau()
+        #self.alpha_s, self.beta_s = self.alpha, self.beta
         self.update_exp_tau()
 
 
     # Run the Gibbs sampler
     def run(self,iterations):
-        self.all_exp_tau = []  # to check for convergence     
+        self.all_exp_tau = []  # to check for convergence 
+        self.all_times = [] # to plot performance against time    
         
         metrics = ['MSE','R^2','Rp']
         self.all_performances = {} # for plotting convergence of metrics
         for metric in metrics:
             self.all_performances[metric] = []
         
+        time_start = time.time()
         for it in range(0,iterations):         
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
                 self.update_exp_S(k,l)
                 
-            self.update_tau()
-            self.update_exp_tau()
-            
             for k in range(0,self.K):
                 self.update_F(k)
                 self.update_exp_F(k)
-                
-            self.update_tau()
-            self.update_exp_tau()
                 
             for l in range(0,self.L):
                 self.update_G(l)
@@ -190,6 +186,9 @@ class bnmtf_vb_optimised:
                 
             print "Iteration %s. ELBO: %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,elbo,perf['MSE'],perf['R^2'],perf['Rp'])
                         
+            time_iteration = time.time()
+            self.all_times.append(time_iteration-time_start)            
+            
         
     # Compute the ELBO
     def elbo(self):

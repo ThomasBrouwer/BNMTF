@@ -121,10 +121,12 @@ class NMTF:
         assert hasattr(self,'F') and hasattr(self,'S') and hasattr(self,'G'), \
             "F, S and G have not been initialised - please run NMTF.initialise() first."        
         
+        self.all_times = [] # to plot performance against time
         self.all_performances = {} # for plotting convergence of metrics
         for metric in self.metrics:
             self.all_performances[metric] = []
             
+        time_start = time.time()
         for it in range(1,iterations+1):
             # Doing S first gives more interpretable results (F,G ~= [0,1] rather than [0,20])
             for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
@@ -137,6 +139,9 @@ class NMTF:
                 self.update_G(l)
                
             self.give_update(it)
+            
+            time_iteration = time.time()
+            self.all_times.append(time_iteration-time_start)  
         
                 
     """ Updates for F, G, S. """                

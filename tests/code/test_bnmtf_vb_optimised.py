@@ -119,13 +119,13 @@ def test_initialise():
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
         assert BNMTF.tauG[j,l] == 1.
         assert BNMTF.muG[j,l] == 1./lambdaG[j,l]
-    #assert BNMTF.alpha_s == alpha + I*J/2.
-    assert BNMTF.alpha_s == alpha
-    #assert BNMTF.beta_s == beta + BNMTF.exp_square_diff()/2.
-    assert BNMTF.beta_s == beta
+    assert BNMTF.alpha_s == alpha + I*J/2.
+    #assert BNMTF.alpha_s == alpha
+    assert BNMTF.beta_s == beta + BNMTF.exp_square_diff()/2.
+    #assert BNMTF.beta_s == beta
         
-    #assert BNMTF.exptau == (alpha + I*J/2.)/(beta + BNMTF.exp_square_diff()/2.)
-    assert BNMTF.exptau == alpha / beta
+    assert BNMTF.exptau == (alpha + I*J/2.)/(beta + BNMTF.exp_square_diff()/2.)
+    #assert BNMTF.exptau == alpha / beta
     
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
         assert abs(BNMTF.expF[i,k] - (0.5 + 0.352065 / (1-0.3085))) < 0.0001

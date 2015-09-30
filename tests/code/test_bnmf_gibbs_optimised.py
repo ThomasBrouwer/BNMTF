@@ -113,7 +113,7 @@ def test_initialise():
         assert BNMF.U[i,k] == 1./2.
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
         assert BNMF.V[j,k] == 1./3.
-    assert BNMF.tau == 3./1.
+    #assert BNMF.tau == 3./1.
     
     
 """ Test computing values for alpha, beta, mu, tau. """
@@ -143,6 +143,7 @@ def test_beta_s():
 def test_tauU():
     BNMF = bnmf_gibbs_optimised(R,M,K,priors)
     BNMF.initialise(init)
+    BNMF.tau = 3.
     #V^2 = [[1/9,1/9],[1/9,1/9],[1/9,1/9]], sum_j V^2 = [2/9,1/3,2/9,2/9,1/3] (index=i)
     tauU = 3.*numpy.array([[2./9.,2./9.],[1./3.,1./3.],[2./9.,2./9.],[2./9.,2./9.],[1./3.,1./3.]])
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
@@ -151,6 +152,7 @@ def test_tauU():
 def test_muU():
     BNMF = bnmf_gibbs_optimised(R,M,K,priors)
     BNMF.initialise(init)
+    BNMF.tau = 3.
     #U*V^T - Uik*Vjk = [[1/6,..]], so Rij - Ui * Vj + Uik * Vjk = 5/6
     tauU = 3.*numpy.array([[2./9.,2./9.],[1./3.,1./3.],[2./9.,2./9.],[2./9.,2./9.],[1./3.,1./3.]])
     muU = 1./tauU * ( 3. * numpy.array([[2.*(5./6.)*(1./3.),10./18.],[15./18.,15./18.],[10./18.,10./18.],[10./18.,10./18.],[15./18.,15./18.]]) - lambdaU )
@@ -160,6 +162,7 @@ def test_muU():
 def test_tauV():
     BNMF = bnmf_gibbs_optimised(R,M,K,priors)
     BNMF.initialise(init)
+    BNMF.tau = 3.
     #U^2 = [[1/4,1/4],[1/4,1/4],[1/4,1/4],[1/4,1/4],[1/4,1/4]], sum_i U^2 = [1,1,1] (index=j)
     tauV = 3.*numpy.array([[1.,1.],[1.,1.],[1.,1.]])
     for j,k in itertools.product(xrange(0,J),xrange(0,K)):
@@ -168,6 +171,7 @@ def test_tauV():
 def test_muV():
     BNMF = bnmf_gibbs_optimised(R,M,K,priors)
     BNMF.initialise(init)
+    BNMF.tau = 3.
     #U*V^T - Uik*Vjk = [[1/6,..]], so Rij - Ui * Vj + Uik * Vjk = 5/6
     tauV = 3.*numpy.array([[1.,1.],[1.,1.],[1.,1.]])
     muV = 1./tauV * ( 3. * numpy.array([[4.*(5./6.)*(1./2.),4.*(5./6.)*(1./2.)],[4.*(5./6.)*(1./2.),4.*(5./6.)*(1./2.)],[4.*(5./6.)*(1./2.),4.*(5./6.)*(1./2.)]]) - lambdaV )

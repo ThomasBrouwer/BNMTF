@@ -86,10 +86,12 @@ class NMF:
     def run(self,iterations):
         assert hasattr(self,'U') and hasattr(self,'V'), "U and V have not been initialised - please run NMF.initialise() first."        
         
+        self.all_times = [] # to plot performance against time
         self.all_performances = {} # for plotting convergence of metrics
         for metric in self.metrics:
             self.all_performances[metric] = []
             
+        time_start = time.time()
         for it in range(1,iterations+1):
             for k in range(0,self.K):
                 self.update_U(k)
@@ -97,6 +99,9 @@ class NMF:
                 self.update_V(k)
             
             self.give_update(it)
+            
+            time_iteration = time.time()
+            self.all_times.append(time_iteration-time_start)            
             
 
     """ Updates for U and V """    

@@ -49,8 +49,6 @@ from distributions.truncated_normal_vector import TN_vector_mode
 
 import numpy, itertools, math, time
 
-minimum_TN = 0
-
 class nmtf_icm:
     def __init__(self,R,M,K,L,priors):
         self.R = numpy.array(R,dtype=float)
@@ -122,18 +120,20 @@ class nmtf_icm:
             kmeans_G.cluster()
             self.G = kmeans_G.clustering_results + 0.2
 
-        self.tau = self.alpha/self.beta
+        self.tau = gamma_mode(self.alpha_s(), self.beta_s())
 
 
     # Run the Gibbs sampler
-    def run(self,iterations):  
+    def run(self,iterations,minimum_TN=0.):  
         self.all_tau = numpy.zeros(iterations)
+        self.all_times = [] # to plot performance against time
         
         metrics = ['MSE','R^2','Rp']
         self.all_performances = {} # for plotting convergence of metrics
         for metric in metrics:
             self.all_performances[metric] = []
         
+        time_start = time.time()
         for it in range(0,iterations):            
             for k in range(0,self.K):
                 tauFk = self.tauF(k)
@@ -162,6 +162,9 @@ class nmtf_icm:
                 
             print "Iteration %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,perf['MSE'],perf['R^2'],perf['Rp'])
         
+            time_iteration = time.time()
+            self.all_times.append(time_iteration-time_start)            
+            
         return 
         
 

@@ -108,7 +108,7 @@ class bnmf_gibbs_optimised:
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 self.V[j,k] = 1.0/self.lambdaV[j][k]
         
-        self.tau = self.alpha/self.beta
+        self.tau = self.alpha_s() / self.beta_s()
         
 
     # Run the Gibbs sampler
@@ -116,12 +116,14 @@ class bnmf_gibbs_optimised:
         self.all_U = numpy.zeros((iterations,self.I,self.K))  
         self.all_V = numpy.zeros((iterations,self.J,self.K))   
         self.all_tau = numpy.zeros(iterations) 
+        self.all_times = [] # to plot performance against time
         
         metrics = ['MSE','R^2','Rp']
         self.all_performances = {} # for plotting convergence of metrics
         for metric in metrics:
             self.all_performances[metric] = []
         
+        time_start = time.time()
         for it in range(0,iterations):      
             for k in range(0,self.K):   
                 tauUk = self.tauU(k)
@@ -142,6 +144,9 @@ class bnmf_gibbs_optimised:
                 self.all_performances[metric].append(perf[metric])
                 
             print "Iteration %s. MSE: %s. R^2: %s. Rp: %s." % (it+1,perf['MSE'],perf['R^2'],perf['Rp'])
+            
+            time_iteration = time.time()
+            self.all_times.append(time_iteration-time_start)            
             
         return (self.all_U, self.all_V, self.all_tau)
         
