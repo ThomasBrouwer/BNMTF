@@ -40,7 +40,7 @@ Finally, we can return the goodness of fit of the data using the quality(metric)
 (we want to maximise these values)
 """
 
-from distributions.gamma import gamma_expectation, gamma_expectation_log
+from distributions.gamma import gamma_expectation, gamma_expectation_log, gamma_draw
 from distributions.truncated_normal_vector import TN_vector_expectation, TN_vector_variance
 from distributions.exponential import exponential_draw
 
@@ -99,7 +99,7 @@ class bnmf_vb_optimised:
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):        
                 self.muU[i,k] = exponential_draw(self.lambdaU[i,k])
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
-                self.muV[j,k] = exponential_draw(self.lambdaV[j,k])    
+                self.muV[j,k] = exponential_draw(self.lambdaV[j,k])  
         
         # Initialise the expectations and variances
         self.expU, self.varU = numpy.zeros((self.I,self.K)), numpy.zeros((self.I,self.K))
@@ -109,11 +109,12 @@ class bnmf_vb_optimised:
             self.update_exp_U(k)
         for k in xrange(0,self.K):
             self.update_exp_V(k)
-            
-        # Initialise tau using the updates
-        self.update_tau()
+        
+        # Update tau using the updates
+        #self.update_tau()
+        self.alpha_s, self.beta_s = self.alpha, self.beta
         self.update_exp_tau()
-
+        
 
     # Run the Gibbs sampler
     def run(self,iterations):

@@ -101,15 +101,15 @@ class bnmf_gibbs_optimised:
                 self.U[i,k] = exponential_draw(self.lambdaU[i][k])
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 self.V[j,k] = exponential_draw(self.lambdaV[j][k])
-            self.tau = gamma_draw(self.alpha,self.beta)
             
         elif init == 'exp':
             for i,k in itertools.product(xrange(0,self.I),xrange(0,self.K)):
                 self.U[i,k] = 1.0/self.lambdaU[i][k]
             for j,k in itertools.product(xrange(0,self.J),xrange(0,self.K)):
                 self.V[j,k] = 1.0/self.lambdaV[j][k]
-            self.tau = self.alpha/self.beta
-
+        
+        self.tau = self.alpha/self.beta
+        
 
     # Run the Gibbs sampler
     def run(self,iterations):

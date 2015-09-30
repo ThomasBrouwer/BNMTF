@@ -126,8 +126,7 @@ class bnmtf_gibbs_optimised:
             kmeans_G.cluster()
             self.G = kmeans_G.clustering_results + 0.2
 
-        # Initialise tau using the updates
-        self.tau = gamma_draw(self.alpha_s(),self.beta_s())
+        self.tau = self.alpha/self.beta
 
 
     # Run the Gibbs sampler

@@ -146,7 +146,8 @@ class bnmtf_vb_optimised:
             self.update_exp_G(l)
             
         # Initialise tau using the updates
-        self.update_tau()
+        #self.update_tau()
+        self.alpha_s, self.beta_s = self.alpha, self.beta
         self.update_exp_tau()
 
 
