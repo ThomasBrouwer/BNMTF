@@ -16,7 +16,7 @@ import numpy, matplotlib.pyplot as plt, random
 standardised = False #standardised Sanger or unstandardised
 
 iterations = 1000
-I, J, K, L = 622,139,10,5
+I, J, K, L = 622,139,30,20
 
 init_S = 'random' #'exp' #
 init_FG = 'kmeans' #'exp' #

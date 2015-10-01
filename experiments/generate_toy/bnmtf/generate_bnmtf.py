@@ -19,8 +19,8 @@ project_location = "/home/tab43/Documents/Projects/libraries/"
 import sys
 sys.path.append(project_location)
 
-from BNMTF.code.distributions.exponential import Exponential
-from BNMTF.code.distributions.normal import Normal
+from BNMTF.code.distributions.exponential import exponential_draw
+from BNMTF.code.distributions.normal import normal_draw
 from ml_helpers.code.mask import generate_M
 
 import numpy, itertools, matplotlib.pyplot as plt
@@ -29,13 +29,13 @@ def generate_dataset(I,J,K,L,lambdaF,lambdaS,lambdaG,tau):
     # Generate U, V
     F = numpy.zeros((I,K))
     for i,k in itertools.product(xrange(0,I),xrange(0,K)):
-        F[i,k] = Exponential(lambdaF[i,k]).draw()
+        F[i,k] = exponential_draw(lambdaF[i,k])
     S = numpy.zeros((K,L))
     for k,l in itertools.product(xrange(0,K),xrange(0,L)):
-        S[k,l] = Exponential(lambdaS[k,l]).draw()
+        S[k,l] = exponential_draw(lambdaS[k,l])
     G = numpy.zeros((J,L))
     for j,l in itertools.product(xrange(0,J),xrange(0,L)):
-        G[j,l] = Exponential(lambdaG[j,l]).draw()
+        G[j,l] = exponential_draw(lambdaG[j,l])
     
     # Generate R
     true_R = numpy.dot(F,numpy.dot(S,G.T))
@@ -50,7 +50,7 @@ def add_noise(true_R,tau):
     (I,J) = true_R.shape
     R = numpy.zeros((I,J))
     for i,j in itertools.product(xrange(0,I),xrange(0,J)):
-        R[i,j] = Normal(true_R[i,j],tau).draw()
+        R[i,j] = normal_draw(true_R[i,j],tau)
     return R
     
 def try_generate_M(I,J,fraction_unknown,attempts):
