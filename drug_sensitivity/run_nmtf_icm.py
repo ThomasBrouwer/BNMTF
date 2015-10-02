@@ -7,7 +7,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.nmtf_icm import nmtf_icm
-from load_data import load_Sanger
+from BNMTF.drug_sensitivity.load_data import load_Sanger
 
 import numpy, matplotlib.pyplot as plt, random
 
