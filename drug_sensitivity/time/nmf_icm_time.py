@@ -42,8 +42,6 @@ performances_repeats = []
 for i in range(0,repeats):
     # Set all the seeds
     numpy.random.seed(0)
-    random.seed(0)
-    scipy.random.seed(0)
     
     # Run the classifier
     nmf = nmf_icm(R,M,K,priors) 

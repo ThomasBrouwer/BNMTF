@@ -13,7 +13,6 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
-from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
 
@@ -35,10 +34,11 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'la
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.ones((I,J))
-M_test = calc_inverse_M(numpy.loadtxt(input_folder+"M.txt"))
+
+# Give the same random initialisation
+numpy.random.seed(3)
 
 # Run the Gibbs sampler
-#BNMTF = bnmtf_vb(R,M,K,L,priors)
 BNMTF = bnmtf_vb_optimised(R,M,K,L,priors)
 BNMTF.initialise(init_S=init_S,init_FG=init_FG)
 
@@ -47,10 +47,6 @@ expS = BNMTF.expS
 expG = BNMTF.expG
 
 BNMTF.run(iterations)
-
-# Also measure the performances
-performances = BNMTF.predict(M_test)
-print performances
 
 # Plot the tau expectation values to check convergence
 plt.plot(BNMTF.all_exp_tau)

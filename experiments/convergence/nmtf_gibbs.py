@@ -13,7 +13,6 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.bnmtf_gibbs_optimised import bnmtf_gibbs_optimised
-from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
 
@@ -37,7 +36,9 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'la
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.ones((I,J))
-M_test = calc_inverse_M(numpy.loadtxt(input_folder+"M.txt"))
+
+# Give the same random initialisation
+numpy.random.seed(3)
 
 # Run the Gibbs sampler
 BNMTF = bnmtf_gibbs_optimised(R,M,K,L,priors)
@@ -62,13 +63,6 @@ axarr[2].set_ylabel("S[0,0]")
 axarr[3].plot(x, Gs[:,0,0]) 
 axarr[3].set_ylabel("G[0,0]")
 axarr[3].set_xlabel("Iterations")
-
-# Approximate the expectations
-(exp_F, exp_S, exp_G, exp_tau) = BNMTF.approx_expectation(burn_in,thinning)
-
-# Also measure the performances
-performances = BNMTF.predict(M_test,burn_in,thinning)
-print performances
 
 # Extract the performances across all iterations
 print "gibbs_all_performances = %s" % BNMTF.all_performances

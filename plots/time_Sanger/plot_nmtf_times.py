@@ -15,7 +15,7 @@ We have the following methods:
 import matplotlib.pyplot as plt, ast
 
 metrics = ['MSE']#,'R^2','Rp']
-MSE_max = 5
+MSE_range = (2,4)
 time_max = 20
 
 folder = "./"
@@ -69,6 +69,6 @@ for metric in metrics:
     
     plt.xlim(0,time_max)
     if metric == 'MSE':
-        plt.ylim(0,MSE_max)
+        plt.ylim(MSE_range)
     elif metric == 'R^2' or metric == 'Rp':
         plt.ylim(0,1)

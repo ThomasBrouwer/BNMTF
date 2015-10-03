@@ -25,8 +25,8 @@ fractions_unknown = [ 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ]
 input_folder = project_location+"BNMTF/experiments/generate_toy/bnmtf/"
 
 repeats = 10 # number of times we try each fraction
-iterations = 2000
-burn_in = 1800
+iterations = 3000
+burn_in = 2800
 thinning = 5
 
 init_S = 'random'
@@ -41,10 +41,11 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'la
 
 metrics = ['MSE', 'R^2', 'Rp']
 
-
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 
+# Seed all of the methods the same
+numpy.random.seed(3)
 
 # Generate matrices M - one list of M's for each fraction
 M_attempts = 100

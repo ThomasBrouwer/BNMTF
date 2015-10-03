@@ -56,7 +56,7 @@ for i in range(0,repeats):
     performances_repeats.append(BNMTF.all_performances)
 
 # Check whether seed worked: all performances should be the same
-assert all(numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats), \
+assert all([numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats]), \
     "Seed went wrong - performances not the same across repeats!"
 
 # Print out the performances, and the average times

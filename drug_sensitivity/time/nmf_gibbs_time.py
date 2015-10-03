@@ -40,8 +40,6 @@ performances_repeats = []
 for i in range(0,repeats):
     # Set all the seeds
     numpy.random.seed(0)
-    random.seed(0)
-    scipy.random.seed(0)
     
     # Run the classifier
     BNMF = bnmf_gibbs_optimised(R,M,K,priors) 

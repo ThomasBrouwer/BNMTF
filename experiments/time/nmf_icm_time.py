@@ -13,7 +13,6 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.nmf_icm import nmf_icm
-from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, random, scipy, matplotlib.pyplot as plt
 
@@ -37,9 +36,6 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.ones((I,J))
-#M = numpy.loadtxt(input_folder+"M.txt")
-M_test = calc_inverse_M(numpy.loadtxt(input_folder+"M.txt"))
-
 
 # Run the VB algorithm, <repeats> times
 times_repeats = []
@@ -55,16 +51,12 @@ for i in range(0,repeats):
     nmf.initialise(init_UV)
     nmf.run(iterations,minimum_TN=minimum_TN)
 
-    # Also measure the performances
-    performances = nmf.predict(M_test)
-    print "Performance on test set: %s." % performances
-
     # Extract the performances and timestamps across all iterations
     times_repeats.append(nmf.all_times)
     performances_repeats.append(nmf.all_performances)
 
 # Check whether seed worked: all performances should be the same
-assert all(numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats), \
+assert all([numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats]), \
     "Seed went wrong - performances not the same across repeats!"
 
 # Print out the performances, and the average times

@@ -12,7 +12,6 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.nmtf_np import NMTF
-from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
 
@@ -30,17 +29,14 @@ expo_prior = 1/10.
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.ones((I,J))
-#M = numpy.loadtxt(input_folder+"M.txt")
-M_test = calc_inverse_M(numpy.loadtxt(input_folder+"M.txt"))
+
+# Give the same random initialisation
+numpy.random.seed(3)
 
 # Run the algorithm
 nmtf = NMTF(R,M,K,L) 
 nmtf.initialise(init_S,init_FG,expo_prior)
 nmtf.run(iterations)
-
-# Also measure the performances
-performances = nmtf.predict(M_test)
-print "Performance on test set: %s." % performances
 
 # Extract the performances across all iterations
 print "np_all_performances = %s" % nmtf.all_performances

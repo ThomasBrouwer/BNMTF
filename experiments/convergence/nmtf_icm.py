@@ -13,7 +13,6 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.nmtf_icm import nmtf_icm
-from ml_helpers.code.mask import calc_inverse_M
 
 import numpy, matplotlib.pyplot as plt
 
@@ -37,16 +36,14 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'la
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.ones((I,J))
-M_test = calc_inverse_M(numpy.loadtxt(input_folder+"M.txt"))
+
+# Give the same random initialisation
+numpy.random.seed(3)
 
 # Run the Gibbs sampler
 NMTF = nmtf_icm(R,M,K,L,priors)
 NMTF.initialise(init_S=init_S,init_FG=init_FG)
 NMTF.run(iterations,minimum_TN=minimum_TN)
-
-# Also measure the performances
-performances = NMTF.predict(M_test)
-print performances
 
 # Plot the tau expectation values to check convergence
 plt.plot(NMTF.all_tau)

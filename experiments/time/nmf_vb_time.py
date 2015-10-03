@@ -23,7 +23,7 @@ input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
 repeats = 10
 
-iterations = 1000
+iterations = 10
 init_UV = 'random'
 I, J, K = 100,80,10
 
@@ -35,8 +35,6 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 # Load in data
 R = numpy.loadtxt(input_folder+"R.txt")
 M = numpy.ones((I,J))
-#M = numpy.loadtxt(input_folder+"M.txt")
-M_test = calc_inverse_M(numpy.loadtxt(input_folder+"M.txt"))
 
 
 # Run the VB algorithm, <repeats> times
@@ -53,16 +51,12 @@ for i in range(0,repeats):
     BNMF.initialise(init_UV)
     BNMF.run(iterations)
 
-    # Also measure the performances
-    performances = BNMF.predict(M_test)
-    print "Performance on test set: %s." % performances
-
     # Extract the performances and timestamps across all iterations
     times_repeats.append(BNMF.all_times)
     performances_repeats.append(BNMF.all_performances)
 
 # Check whether seed worked: all performances should be the same
-assert all(numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats), \
+assert all([numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats]), \
     "Seed went wrong - performances not the same across repeats!"
 
 # Print out the performances, and the average times

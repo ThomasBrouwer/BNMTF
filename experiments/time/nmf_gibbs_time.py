@@ -21,9 +21,9 @@ import numpy, random, scipy, matplotlib.pyplot as plt
 
 input_folder = project_location+"BNMTF/experiments/generate_toy/bnmf/"
 
-repeats = 10
+repeats = 2
 
-iterations = 1000
+iterations = 10
 init_UV = 'random'
 I, J, K = 100,80,10
 
@@ -45,8 +45,6 @@ performances_repeats = []
 for i in range(0,repeats):
     # Set all the seeds
     numpy.random.seed(0)
-    random.seed(0)
-    scipy.random.seed(0)
     
     # Run the classifier
     BNMF = bnmf_gibbs_optimised(R,M,K,priors) 
@@ -58,7 +56,7 @@ for i in range(0,repeats):
     performances_repeats.append(BNMF.all_performances)
 
 # Check whether seed worked: all performances should be the same
-assert all(numpy.array_equal(performances, performances_repeats[0]) for performances in performances_repeats), \
+assert all([numpy.array_equal(p, performances_repeats[0]) for p in performances_repeats]), \
     "Seed went wrong - performances not the same across repeats!"
 
 # Print out the performances, and the average times
