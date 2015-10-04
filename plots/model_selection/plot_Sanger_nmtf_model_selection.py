@@ -19,9 +19,9 @@ vb_greedy_all_values = {'MSE': [3.0272042551947203, 3.027204256305112, 3.0272042
 list_values_K=[1.0, 2.0, 1.0, 2.0, 3.0, 2.0, 3.0, 4.0, 3.0, 4.0, 5.0, 4.0, 5.0, 6.0, 5.0, 6.0] 
 list_values_L=[1.0, 1.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0, 5.0, 5.0, 5.0, 6.0, 6.0]
 
-metrics = ['MSE']#['BIC', 'AIC','MSE']
+metrics = ['AIC']#['BIC', 'AIC','MSE']
 
-#'''
+'''
 """ First plot the grid search """
 for metric in metrics:
     # Make three lists of indices X,Y,Z (K,L,metric)
@@ -68,18 +68,24 @@ for metric in metrics:
     Ki, Li = numpy.meshgrid(Ki, Li)
     
     # Interpolate
-    rbf = Rbf(list_values_K, list_values_L, values, function='linear')
+    rbf = Rbf(list_values_K, list_values_L, values, function='multiquadric')
     values_i = rbf(Ki, Li)
     
     # Plot
-    plt.figure()
+    fig = plt.figure(figsize=(1.9,1.45))
+    fig.subplots_adjust(left=0.06, right=0.93, bottom=0.18, top=0.97)
+    plt.xlabel("K", fontsize=8, labelpad=0)
+    plt.ylabel("L", fontsize=8, labelpad=-3)
+    plt.yticks(fontsize=8)
+    plt.xticks(fontsize=8)    
+    
+    vmin = min(values)
+    vmax = max(values)#(2*min(values)+max(values))/3.
     plt.imshow(values_i, cmap='jet_r',
-               vmin=min(values), vmax=max(values), origin='lower',
-               extent=[min(values_K), max(values_K), min(values_L), max(values_L)])
-    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r', s=50)
-    plt.colorbar()
-    #plt.title("Metric: %s." % metric)   
-    plt.xlabel("K", fontsize=16)     
-    plt.ylabel("L", fontsize=16)  
+               vmin=vmin, vmax=vmax, origin='lower',
+               extent=[min(values_K)-1, max(values_K)+1, min(values_L)-1, max(values_L)+1])
+    plt.scatter(list_values_K, list_values_L, c=values, cmap='jet_r', s=5, vmin=vmin, vmax=vmax)
+    cb = plt.colorbar()
+    cb.ax.tick_params(labelsize=6)
     plt.show()
-'''
+#'''

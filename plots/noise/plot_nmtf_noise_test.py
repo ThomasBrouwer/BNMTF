@@ -56,10 +56,13 @@ colours = ['r','b','g','c']
 
 
 for metric in metrics:
-    plt.figure()
-    #plt.title("Performances (%s) for different noise ratios" % metric)
-    plt.xlabel("Noise to signal ratio", fontsize=16)
-    plt.ylabel(metric, fontsize=16)
+    fig = plt.figure(figsize=(1.9,1.5))
+    fig.subplots_adjust(left=0.18, right=0.99, bottom=0.17, top=0.95)
+    #plt.title("Performances (%s) for different fractions of missing values" % metric)
+    plt.xlabel("Noise to signal ratio", fontsize=8, labelpad=1)
+    plt.ylabel(metric, fontsize=8, labelpad=-1)
+    plt.yticks(range(0,MSE_max+1,50),fontsize=6)
+    plt.xticks(fontsize=6)
     
     x = noise_ratios 
     offset = 0
@@ -71,7 +74,5 @@ for metric in metrics:
         
     plt.ylim(0,MSE_max)
     plt.xticks(numpy.arange(N) + 2*width, x)
-    
-    plt.legend(loc=0) 
     
     

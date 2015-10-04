@@ -49,6 +49,7 @@ avr_performances = [
     icm_average_performances,
     np_average_performances
 ]
+colours = ['r','b','g','c']
 
 # Also compute the median values
 def compute_medians(all_performances):
@@ -71,18 +72,21 @@ values_to_plot = avr_performances
 
 # Plot 
 for metric in metrics:
-    plt.figure()
+    fig = plt.figure(figsize=(1.9,1.5))
+    fig.subplots_adjust(left=0.15, right=0.96, bottom=0.17, top=0.95)
     #plt.title("Performances (%s) for different fractions of missing values" % metric)
-    plt.xlabel("Fraction missing", fontsize=16)
-    plt.ylabel(metric, fontsize=16)
+    plt.xlabel("Fraction missing", fontsize=8, labelpad=1)
+    plt.ylabel(metric, fontsize=8, labelpad=-1)
+    plt.yticks(range(0,MSE_max+1,5),fontsize=6)
+    plt.xticks(fontsize=6)
     
     x = fractions_unknown
-    for method, avr_performance in zip(methods,values_to_plot):
+    for method,avr_performance,colour in zip(methods,values_to_plot,colours):
         y = avr_performance[metric]
         #plt.plot(x,y,label=method)
-        plt.plot(x,y,linestyle='-', marker='o', label=method)
-    plt.legend(loc=0)  
+        plt.plot(x,y,linestyle='-', marker='o', label=method, c=colour, markersize=3)
     
+    plt.xlim(0.0,1.)
     if metric == 'MSE':
         plt.ylim(0,MSE_max)
     else:
