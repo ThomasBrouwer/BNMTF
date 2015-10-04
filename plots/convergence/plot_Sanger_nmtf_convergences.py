@@ -15,7 +15,7 @@ We have the following methods:
 
 import matplotlib.pyplot as plt
 metrics = ['MSE']#,'R^2','Rp']
-MSE_lim = (2,4)
+MSE_lim = (2,3)
 xlim = 1000
 iterations = range(1,1000+1)
 
@@ -39,22 +39,25 @@ methods = ['VB-NMF', 'G-NMF', 'NP-NMF', 'ICM-NMF']
 avr_performances = [
     vb_all_performances,
     gibbs_all_performances,
-    np_all_performances,
-    icm_all_performances
+    icm_all_performances,
+    np_all_performances
 ]
+colours = ['r','b','g','c']
 
 for metric in metrics:
-    plt.figure()
+    fig = plt.figure(figsize=(1.9,1.5))
+    fig.subplots_adjust(left=0.12, right=0.95, bottom=0.17, top=0.95)
     #plt.title("Performances (%s) for different fractions of missing values" % metric)
-    plt.xlabel("Iterations", fontsize=16)
-    plt.ylabel(metric, fontsize=16)
+    plt.xlabel("Iterations", fontsize=8, labelpad=0)
+    plt.ylabel(metric, fontsize=8, labelpad=-1)
+    plt.yticks(range(0,MSE_lim[1]+1),fontsize=6)
+    plt.xticks(fontsize=6)
     
     x = iterations
-    for method, avr_performance in zip(methods,avr_performances):
+    for method, avr_performance, colour in zip(methods,avr_performances,colours):
         y = avr_performance[metric]
         #plt.plot(x,y,label=method)
-        plt.plot(x,y,linestyle='-', marker=None, label=method)
-    plt.legend(loc=0)  
+        plt.plot(x,y,linestyle='-', marker=None, label=method, c=colour)
     
     plt.xlim(1,xlim)    
     if metric == 'MSE':
