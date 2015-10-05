@@ -32,7 +32,7 @@ Initialisation can be done by running the initialise(init,tauUV) function. We in
 """
 
 import sys
-sys.path.append("/home/thomas/Documenten/PhD/")#("/home/tab43/Documents/Projects/libraries/")
+sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Documenten/PhD/")#
 from kmeans_missing.code.kmeans import KMeans
 
 from distributions.exponential import exponential_draw
@@ -142,6 +142,12 @@ class NMTF:
             
             time_iteration = time.time()
             self.all_times.append(time_iteration-time_start)  
+        
+        
+    """ Method for doing both initialise() and run() """
+    def train(self,iterations,init_S='random',init_FG='random',expo_prior=1.):
+        self.initialise(init_S=init_S,init_FG=init_FG,expo_prior=expo_prior) 
+        self.run(iterations=iterations)
         
                 
     """ Updates for F, G, S. """                
