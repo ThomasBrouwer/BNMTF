@@ -10,20 +10,20 @@ sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Docu
 
 import numpy, itertools, random
 from BNMTF.code.nmtf_np import NMTF
-from BNMTF.cross_validation.nested_matrix_cross_validation import MatrixNestedCrossValidation
+from BNMTF.cross_validation.matrix_cross_validation import MatrixCrossValidation
 from BNMTF.drug_sensitivity.load_data import load_Sanger
 
 
 # Settings
 standardised = False
 train_config = {
-    'iterations' : 2000,
+    'iterations' : 3000,
     'init_FG' : 'kmeans',
     'init_S' : 'exponential',
     'expo_prior' : 0.1
 }
-K_range = [8,10]
-L_range = [8,10]
+K_range = [2,4,6,8,10]
+L_range = [2,4,6,8,10]
 P = 5
 no_folds = 5
 output_file = "./results.txt"
@@ -38,15 +38,13 @@ parameter_search = [{'K':K,'L':L} for (K,L) in itertools.product(K_range,L_range
 # Run the cross-validation framework
 random.seed(42)
 numpy.random.seed(9000)
-nested_crossval = MatrixNestedCrossValidation(
+nested_crossval = MatrixCrossValidation(
     method=NMTF,
     X=X_min,
     M=M,
     K=no_folds,
-    P=5,
     parameter_search=parameter_search,
     train_config=train_config,
-    file_performance=output_file,
-    files_nested_performances=files_nested_performances
+    file_performance=output_file
 )
 nested_crossval.run()

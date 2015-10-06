@@ -66,6 +66,12 @@ class bnmf_vb_optimised:
         self.alpha, self.beta, self.lambdaU, self.lambdaV = \
             float(priors['alpha']), float(priors['beta']), numpy.array(priors['lambdaU']), numpy.array(priors['lambdaV'])
         
+        # If lambdaU or lambdaV are an integer rather than a numpy array, we make it into one using that value
+        if self.lambdaU.shape == ():
+            self.lambdaU = self.lambdaU * numpy.ones((self.I,self.K))
+        if self.lambdaV.shape == ():
+            self.lambdaV = self.lambdaV * numpy.ones((self.J,self.K))
+        
         assert self.lambdaU.shape == (self.I,self.K), "Prior matrix lambdaU has the wrong shape: %s instead of (%s, %s)." % (self.lambdaU.shape,self.I,self.K)
         assert self.lambdaV.shape == (self.J,self.K), "Prior matrix lambdaV has the wrong shape: %s instead of (%s, %s)." % (self.lambdaV.shape,self.J,self.K)
                    
@@ -80,12 +86,6 @@ class bnmf_vb_optimised:
             assert c != 0, "Fully unobserved row in R, row %s." % i
         for j,c in enumerate(sums_columns):
             assert c != 0, "Fully unobserved column in R, column %s." % j
-
-
-    # Initialise and run the sampler
-    def train(self,init,iterations):
-        self.initialise(init)
-        return self.run(iterations)
 
 
     # Initialise U, V, and tau. 
@@ -150,6 +150,12 @@ class bnmf_vb_optimised:
             self.all_times.append(time_iteration-time_start)            
             
         return
+        
+        
+    # Method for doing both initialise() and run() 
+    def train(self,iterations,init_UV='random'):
+        self.initialise(init_UV=init_UV) 
+        self.run(iterations=iterations)    
         
         
     # Compute the ELBO

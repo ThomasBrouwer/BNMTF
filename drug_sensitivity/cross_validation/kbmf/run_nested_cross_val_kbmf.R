@@ -1,8 +1,8 @@
-# Run the cross-validation for KBMF
+# Run the nested cross-validation for KBMF
 
 source("nested_cross_val_kbmf.R")
-K <- 10
-R_values <- c(2,3)
+K <- 5
+R_values <- c(7,8,9)
 
 Px <- 3
 Nx <- 622
@@ -41,14 +41,9 @@ Kz[,, 3] <- kernel_targets
 # Run the cross-validation
 kbmf_nested_cross_validation(Kx, Kz, Y, R_values, K)
 
-# R_values <- c(6,8,10,12,14)
-# MSE: 2.279846
-# R^2: 0.8050046
-# Rp:  0.3560679 <- bug in code, fixed now
-
-# R_values <- c(8,10,12)
-# MSE: 2.252472
-# R^2: 0.8073721
-# Rp:  0.8986164
+# R_values <- c(6,7,8,9,10,11,12,13,14,15)
+# MSE: 
+# R^2: 
+# Rp:  
 
 

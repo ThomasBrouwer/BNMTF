@@ -101,7 +101,13 @@ class NMF:
             self.give_update(it)
             
             time_iteration = time.time()
-            self.all_times.append(time_iteration-time_start)            
+            self.all_times.append(time_iteration-time_start)   
+        
+        
+    """ Method for doing both initialise() and run() """
+    def train(self,iterations,init_UV='random',expo_prior=1.):
+        self.initialise(init_UV=init_UV,expo_prior=expo_prior) 
+        self.run(iterations=iterations)         
             
 
     """ Updates for U and V """    

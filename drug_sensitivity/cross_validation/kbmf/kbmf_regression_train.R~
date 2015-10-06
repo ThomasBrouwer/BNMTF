@@ -21,7 +21,7 @@ kbmf_regression_train <- function(Kx, Kz, Y, R, varargin) {
     parameters$alpha_eta <- 1
     parameters$beta_eta <- 1
   }
-  parameters$iteration <- 1
+  parameters$iteration <- 1#200
   parameters$progress <- 1
   parameters$R <- R
   parameters$seed <- 1606

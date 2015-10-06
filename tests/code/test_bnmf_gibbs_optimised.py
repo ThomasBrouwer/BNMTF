@@ -80,6 +80,26 @@ def test_init():
     assert numpy.array_equal(BNMF.lambdaU,lambdaU)
     assert numpy.array_equal(BNMF.lambdaV,lambdaV)
     
+    # And when lambdaU and lambdaV are integers    
+    I,J,K = 3,2,2
+    R5 = 2*numpy.ones((I,J))
+    lambdaU = 3.
+    lambdaV = 4.
+    M = numpy.ones((I,J))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    BNMF = bnmf_gibbs_optimised(R5,M,K,priors)
+    
+    assert numpy.array_equal(BNMF.R,R5)
+    assert numpy.array_equal(BNMF.M,M)
+    assert BNMF.I == I
+    assert BNMF.J == J
+    assert BNMF.K == K
+    assert BNMF.size_Omega == I*J
+    assert BNMF.alpha == alpha
+    assert BNMF.beta == beta
+    assert numpy.array_equal(BNMF.lambdaU,lambdaU*numpy.ones((I,K)))
+    assert numpy.array_equal(BNMF.lambdaV,lambdaV*numpy.ones((J,K)))
+    
     
 """ Test initialing parameters """
 def test_initialise():

@@ -25,8 +25,6 @@ If we use Gibbs then we run search(burn_in,thinning).
 After that, the values for each metric ('BIC','AIC','loglikelihood','MSE') can 
 be obtained using all_values(metric), and the best value of K can be returned
 using best_value(metric).
-
-We use the optimised Variational Bayes algorithm for BNMF.
 """
 
 project_location = "/home/tab43/Documents/Projects/libraries/"
@@ -56,7 +54,7 @@ class LineSearch:
         }
     
     
-    def search(self,burn_in=None,thinning=None):
+    def search(self,burn_in=None,thinning=None,minimum_TN=None):
         for K in self.values_K:
             print "Running line search for BNMF. Trying K = %s." % K
                         
@@ -69,7 +67,10 @@ class LineSearch:
                 print "Restart %s for K = %s." % (r+1,K)
                 BNMF = self.classifier(self.R,self.M,K,priors)
                 BNMF.initialise(init=self.initUV)
-                BNMF.run(iterations=self.iterations)
+                if minimum_TN is None:
+                    BNMF.run(iterations=self.iterations)
+                else:
+                    BNMF.run(iterations=self.iterations,minimum_TN=minimum_TN)
                 
                 args = {'metric':'loglikelihood'}
                 if burn_in is not None and thinning is not None:

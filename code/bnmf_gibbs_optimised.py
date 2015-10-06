@@ -68,6 +68,12 @@ class bnmf_gibbs_optimised:
         self.alpha, self.beta, self.lambdaU, self.lambdaV = \
             float(priors['alpha']), float(priors['beta']), numpy.array(priors['lambdaU']), numpy.array(priors['lambdaV'])
         
+        # If lambdaU or lambdaV are an integer rather than a numpy array, we make it into one using that value
+        if self.lambdaU.shape == ():
+            self.lambdaU = self.lambdaU * numpy.ones((self.I,self.K))
+        if self.lambdaV.shape == ():
+            self.lambdaV = self.lambdaV * numpy.ones((self.J,self.K))
+                
         assert self.lambdaU.shape == (self.I,self.K), "Prior matrix lambdaU has the wrong shape: %s instead of (%s, %s)." % (self.lambdaU.shape,self.I,self.K)
         assert self.lambdaV.shape == (self.J,self.K), "Prior matrix lambdaV has the wrong shape: %s instead of (%s, %s)." % (self.lambdaV.shape,self.J,self.K)
             

@@ -80,6 +80,26 @@ def test_init():
     assert numpy.array_equal(NMF.lambdaU,lambdaU)
     assert numpy.array_equal(NMF.lambdaV,lambdaV)
     
+    # And when lambdaU and lambdaV are integers    
+    I,J,K = 3,2,2
+    R5 = 2*numpy.ones((I,J))
+    lambdaU = 3.
+    lambdaV = 4.
+    M = numpy.ones((I,J))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+    NMF = nmf_icm(R5,M,K,priors)
+    
+    assert numpy.array_equal(NMF.R,R5)
+    assert numpy.array_equal(NMF.M,M)
+    assert NMF.I == I
+    assert NMF.J == J
+    assert NMF.K == K
+    assert NMF.size_Omega == I*J
+    assert NMF.alpha == alpha
+    assert NMF.beta == beta
+    assert numpy.array_equal(NMF.lambdaU,lambdaU*numpy.ones((I,K)))
+    assert numpy.array_equal(NMF.lambdaV,lambdaV*numpy.ones((J,K)))
+    
     
 """ Test initialing parameters """
 def test_initialise():

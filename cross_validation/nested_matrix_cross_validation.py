@@ -45,6 +45,7 @@ Methods:
 
 import numpy, mask
 from parallel_matrix_cross_validation import ParallelMatrixCrossValidation
+from matrix_cross_validation import MatrixCrossValidation
 
 class MatrixNestedCrossValidation:
     def __init__(self,method,X,M,K,P,parameter_search,train_config,file_performance,files_nested_performances):
@@ -74,7 +75,8 @@ class MatrixNestedCrossValidation:
             print "Fold %s of nested cross-validation." % (i+1)            
             
             # Run the cross-validation
-            crossval = ParallelMatrixCrossValidation(
+            #crossval = ParallelMatrixCrossValidation(
+            crossval = MatrixCrossValidation(
                 method=self.method,
                 X=self.X,
                 M=train,
@@ -82,7 +84,7 @@ class MatrixNestedCrossValidation:
                 parameter_search=self.parameter_search,
                 train_config=self.train_config,
                 file_performance=self.files_nested_performances[i],
-                P=self.P
+                #P=self.P
             )
             crossval.run()
             (best_parameters,_) = crossval.find_best_parameters(evaluation_criterion='MSE',low_better=True)
