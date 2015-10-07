@@ -75,8 +75,8 @@ class MatrixNestedCrossValidation:
             print "Fold %s of nested cross-validation." % (i+1)            
             
             # Run the cross-validation
-            #crossval = ParallelMatrixCrossValidation(
-            crossval = MatrixCrossValidation(
+            crossval = ParallelMatrixCrossValidation(
+            #crossval = MatrixCrossValidation(
                 method=self.method,
                 X=self.X,
                 M=train,
@@ -84,7 +84,7 @@ class MatrixNestedCrossValidation:
                 parameter_search=self.parameter_search,
                 train_config=self.train_config,
                 file_performance=self.files_nested_performances[i],
-                #P=self.P
+                P=self.P
             )
             crossval.run()
             (best_parameters,_) = crossval.find_best_parameters(evaluation_criterion='MSE',low_better=True)

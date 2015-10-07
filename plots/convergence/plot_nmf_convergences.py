@@ -32,7 +32,7 @@ np_all_performances = {'R^2': [0.3032122365329063, 0.6133166405978905, 0.6431376
 
 
 # Assemble the average performances and method names
-methods = ['VB-NMF', 'G-NMF', 'ICM-NMF', 'NP-NMF']
+methods = ['VB-NM(T)F', 'G-NM(T)F', 'ICM-NM(T)F', 'NP-NM(T)F']
 avr_performances = [
     vb_all_performances,
     gibbs_all_performances,
@@ -66,7 +66,7 @@ for metric in metrics:
     # Set up the legend outside
     font_size_legend, number_of_columns, legend_box_line_width, legend_line_width = 12, 4, 1, 2
     ax = fig.add_subplot(111)
-    legend_fig = plt.figure(figsize=(5.6,0.4))
+    legend_fig = plt.figure(figsize=(6.5,0.4))
     legend = legend_fig.legend(*ax.get_legend_handles_labels(), loc='center', prop={'size':font_size_legend}, ncol=number_of_columns)
     legend.get_frame().set_linewidth(legend_box_line_width)
     plt.setp(legend.get_lines(),linewidth=legend_line_width)

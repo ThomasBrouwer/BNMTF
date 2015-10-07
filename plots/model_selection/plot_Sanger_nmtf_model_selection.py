@@ -72,8 +72,8 @@ for metric in metrics:
     values_i = rbf(Ki, Li)
     
     # Plot
-    fig = plt.figure(figsize=(1.9,1.45))
-    fig.subplots_adjust(left=0.06, right=0.93, bottom=0.18, top=0.97)
+    fig = plt.figure(figsize=(1.9,1.42))
+    fig.subplots_adjust(left=0.07, right=0.90, bottom=0.18, top=0.98)
     plt.xlabel("K", fontsize=8, labelpad=0)
     plt.ylabel("L", fontsize=8, labelpad=-3)
     plt.yticks(fontsize=8)

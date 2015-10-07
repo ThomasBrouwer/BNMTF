@@ -85,20 +85,35 @@ class LineSearchCrossValidation:
             
     # Initialises and runs the model, and returns the performance on the test set
     def run_model(self,train,test,K,burn_in=None,thinning=None,minimum_TN=None):
-        model = self.classifier(
-            R=self.R,
-            M=train,
-            K=K,
-            priors=self.priors
-        )
-        model.initialise(self.init_UV)
-        
-        if minimum_TN is None:
-            model.run(self.iterations)
-        else:
-            model.run(self.iterations,minimum_TN=minimum_TN)
+        # We train <restarts> models, and use the one with the best log likelihood to make predictions   
+        best_loglikelihood = None
+        best_performance = None
+        for r in range(0,self.restarts):
+            model = self.classifier(
+                R=self.R,
+                M=train,
+                K=K,
+                priors=self.priors
+            )
+            model.initialise(self.init_UV)
             
-        if burn_in is None or thinning is None:
-            return model.predict(test)
-        else:
-            return model.predict(test,burn_in,thinning)
+            if minimum_TN is None:
+                model.run(self.iterations)
+            else:
+                model.run(self.iterations,minimum_TN=minimum_TN)
+                
+            if burn_in is None or thinning is None:
+                new_loglikelihood = model.quality('loglikelihood')
+                performance = model.predict(test)
+            else:
+                new_loglikelihood = model.quality('loglikelihood',burn_in,thinning)
+                performance = model.predict(test,burn_in,thinning)
+                
+            if best_loglikelihood is None or new_loglikelihood > best_loglikelihood:
+                best_loglikelihood = new_loglikelihood
+                best_performance = performance
+                
+            print "Trained final model, attempt %s. Log likelihood: %s." % (r+1,new_loglikelihood)            
+            
+        print "Best log likelihood: %s." % best_loglikelihood
+        return best_performance

@@ -21,10 +21,10 @@ init_UV = 'random'
 
 K_range = [6,7,8,9,10]#[1,5,10,15,20,25,30]
 no_folds = 5
-restarts = 1
+restarts = 2
 
 quality_metric = 'AIC'
-output_file = "./results.txt"
+output_file = "./results_TEST.txt"
 
 alpha, beta = 1., 1.
 lambdaU = 1./10.
@@ -73,4 +73,9 @@ All model fits for fold 5, metric AIC: [258343.1164455777, 257839.49106167446, 2
 Best K for fold 5: 10.
 Performance: {'R^2': 0.8047119529751179, 'MSE': 2.2782282291320404, 'Rp': 0.89729843931779008}.
 
+all_MSE = [2.2794695051543621,2.3011752753788319,2.3388522194957702,2.3356777235035682,2.2782282291320404]
+all_R2 = [0.8038426722870428,0.8022773607196355,0.8036644470434058, 0.7992844705144458,0.8047119529751179]
+
+Average MSE: 2.306 +- 0.026
+Average R^2: 0.803 +- 0.002
 """

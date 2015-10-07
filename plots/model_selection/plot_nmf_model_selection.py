@@ -27,6 +27,7 @@ for metric in metrics:
         plt.yticks(fontsize=6)
     else:
         plt.yticks(fontsize=4)
+        #plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
     plt.xticks(fontsize=6)
     
     plt.plot(values_K, vb_all_values[metric], linestyle='-', marker='o', label=metric, markersize=3)
