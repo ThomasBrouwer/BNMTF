@@ -14,10 +14,10 @@ from BNMTF.drug_sensitivity.load_data import load_Sanger
 
 # Settings
 standardised = False
-iterations = 500
+iterations = 200
 init_UV = 'random'
 
-K_range = [1,5,10,15,20,25,30]
+K_range = [6,7,8,9,10]#[1,5,10,15,20,25,30]
 no_folds = 5
 restarts = 1
 
@@ -51,3 +51,25 @@ nested_crossval = LineSearchCrossValidation(
     file_performance=output_file
 )
 nested_crossval.run(minimum_TN=minimum_TN)
+
+"""
+All model fits for fold 1, metric AIC: [252998.28783295467, 250747.87405923707, 249171.33422154275, 248348.40470946211, 246802.03487854672].
+Best K for fold 1: 10.
+Performance: {'R^2': 0.807748962293107, 'MSE': 2.2340759985699807, 'Rp': 0.89958671281823332}.
+
+All model fits for fold 2, metric AIC: [252998.29009544547, 250747.87405923707, 249171.33422154275, 248348.40470946211, 246802.03487854672].
+Best K for fold 2: 10.
+Performance: {'R^2': 0.8075286864183611, 'MSE': 2.2400582434352443, 'Rp': 0.89953229833400639}.
+
+All model fits for fold 3, metric AIC: [252998.25304278632, 250747.87405923707, 249171.33422154275, 248348.40470946211, 246802.03487854672].
+Best K for fold 3: 10.
+Performance: {'R^2': 0.8043624727400118, 'MSE': 2.3305369708045012, 'Rp': 0.89777844572303478}.
+
+All model fits for fold 4, metric AIC: [252996.15253591264, 250747.87405923707, 249171.33422154275, 248348.40470946211, 246802.03487854672].
+Best K for fold 4: 10.
+Performance: {'R^2': 0.8020475315100168, 'MSE': 2.3035246557634794, 'Rp': 0.89627310905893576}.
+
+All model fits for fold 5, metric AIC: [252998.07360170182, 250747.87405923707, 249171.33422154275, 248348.40470946211, 246802.03487854672].
+Best K for fold 5: 10.
+Performance: {'R^2': 0.8080801550156258, 'MSE': 2.2389348208205333, 'Rp': 0.89962819094414426}. 
+"""

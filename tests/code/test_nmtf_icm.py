@@ -93,6 +93,29 @@ def test_init():
     assert numpy.array_equal(NMTF.lambdaS,lambdaS)
     assert numpy.array_equal(NMTF.lambdaG,lambdaG)
     
+    # Test when lambdaF S G are integers
+    I,J,K,L = 3,2,2,2
+    R5 = 2*numpy.ones((I,J))
+    lambdaF = 3
+    lambdaS = 4
+    lambdaG = 5
+    M = numpy.ones((I,J))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+    NMTF = nmtf_icm(R5,M,K,L,priors)
+    
+    assert numpy.array_equal(NMTF.R,R5)
+    assert numpy.array_equal(NMTF.M,M)
+    assert NMTF.I == I
+    assert NMTF.J == J
+    assert NMTF.K == K
+    assert NMTF.L == L
+    assert NMTF.size_Omega == I*J
+    assert NMTF.alpha == alpha
+    assert NMTF.beta == beta
+    assert numpy.array_equal(NMTF.lambdaF,3*numpy.ones((I,K)))
+    assert numpy.array_equal(NMTF.lambdaS,4*numpy.ones((K,L)))
+    assert numpy.array_equal(NMTF.lambdaG,5*numpy.ones((J,L)))
+    
     
 """ Test initialing parameters """
 def test_initialise():

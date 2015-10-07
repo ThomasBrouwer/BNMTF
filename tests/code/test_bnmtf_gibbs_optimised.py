@@ -93,6 +93,29 @@ def test_init():
     assert numpy.array_equal(BNMTF.lambdaS,lambdaS)
     assert numpy.array_equal(BNMTF.lambdaG,lambdaG)
     
+    # Test when lambdaF S G are integers
+    I,J,K,L = 3,2,2,2
+    R5 = 2*numpy.ones((I,J))
+    lambdaF = 3
+    lambdaS = 4
+    lambdaG = 5
+    M = numpy.ones((I,J))
+    priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
+    BNMTF = bnmtf_gibbs_optimised(R5,M,K,L,priors)
+    
+    assert numpy.array_equal(BNMTF.R,R5)
+    assert numpy.array_equal(BNMTF.M,M)
+    assert BNMTF.I == I
+    assert BNMTF.J == J
+    assert BNMTF.K == K
+    assert BNMTF.L == L
+    assert BNMTF.size_Omega == I*J
+    assert BNMTF.alpha == alpha
+    assert BNMTF.beta == beta
+    assert numpy.array_equal(BNMTF.lambdaF,3*numpy.ones((I,K)))
+    assert numpy.array_equal(BNMTF.lambdaS,4*numpy.ones((K,L)))
+    assert numpy.array_equal(BNMTF.lambdaG,5*numpy.ones((J,L)))
+    
     
 """ Test initialing parameters """
 def test_initialise():

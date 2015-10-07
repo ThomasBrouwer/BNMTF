@@ -29,7 +29,8 @@ We expect the following arguments:
 
 The greedy grid search can be started by running search(search_metric), where 
 we stop searching after our specified metric's performance drops.
-If we use Gibbs then we run search(search_metric,burn_in,thinning).
+If we use Gibbs then we run search(search_metric,burn_in=<>,thinning=<>).
+If we use ICM then we use run_search(search_metric,minimum_TN=<>)
 
 After that, the values for each metric ('BIC','AIC','loglikelihood','MSE') can 
 be obtained using all_values(metric), and the best value of K and L can be 
@@ -69,7 +70,7 @@ class GreedySearch:
         }
     
     
-    def search(self,search_metric,burn_in=None,thinning=None):
+    def search(self,search_metric,burn_in=None,thinning=None,minimum_TN=None):
         assert search_metric in metrics, "Unrecognised metric name: %s." % search_metric    
         
         def try_KL(K,L):
@@ -92,7 +93,10 @@ class GreedySearch:
                 print "Restart %s for K = %s, L = %s." % (r+1,K,L)  
                 BNMTF = self.classifier(self.R,self.M,K,L,priors)
                 BNMTF.initialise(init_S=self.initS,init_FG=self.initFG)
-                BNMTF.run(iterations=self.iterations)
+                if minimum_TN is None:
+                    BNMTF.run(iterations=self.iterations)
+                else:
+                    BNMTF.run(iterations=self.iterations,minimum_TN=minimum_TN)
                 
                 args = {'metric':'loglikelihood'}
                 if burn_in is not None and thinning is not None:

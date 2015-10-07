@@ -78,6 +78,14 @@ class bnmtf_vb_optimised:
         self.alpha, self.beta, self.lambdaF, self.lambdaS, self.lambdaG = \
             float(priors['alpha']), float(priors['beta']), numpy.array(priors['lambdaF']), numpy.array(priors['lambdaS']), numpy.array(priors['lambdaG'])
         
+        # If lambdaF, lambdaS, or lambdaG are an integer rather than a numpy array, we make it into one using that value
+        if self.lambdaF.shape == ():
+            self.lambdaF = self.lambdaF * numpy.ones((self.I,self.K))
+        if self.lambdaS.shape == ():
+            self.lambdaS = self.lambdaS * numpy.ones((self.K,self.L))
+        if self.lambdaG.shape == ():
+            self.lambdaG = self.lambdaG * numpy.ones((self.J,self.L))
+        
         assert self.lambdaF.shape == (self.I,self.K), "Prior matrix lambdaF has the wrong shape: %s instead of (%s, %s)." % (self.lambdaF.shape,self.I,self.K)
         assert self.lambdaS.shape == (self.K,self.L), "Prior matrix lambdaS has the wrong shape: %s instead of (%s, %s)." % (self.lambdaS.shape,self.K,self.L)
         assert self.lambdaG.shape == (self.J,self.L), "Prior matrix lambdaG has the wrong shape: %s instead of (%s, %s)." % (self.lambdaG.shape,self.J,self.L)

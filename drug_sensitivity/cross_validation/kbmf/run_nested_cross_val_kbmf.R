@@ -41,9 +41,8 @@ Kz[,, 3] <- kernel_targets
 # Run the cross-validation
 kbmf_nested_cross_validation(Kx, Kz, Y, R_values, K)
 
-# R_values <- c(6,7,8,9,10,11,12,13,14,15)
-# MSE: 
-# R^2: 
-# Rp:  
-
-
+# R_values <- c(7,8,9)
+# MSE: 2.1906, 2.1993, 2.2380, 2.2522, 2.3098
+# R^2: 0.8108, 0.8109, 0.8073, 0.8120, 0.8021
+# Rp:  0.9005, 0.9005, 0.8986, 0.9011, 0.8958
+# Average performances: MSE=2.2380, R^2=0.8086, Rp=0.8993
