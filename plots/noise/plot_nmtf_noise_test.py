@@ -75,4 +75,5 @@ for metric in metrics:
     plt.ylim(0,MSE_max)
     plt.xticks(numpy.arange(N) + 2*width, x)
     
+    plt.savefig("../graphs_toy/mse_nmtf_noise_test.png", dpi=600)
     

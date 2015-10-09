@@ -91,3 +91,5 @@ for metric in metrics:
         plt.ylim(0,MSE_max)
     else:
         plt.ylim(0,1)
+        
+    plt.savefig("../graphs_toy/mse_nmtf_missing_values_predictions.png", dpi=600)

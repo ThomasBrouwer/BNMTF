@@ -75,3 +75,5 @@ for metric in metrics:
         plt.ylim(MSE_range)
     elif metric == 'R^2' or metric == 'Rp':
         plt.ylim(0,1)
+        
+    plt.savefig("../graphs_Sanger/mse_Sanger_nmtf_times.png", dpi=600)

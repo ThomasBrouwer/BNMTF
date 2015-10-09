@@ -26,3 +26,5 @@ for metric in metrics:
     
     plt.plot(values_K, vb_all_values[metric], linestyle='-', marker='o', label=metric, markersize=2)
     #plt.legend(loc=3)
+        
+    plt.savefig("../graphs_Sanger/aic_Sanger_line_model_selection.png", dpi=600)

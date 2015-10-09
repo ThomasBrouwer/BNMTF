@@ -68,3 +68,5 @@ for metric in metrics:
         plt.ylim(0,MSE_max)
     elif metric == 'R^2' or metric == 'Rp':
         plt.ylim(0,1)
+        
+    plt.savefig("../graphs_Sanger/mse_Sanger_nmf_convergences.png", dpi=600)

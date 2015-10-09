@@ -88,4 +88,6 @@ for metric in metrics:
     cb = plt.colorbar()
     cb.ax.tick_params(labelsize=6)
     plt.show()
+        
+    plt.savefig("../graphs_Sanger/aic_Sanger_greedy_model_selection.png", dpi=600)
 #'''

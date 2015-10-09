@@ -56,6 +56,7 @@ colours = ['r','b','g','c']
 
 for metric in metrics:
     fig = plt.figure(figsize=(1.9,1.5))
+    fig.add_subplot(111)
     fig.subplots_adjust(left=0.15, right=0.99, bottom=0.17, top=0.95)
     #plt.title("Performances (%s) for different fractions of missing values" % metric)
     plt.xlabel("Noise to signal ratio", fontsize=8, labelpad=1)
@@ -74,4 +75,4 @@ for metric in metrics:
     plt.ylim(0,MSE_max)
     plt.xticks(numpy.arange(N) + 2*width, x)
     
-    
+    plt.savefig("../graphs_toy/mse_nmf_noise_test.png", dpi=600)

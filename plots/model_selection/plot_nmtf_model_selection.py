@@ -23,7 +23,7 @@ list_values_L = [1.0, 1.0, 2.0, 2.0, 2.0, 3.0, 3.0, 3.0, 4.0, 4.0, 4.0, 5.0, 5.0
 
 """ First plot the grid search """
 metrics = ['AIC']#,'MSE']#,'BIC']
-'''
+#'''
 for metric in metrics:
     # Make three lists of indices X,Y,Z (K,L,metric)
     values = numpy.array(vb_grid_all_values[metric]).flatten()
@@ -60,6 +60,8 @@ for metric in metrics:
         fig.subplots_adjust(left=-0.02, right=0.95, bottom=0.18, top=0.98)
         cb.ax.tick_params(labelsize=6)
     plt.show()
+        
+    plt.savefig("../graphs_toy/aic_nmtf_model_selection.png", dpi=600)
     
     # Print the best value
     index, row_length = numpy.argmin(values), len(values_L)
@@ -100,4 +102,6 @@ for metric in metrics:
     cb.ax.tick_params(labelsize=6)
     #plt.title("Metric: %s." % metric)   
     plt.show()
-#'''
+        
+    plt.savefig("../graphs_toy/aic_nmtf_greedy_model_selection.png", dpi=600)
+'''

@@ -69,6 +69,8 @@ for metric in metrics:
     elif metric == 'R^2' or metric == 'Rp':
         plt.ylim(0,1)
         
+    plt.savefig("../graphs_toy/mse_nmf_convergences.png", dpi=600)
+        
     # Set up the legend outside
     font_size_legend, number_of_columns, legend_box_line_width, legend_line_width = 12, 4, 1, 2
     ax = fig.add_subplot(111)
@@ -76,4 +78,6 @@ for metric in metrics:
     legend = legend_fig.legend(*ax.get_legend_handles_labels(), loc='center', prop={'size':font_size_legend}, ncol=number_of_columns)
     legend.get_frame().set_linewidth(legend_box_line_width)
     plt.setp(legend.get_lines(),linewidth=legend_line_width)
+        
+    plt.savefig("../graphs_toy/legend.png", dpi=600)
     
