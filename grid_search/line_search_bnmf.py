@@ -34,7 +34,7 @@ sys.path.append(project_location)
 
 import numpy
 
-metrics = ['BIC','AIC','loglikelihood','MSE']
+metrics = ['BIC','AIC','loglikelihood','MSE','ELBO']
 
 class LineSearch:
     def __init__(self,classifier,values_K,R,M,priors,initUV,iterations,restarts=1):

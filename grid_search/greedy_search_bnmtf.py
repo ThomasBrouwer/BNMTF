@@ -47,7 +47,7 @@ sys.path.append(project_location)
 
 import numpy
 
-metrics = ['BIC','AIC','loglikelihood','MSE']
+metrics = ['BIC','AIC','loglikelihood','MSE','ELBO']
 
 class GreedySearch:
     def __init__(self,classifier,values_K,values_L,R,M,priors,initS,initFG,iterations,restarts=1):

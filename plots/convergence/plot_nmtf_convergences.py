@@ -14,7 +14,7 @@ We have the following methods:
 
 import matplotlib.pyplot as plt
 metrics = ['MSE']#,'R^2','Rp']
-MSE_max = 8
+MSE_max = 4
 iterations = range(1,1000+1)
 
 folder = "../time_toy/"
