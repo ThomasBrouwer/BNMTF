@@ -32,7 +32,7 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 minimum_TN = 0.1
 
 # Load in the Sanger dataset
-(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised)
+(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised,sep=',')
 
 # Run the cross-validation framework
 random.seed(42)

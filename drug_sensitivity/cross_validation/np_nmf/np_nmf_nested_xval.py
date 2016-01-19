@@ -17,12 +17,11 @@ from BNMTF.drug_sensitivity.load_data import load_Sanger
 # Settings
 standardised = False
 train_config = {
-    'iterations' : 3000,
+    'iterations' : 1000,
     'init_UV' : 'exponential',
     'expo_prior' : 0.1
 }
 K_range = [6,7,8,9,10]
-P = 4
 no_folds = 5
 output_file = "./results.txt"
 files_nested_performances = ["./fold_%s.txt" % fold for fold in range(1,no_folds+1)]
@@ -31,7 +30,7 @@ files_nested_performances = ["./fold_%s.txt" % fold for fold in range(1,no_folds
 parameter_search = [{'K':K} for K in K_range]
 
 # Load in the Sanger dataset
-(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised)
+(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised,sep=',')
 
 # Run the cross-validation framework
 random.seed(42)

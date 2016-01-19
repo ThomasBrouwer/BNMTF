@@ -19,13 +19,13 @@ iterations = 1000
 init_S = 'random' #'exp' #
 init_FG = 'kmeans' #'exp' #
 
-K_range = [5,6,7,8]
-L_range = [5,6,7,8]
+K_range = [4,5,6,7,8]
+L_range = [4,5,6,7,8]
 no_folds = 5
 restarts = 2
 
 quality_metric = 'AIC'
-output_file = "./results_TEST.txt"
+output_file = "./results.txt"
 
 alpha, beta = 1., 1.
 lambdaF = 1./10.
@@ -34,7 +34,7 @@ lambdaG = 1./10.
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 
 # Load in the Sanger dataset
-(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised)
+(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised,sep=',')
 
 # Run the cross-validation framework
 random.seed(42)
