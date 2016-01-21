@@ -26,9 +26,9 @@ init_S = 'random'
 I, J, K, L = 100, 80, 5, 5
 
 alpha, beta = 1., 1.
-lambdaF = numpy.ones((I,K))/10.
-lambdaS = numpy.ones((K,L))/10.
-lambdaG = numpy.ones((J,L))/10.
+lambdaF = numpy.ones((I,K))
+lambdaS = numpy.ones((K,L))/100.
+lambdaG = numpy.ones((J,L))
 priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'lambdaG':lambdaG }
 
 # Load in data

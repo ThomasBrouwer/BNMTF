@@ -14,7 +14,7 @@ name_drug_sensitivity <- 'ic50_excl_empty_filtered_cell_lines_drugs.txt'
 Y <- as.matrix(read.table(paste(folder_drug_sensitivity,name_drug_sensitivity,sep=''),
 				header=TRUE,
 				sep='\t',
-				colClasses=c(rep("NULL",3), rep("numeric",139))))
+				colClasses=c(rep("NULL",3), rep("numeric",138))))
 
 print("Loaded data")
 
@@ -51,7 +51,7 @@ print("Trained model")
 print(sprintf("MSE = %.4f", mean((prediction$Y$mu - Y)^2, na.rm=TRUE )))
 # R=5, 200 iterations: "MSE = 2.0170"
 # R=5, 1000 iterations: "MSE = 2.0131"
-# R=10, 100 iterations: "MSE = "
+# R=10, 100 iterations: "MSE = 1.5869"
 # R=10, 200 iterations: "MSE = 1.5736"
 # R=10, 1000 iterations: "MSE = 1.5644"
 

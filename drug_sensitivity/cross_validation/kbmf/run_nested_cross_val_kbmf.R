@@ -14,8 +14,8 @@ folder_drug_sensitivity <- '/home/tab43/Dropbox/Biological databases/Sanger_drug
 name_drug_sensitivity <- 'ic50_excl_empty_filtered_cell_lines_drugs.txt'
 Y <- as.matrix(read.table(paste(folder_drug_sensitivity,name_drug_sensitivity,sep=''),
 				header=TRUE,
-				sep='\t',
-				colClasses=c(rep("NULL",3), rep("numeric",139))))
+				sep=',',
+				colClasses=c(rep("NULL",3), rep("numeric",138))))
 
 # Load in the kernels - X = cancer cell lines, Z = drugs
 folder_kernels <- './kernels/'

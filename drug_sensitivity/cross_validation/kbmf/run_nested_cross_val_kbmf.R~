@@ -15,7 +15,7 @@ name_drug_sensitivity <- 'ic50_excl_empty_filtered_cell_lines_drugs.txt'
 Y <- as.matrix(read.table(paste(folder_drug_sensitivity,name_drug_sensitivity,sep=''),
 				header=TRUE,
 				sep='\t',
-				colClasses=c(rep("NULL",3), rep("numeric",139))))
+				colClasses=c(rep("NULL",3), rep("numeric",138))))
 
 # Load in the kernels - X = cancer cell lines, Z = drugs
 folder_kernels <- './kernels/'
@@ -46,5 +46,3 @@ kbmf_nested_cross_validation(Kx, Kz, Y, R_values, K)
 # R^2: 0.8108, 0.8109, 0.8073, 0.8120, 0.8021
 # Rp:  0.9005, 0.9005, 0.8986, 0.9011, 0.8958
 # Average performances: MSE=2.2380, R^2=0.8086, Rp=0.8993
-
-

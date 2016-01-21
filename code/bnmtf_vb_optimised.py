@@ -58,6 +58,7 @@ from distributions.exponential import exponential_draw
 import numpy, itertools, math, scipy, time
 from scipy.stats import norm
 import matplotlib.pyplot as plt
+from random import shuffle
 
 class bnmtf_vb_optimised:
     def __init__(self,R,M,K,L,priors):
@@ -170,16 +171,25 @@ class bnmtf_vb_optimised:
             self.all_performances[metric] = []
         
         time_start = time.time()
-        for it in range(0,iterations):         
-            for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
+        for it in range(0,iterations): 
+            indices_kl = list(itertools.product(xrange(0,self.K),xrange(0,self.L)))
+            shuffle(indices_kl)
+            for k,l in indices_kl:
+            #for k,l in itertools.product(xrange(0,self.K),xrange(0,self.L)):
                 self.update_S(k,l)
                 self.update_exp_S(k,l)
                 
-            for k in range(0,self.K):
+            indices_k = list(range(0,self.K))
+            shuffle(indices_k)
+            for k in indices_k:
+            #for k in range(0,self.K):
                 self.update_F(k)
                 self.update_exp_F(k)
-                
-            for l in range(0,self.L):
+               
+            indices_l = list(range(0,self.L))
+            shuffle(indices_l)
+            for l in indices_l:
+            #for l in range(0,self.L):
                 self.update_G(l)
                 self.update_exp_G(l)
                 
