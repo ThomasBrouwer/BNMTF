@@ -28,7 +28,7 @@ folder_Sanger = "/home/tab43/Dropbox/Biological databases/Sanger_drug_sensivitit
 Sanger_file = folder_Sanger+"ic50_excl_empty_filtered_cell_lines_drugs.txt"
 Sanger_file_std = folder_Sanger+"ic50_excl_empty_filtered_cell_lines_drugs_standardised.txt"
 
-def load_Sanger(location=None,standardised=False):
+def load_Sanger(location=None,standardised=False,sep="\t"):
     """ Load in data. We get a masked array, and set masked values to 0. """
     if location:
         fin = location
@@ -47,7 +47,7 @@ def load_Sanger(location=None,standardised=False):
     M = mask.calc_inverse_M(numpy.array(X.mask,dtype=float))
     (I,J) = X.shape # 2200 drugs, 60 cancer cell lines
     '''
-    lines = [line.split("\n")[0].split("\r")[0].split("\t") for line in open(fin,'r').readlines()]
+    lines = [line.split("\n")[0].split("\r")[0].split(sep) for line in open(fin,'r').readlines()]
     drug_names = lines[0][3:]
     cell_lines = []
     cancer_types = []

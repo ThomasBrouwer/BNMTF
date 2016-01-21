@@ -43,6 +43,7 @@ Finally, we can return the goodness of fit of the data using the quality(metric)
          = 'BIC'        -> return Bayesian Information Criterion
          = 'AIC'        -> return Afaike Information Criterion
          = 'MSE'        -> return Mean Square Error
+         = 'ELBO'       -> return Evidence Lower Bound
 (we want to maximise these values)
 """
 
@@ -331,7 +332,7 @@ class bnmtf_vb_optimised:
         
     # Functions for model selection, measuring the goodness of fit vs model complexity
     def quality(self,metric):
-        assert metric in ['loglikelihood','BIC','AIC','MSE'], 'Unrecognised metric for model quality: %s.' % metric
+        assert metric in ['loglikelihood','BIC','AIC','MSE','ELBO'], 'Unrecognised metric for model quality: %s.' % metric
         log_likelihood = self.log_likelihood()
         if metric == 'loglikelihood':
             return log_likelihood
@@ -344,6 +345,8 @@ class bnmtf_vb_optimised:
         elif metric == 'MSE':
             R_pred = self.triple_dot(self.expF,self.expS,self.expG.T)
             return self.compute_MSE(self.M,self.R,R_pred)
+        elif metric == 'ELBO':
+            return self.elbo()
         
     def log_likelihood(self):
         # Return the likelihood of the data given the trained model's parameters

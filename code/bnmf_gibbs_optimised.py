@@ -225,7 +225,7 @@ class bnmf_gibbs_optimised:
 
     # Functions for model selection, measuring the goodness of fit vs model complexity
     def quality(self,metric,burn_in,thinning):
-        assert metric in ['loglikelihood','BIC','AIC','MSE'], 'Unrecognised metric for model quality: %s.' % metric
+        assert metric in ['loglikelihood','BIC','AIC','MSE','ELBO'], 'Unrecognised metric for model quality: %s.' % metric
         
         (expU,expV,exptau) = self.approx_expectation(burn_in,thinning)
         log_likelihood = self.log_likelihood(expU,expV,exptau)
@@ -241,6 +241,8 @@ class bnmf_gibbs_optimised:
         elif metric == 'MSE':
             R_pred = numpy.dot(expU,expV.T)
             return self.compute_MSE(self.M,self.R,R_pred)
+        elif metric == 'ELBO':
+            return 0.
         
     def log_likelihood(self,expU,expV,exptau):
         # Return the likelihood of the data given the trained model's parameters
