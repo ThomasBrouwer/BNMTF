@@ -1,0 +1,545 @@
+16betabromoandrosterone	16-beta-bromoandrosterone	411726	C[C@]12CC[C@H]3[C@@H](CC[C@H]4C[C@H](O)CC[C@]34C)[C@@H]1C[C@H](Br)C2=O
+1s3rrsl3	1S,3R-RSL-3	609060	COC(=O)[C@H]1Cc2c([nH]c3ccccc23)[C@@H](N1C(=O)CCl)c1ccc(cc1)C(=O)OC
+3clahpc	3-Cl-AHPC	660796	OC(=O)\C=C\c1ccc(c(Cl)c1)-c1ccc(O)c(c1)C12C[C@H]3C[C@H](C[C@H](C3)C1)C2
+968	968	660080	CN(C)c1ccc(cc1Br)C1Nc2ccc3ccccc3c2C2=C1C(=O)CC(C)(C)C2
+a804598	A-804598	661033	C[C@H](\N=C(\NC#N)Nc1cccc2ncccc12)c1ccccc1
+aacocf3	AA-COCF3	411724	CCCCC\C=C/C\C=C/C\C=C/C\C=C/CCCC(=O)C(F)(F)F
+abiraterone	abiraterone	660363	C[C@]12CC[C@H]3[C@@H](CC=C4C[C@@H](O)CC[C@]34C)[C@@H]1CC=C2c1cccnc1
+abt199	ABT-199	666541	CC1(C)CCC(CN2CCN(CC2)c2ccc(C(=O)NS(=O)(=O)c3ccc(NCC4CCOCC4)c(c3)[N+]([O-])=O)c(Oc3cnc4[nH]ccc4c3)c2)=C(C1)c1ccc(Cl)cc1
+abt737	ABT-737	411738	CN(C)CC[C@H](CSc1ccccc1)Nc1ccc(cc1[N+]([O-])=O)S(=O)(=O)NC(=O)c1ccc(cc1)N1CCN(Cc2ccccc2-c2ccc(Cl)cc2)CC1
+ac55649	AC55649	375487	CCCCCCCCc1ccc(cc1)-c1ccc(cc1)C(O)=O
+afatinib	afatinib	606135	CN(C)C\C=C\C(=O)Nc1cc2c(Nc3ccc(F)c(Cl)c3)ncnc2cc1O[C@H]1CCOC1
+agk2	AGK-2	411716	Clc1ccc(Cl)c(c1)-c1ccc(\C=C(/C#N)C(=O)Nc2cccc3ncccc23)o1
+alisertib	alisertib	636711	COc1cc(Nc2ncc3CN=C(c4cc(Cl)ccc4-c3n2)c2c(F)cccc2OC)ccc1C(O)=O
+alisertib:navitoclax(2:1mol/mol)	alisertib:navitoclax (2:1 mol/mol)	660282	COc1cc(Nc2ncc3CN=C(c4cc(Cl)ccc4-c3n2)c2c(F)cccc2OC)ccc1C(O)=O.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+alvocidib	alvocidib	687720	CN1CC[C@H]([C@H](O)C1)c1c(O)cc(O)c2c1oc(cc2=O)-c1ccccc1Cl
+am580	AM-580	58455	CC1(C)CCC(C)(C)c2cc(ccc12)C(=O)Nc1ccc(cc1)C(O)=O
+apicidin	apicidin	61097	CC[C@@H](C)[C@@H]1NC(=O)[C@H](Cc2cn(OC)c3ccccc23)NC(=O)[C@H](CCCCCC(=O)CC)NC(=O)[C@H]2CCCCN2C1=O
+at13387	AT13387	688229	CC(C)c1cc(C(=O)N2Cc3ccc(CN4CCN(C)CC4)cc3C2)c(O)cc1O
+at406	AT-406	710154	CNC(C)C(=O)NC1CN(CCC2CCC(N2C1=O)C(=O)NC(c3ccccc3)c4ccccc4)C(=O)CC(C)C
+at7867	AT7867	660409	Clc1ccc(cc1)C1(CCNCC1)c1ccc(cc1)-c1cn[nH]c1
+austocystind	austocystin D	416775	CC(C)(O)CCc1ccc(O)c2c1oc1cc3O[C@H]4OC=C[C@@]4(O)c3c(O)c1c2=O
+avicind	avicin D	688975	CC1O[C@@H](OCC2O[C@@H](O[C@H]3CC[C@@]4(C)C(CC[C@]5(C)C4CC=C4C6CC(C)(C)[C@H](C[C@@]6([C@H](O)C[C@@]54C)C(=O)O[C@@H]4OC(CO)[C@@H](O)[C@@H](O)[C@@H]4O[C@@H]4OC(C)[C@H](O[C@@H]5O[C@@H](CO)[C@H](O)[C@@H]5O)[C@@H](O[C@@H]5OC(CO)[C@@H](O)[C@@H](O)[C@@H]5O)[C@@H]4O)OC(=O)C(\CO)=C\CC[C@](C)(O[C@@H]4OC(C)[C@@H](OC(=O)C(\CO)=C\CCC(C)(O)C=C)[C@@H](O)[C@@H]4O)C=C)C3(C)C)[C@@H](NC(C)=O)[C@H](O)[C@@H]2O)[C@@H](O[C@@H]2OC[C@@H](O)[C@@H](O)[C@@H]2O)[C@H](O)[C@H]1O
+avrainvillamide	avrainvillamide	411856	CC1(C)Oc2ccc3C4=C[C@@]56NC(=O)[C@]7(CCCN7C5=O)C[C@H]6C(C)(C)C4=[N+]([O-])c3c2C=C1
+axitinib	axitinib	348990	CNC(=O)c1ccccc1Sc1ccc2c(\C=C\c3ccccn3)n[nH]c2c1
+az3146	AZ-3146	660087	COc1cc(OC2CCN(C)CC2)ccc1Nc1ncc2n(C)c(=O)n(C3CCCC3)c2n1
+azacitidine	azacitidine	26874	Nc1ncn([C@@H]2O[C@H](CO)[C@@H](O)[C@H]2O)c(=O)n1
+azd1480	AZD1480	660306	C[C@H](Nc1ncc(Cl)c(Nc2cc(C)[nH]n2)n1)c1ncc(F)cn1
+azd4547	AZD4547	660325	COc1cc(CCc2cc(NC(=O)c3ccc(cc3)N3C[C@H](C)N[C@H](C)C3)n[nH]2)cc(OC)c1
+azd6482	AZD6482	639390	C[C@@H](Nc1ccccc1C(O)=O)c1cc(C)cn2c1nc(cc2=O)N1CCOCC1
+azd7545	AZD7545	411814	CN(C)C(=O)c1ccc(cc1)S(=O)(=O)c1ccc(NC(=O)[C@@](C)(O)C(F)(F)F)c(Cl)c1
+azd7762	AZD7762	660777	NC(=O)Nc1cc(sc1C(=O)N[C@H]1CCCNC1)-c1cccc(F)c1
+azd8055	AZD8055	609639	COc1ccc(cc1CO)-c1ccc2c(nc(nc2n1)N1CCOC[C@@H]1C)N1CCOC[C@@H]1C
+b02	B02	122255	O=c1n(Cc2ccccc2)c(\C=C\c2cccnc2)nc2ccccc12
+bafilomycina1	bafilomycin A1	467037	CO[C@H]1\C=C\C=C(C)\C[C@@H](C)[C@H](O)[C@H](C)\C=C(C)\C=C(OC)\C(=O)O[C@@H]1[C@@H](C)[C@@H](O)[C@H](C)[C@H]1C[C@@H](O)[C@H](C)[C@H](O1)C(C)C
+barasertib	barasertib	601923	CCN(CCO)CCCOc1ccc2c(Nc3cc(CC(=O)Nc4cccc(F)c4)[nH]n3)ncnc2c1
+bardoxolonemethyl	bardoxolone methyl	660318	COC(=O)[C@@]12CCC(C)(C)C[C@@H]1[C@@H]1C(=O)C=C3[C@]4(C)C=C(C#N)C(=O)C(C)(C)[C@H]4CC[C@]3(C)[C@@]1(C)CC2
+baxchannelblocker	Bax channel blocker	18311	OC(CN1CCNCC1)Cn1c2ccc(Br)cc2c2cc(Br)ccc12
+bcllzh4	BCL-LZH-4	688516	COc1ccc(cc1)C1C(C(=O)Nc2ccccc2)=C(C)N=c2s\c(=C/c3cn(Cc4ccccc4)c4ccccc34)c(=O)n12
+bec	BEC	60679	N[C@H](CSCCB(O)O)C(O)=O
+belinostat	belinostat	60225	ONC(=O)\C=C\c1cccc(c1)S(=O)(=O)Nc1ccccc1
+bendamustine	bendamustine	374755	Cn1c(CCCC(O)=O)nc2cc(ccc12)N(CCCl)CCCl
+betulinicacid	betulinic acid	23256	CC(=C)[C@@H]1CC[C@@]2(CC[C@]3(C)[C@H](CC[C@@H]4[C@@]5(C)CC[C@H](O)C(C)(C)[C@@H]5CC[C@@]34C)[C@@H]12)C(O)=O
+bexarotene	bexarotene	374747	Cc1cc2c(cc1C(=C)c1ccc(cc1)C(O)=O)C(C)(C)CCC2(C)C
+bi2536	BI-2536	347813	CC[C@H]1N(C2CCCC2)c2nc(Nc3ccc(cc3OC)C(=O)NC3CCN(C)CC3)ncc2N(C)C1=O
+bibr1532	BIBR-1532	417982	C\C(=C/C(=O)Nc1ccccc1C(O)=O)c1ccc2ccccc2c1
+birb796	BIRB-796	660412	Cc1ccc(cc1)-n1nc(cc1NC(=O)Nc1ccc(OCCN2CCOCC2)c2ccccc12)C(C)(C)C
+birinapant	birinapant	660778	CC[C@H](NC(=O)[C@H](C)NC)C(=O)N1C[C@@H](O)C[C@H]1Cc1c([nH]c2cc(F)ccc12)-c1cc2c(C[C@@H]3C[C@H](O)CN3C(=O)[C@H](CC)NC(=O)[C@H](C)NC)cc(F)cc2[nH]1
+bix01294	BIX-01294	53705	COc1cc2nc(nc(NC3CCN(Cc4ccccc4)CC3)c2cc1OC)N1CCCN(C)CC1
+blebbistatin	blebbistatin	50140	Cc1ccc2N=C3N(CCC3(O)C(=O)c2c1)c1ccccc1
+bleomycina2	bleomycin A2	639531	C[C@@H](O)[C@@H](NC(=O)[C@H](C)[C@@H](O)[C@H](C)NC(=O)[C@@H](NC(=O)c1nc(nc(N)c1C)[C@H](CC(N)=O)NC[C@@H](N)C(N)=O)C(O[C@H]1O[C@H](CO)[C@H](O)[C@@H](O)[C@H]1O[C@H]1O[C@H](CO)[C@@H](O)[C@H](OC(N)=O)[C@@H]1O)c1c[nH]cn1)C(=O)NCCc1nc(cs1)-c1nc(cs1)C(=O)NCCC[S+](C)C
+bms195614	BMS-195614	660228	CC1(C)CC=C(c2cnc3ccccc3c2)c2cc(ccc12)C(=O)Nc1ccc(cc1)C(O)=O
+bms270394	BMS-270394	660321	CC1(C)CCC(C)(C)c2cc(ccc12)[C@@H](O)C(=O)Nc1ccc(cc1F)C(O)=O
+bms345541	BMS-345541	622911	Cc1cnc2c(NCCN)nc3ccc(C)cc3n12
+bms536924	BMS-536924	411859	Cc1cc(cc2[nH]c(nc12)-c1c(NC[C@@H](O)c2cccc(Cl)c2)cc[nH]c1=O)N1CCOCC1
+bms754807	BMS-754807	417981	C[C@]1(CCCN1c1nc(Nc2cc(n[nH]2)C2CC2)c2cccn2n1)C(=O)Nc1ccc(F)nc1
+bortezomib	bortezomib	411737	CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O
+bosutinib	bosutinib	660346	COc1cc(Nc2cc(nc3cc(OCCCN4CCN(C)CC4)c(OC)cc23)C#N)c(Cl)cc1Cl
+brd1812	BRD1812	418162	Oc1ccc(C[C@@H]2N3[C@H](CN(Cc4cccc5ccccc45)C2=O)N(CCC3=O)C(=O)NCc2ccccc2)cc1
+brd1835	BRD1835	404070	C[C@@H](CO)N1C[C@H](C)[C@@H](CN(C)Cc2ccc(cc2)C(O)=O)Oc2cc(ccc2S1(=O)=O)C#CCC1CCCC1
+brd4132	BRD4132	3588	CC(C)N1C(=O)S\C(=C\c2ccc(Sc3nc4ccccc4[nH]3)o2)C1=O
+brd6340	BRD6340	12877	C(Cn1c2ccccc2c2ccccc12)c1nc2ccccc2[nH]1
+brd8899	BRD8899	608062	CC(=O)NC[C@@H]1C[C@H](CN1)NS(=O)(=O)c1cccc2cncc(C)c12
+brd8958	BRD8958	418163	CC1=NN(C(=O)C\1=C\c1ccc(o1)-c1cc(C)c(C)cc1[N+]([O-])=O)c1ccc(cc1)C(O)=O
+brd9647	BRD9647	37479	COc1ccc(cc1)N(C(=O)c1ccccc1)S(=O)(=O)c1cc(OC)ccc1OC
+brd9876	BRD9876	19153	CC(C)(C)c1ccc2cc(C#N)c(cc2c1)C#N
+brd9876:mk1775(4:1mol/mol)	BRD9876:MK-1775 (4:1 mol/mol)	689136	CC(C)(C)c1ccc2cc(C#N)c(cc2c1)C#N.CN1CCN(CC1)c1ccc(Nc2ncc3c(n2)n(-c2cccc(n2)C(C)(C)O)n(CC=C)c3=O)cc1
+brda02303741	BRD-A02303741	659371	CC(C)N(CCCNC(=O)Nc1ccc(cc1)C(C)(C)C)C[C@H]1O[C@H](C(O)[C@H]1O)n1cnc2c(N)ncnc12
+brda02303741:carboplatin(1:1mol/mol)	BRD-A02303741:carboplatin (1:1 mol/mol)	660271	O=C1O[Pt]OC(=O)C11CCC1.CC(C)N(CCCNC(=O)Nc1ccc(cc1)C(C)(C)C)C[C@H]1O[C@H]([C@H](O)[C@@H]1O)n1ccc2c(N)ncnc12
+brda02303741:navitoclax(2:1mol/mol)	BRD-A02303741:navitoclax (2:1 mol/mol)	660268	CC(C)N(CCCNC(=O)Nc1ccc(cc1)C(C)(C)C)C[C@H]1O[C@H]([C@H](O)[C@@H]1O)n1ccc2c(N)ncnc12.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+brda05715709	BRD-A05715709	660342	Cc1ccccc1C(N(C(=O)Cc1ccncc1)c1cccc(F)c1)C(=O)NC1CCCCC1
+brda71883111	BRD-A71883111	660145	Fc1cccc(c1)N(C(C(=O)NC1CCCCC1)c1ccccc1Cl)C(=O)Cc1cccs1
+brda86708339	BRD-A86708339	687769	Cc1ccc(cc1)C(NC(=O)c1ccccc1)c1ccc2cccnc2c1O
+brda94377914	BRD-A94377914	61724	CN1CCCCC1NC(=O)[C@H](CCCCCC(C)=O)C(=O)Nc1nc(cs1)-c1ccccc1
+brdk01737880	BRD-K01737880	438345	COc1ccc(NC(=O)Nc2ccc3O[C@@H](CN(C)Cc4ccc5OCOc5c4)[C@@H](C)CN([C@@H](C)CO)C(=O)c3c2)cc1
+brdk02251932	BRD-K02251932	442141	C[C@H](CO)N1C[C@H](C)[C@H](CN(C)C(=O)NC2CCCCC2)Oc2c(NS(=O)(=O)c3ccc(F)cc3)cccc2C1=O
+brdk02492147	BRD-K02492147	415688	CN1CCN(CC1)C(=O)C[C@@H]1O[C@H](CO)[C@@H](NS(=O)(=O)c2cccc(F)c2)C=C1
+brdk03536150	BRD-K03536150	686134	CC1=NN(C(=O)C\1=N\Nc1ccccc1C(O)=O)c1nc(cs1)-c1ccccc1
+brdk03911514	BRD-K03911514	660424	CCCC[C@H](NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@@H](NC(=O)[C@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CO)NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](CCC(O)=O)NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](Cc2cnc[nH]2)NC(=O)[C@H](CCC(O)=O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CCC(O)=O)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CO)NC(=O)[C@H](CC(C)C)NC(C)=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N1)[C@@H](C)CC)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](Cc1ccccc1)C(N)=O
+brdk04800985	BRD-K04800985	435086	C[C@@H](CO)N1C[C@@H](C)[C@@H](CN(C)CC2CCCCC2)Oc2ccc(NC(=O)Nc3c(C)noc3C)cc2C1=O
+brdk07442505	BRD-K07442505	660229	CCOc1ccccc1N\N=C1C(=O)N(N=C\1C)c1nc(cs1)-c1ccccc1
+brdk09344309	BRD-K09344309	439882	C[C@H](CO)N1C[C@@H](C)[C@H](CN(C)Cc2ccc3OCOc3c2)Oc2c(NC(=O)c3ccncc3)cccc2C1=O
+brdk09587429	BRD-K09587429	416842	C[C@@H](NC(=O)C[C@@H]1CC[C@@H](NC(=O)CN2CCOCC2)[C@H](CO)O1)c1ccccc1
+brdk11533227	BRD-K11533227	389297	CC(=O)NC1CCN(CC1)C(=O)Nc1cc(ccc1N)-c1cccs1
+brdk13185470	BRD-K13185470	660839	CC(C)C[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CCCNC(N)=N)NC(C)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](C(C)C)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CC(O)=O)C(=O)NCC(=O)N[C@@H](C(C)C)C(=O)N[C@@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](Cc2cnc[nH]2)NC(=O)[C@H](CC(N)=O)NC(=O)[C@H](CCCNC(N)=N)NC1=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1ccccc1)C(N)=O
+brdk13999467	BRD-K13999467	410270	C[C@@H](CO)N1C[C@H](C)[C@H](CN(C)C(=O)Cc2ccncc2)Oc2cc(ccc2S1(=O)=O)C#Cc1ccccc1F
+brdk14844214	BRD-K14844214	402775	CC(C)CC#Cc1ccc2c(O[C@@H](CN(C)C(=O)c3cnccn3)[C@H](C)CN([C@H](C)CO)S2(=O)=O)c1
+brdk16130065	BRD-K16130065	660425	CC[C@H](C)[C@H](NC(C)=O)C(=O)N[C@@H](Cc1c[nH]c2ccccc12)C(=O)N[C@@H]([C@@H](C)CC)C(=O)N[C@@H](C)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CC(O)=O)C(=O)N[C@@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](CC(O)=O)NC(=O)CNC(=O)[C@@H](NC1=O)[C@@H](C)CC)C(=O)N[C@@H](Cc1ccccc1)C(=O)N[C@@H](CC(N)=O)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CCCNC(N)=N)C(N)=O
+brdk16147474	BRD-K16147474	447732	CC(C)NC(=O)Nc1ccc2O[C@@H](CN(C)S(C)(=O)=O)[C@@H](C)CN([C@H](C)CO)C(=O)Cc2c1
+brdk17060750	BRD-K17060750	600054	CN(C)CC(=O)N[C@@H]1CC[C@@H](CCNC(=O)Nc2ccc(F)cc2)O[C@H]1CO
+brdk19103580	BRD-K19103580	436211	C[C@H](CO)N1C[C@H](C)[C@H](CN(C)Cc2ccc(Cl)c(Cl)c2)Oc2ccc(cc2C1=O)N(C)C
+brdk20514654	BRD-K20514654	651304	CC[C@H](C)[C@H](NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](CCCNC(N)=N)NC(=O)CCNC(C)=O)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CCSC)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](C)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(N)=O)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@]1(C)CCC\C=C/CCC[C@@](C)(NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](CCC(O)=O)NC1=O)C(=O)N[C@@H](CCCNC(N)=N)C(N)=O
+brdk24690302	BRD-K24690302	641721	CN(C)CC1CN(C1)C(=O)Nc1cc(ccc1N)-c1ccc(F)cc1
+brdk26531177	BRD-K26531177	42319	COc1cc(CCC(=O)N2CCC=CC2=O)cc(OC)c1OC
+brdk27188169	BRD-K27188169	660798	CC(C)C[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CCCNC(N)=N)NC(C)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](C(C)C)C(=O)NCC(=O)N[C@@H](CC(O)=O)C(=O)NCC(=O)N[C@@H](C(C)C)C(=O)N[C@@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](Cc2cnc[nH]2)NC(=O)[C@H](CC(N)=O)NC(=O)[C@H](CCCNC(N)=N)NC1=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1ccccc1)C(N)=O
+brdk27188169:navitoclax(2:1mol/mol)	BRD-K27188169:navitoclax (2:1 mol/mol)	665818	CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1.CC(C)C[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CCCNC(N)=N)NC(C)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](C(C)C)C(=O)NCC(=O)N[C@@H](CC(O)=O)C(=O)NCC(=O)N[C@@H](C(C)C)C(=O)N[C@@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](Cc2cnc[nH]2)NC(=O)[C@H](CC(N)=O)NC(=O)[C@H](CCCNC(N)=N)NC1=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1ccccc1)C(N)=O
+brdk27224038	BRD-K27224038	397964	C[C@@H](CO)N1C[C@H](C)[C@@H](CN(C)C(=O)C2CCOCC2)Oc2ncc(cc2C1=O)C#CC1(O)CCCC1
+brdk27986637	BRD-K27986637	452570	C[C@H](CO)N1C[C@H](C)[C@H](CN(C)Cc2ccc3OCCOc3c2)OCc2cn(CCCC1=O)nn2
+brdk28456706	BRD-K28456706	651642	Cc1c(oc2ccc3ccccc3c12)[N+]([O-])=O
+brdk29086754	BRD-K29086754	448891	C[C@H](CO)N1C[C@@H](C)[C@@H](CN(C)Cc2ccc(cc2)C(O)=O)Oc2ccc(NC(=O)Nc3ccc(F)cc3)cc2CC1=O
+brdk29313308	BRD-K29313308	634814	CC(=O)Nc1ccc(cc1)C(=O)Nc1ccc(F)cc1N
+brdk30019337	BRD-K30019337	437263	CC(C)NC(=O)N(C)C[C@H]1Oc2ccc(cc2C(=O)N(C[C@H]1C)[C@H](C)CO)N(C)C
+brdk30748066	BRD-K30748066	689506	Cc1c(sc(=O)n1C)-c1ccnc(Nc2ccc(cc2)N2CCNCC2)n1
+brdk33199242	BRD-K33199242	449707	CNC[C@@H]1Oc2ccc(cc2CC(=O)N(C[C@@H]1C)[C@@H](C)CO)N(C)C
+brdk33514849	BRD-K33514849	401251	C[C@H](CO)N1C[C@@H](C)[C@H](CN(C)C(=O)Nc2ccc3OCOc3c2)Oc2cc(ccc2S1(=O)=O)C#Cc1ccncc1
+brdk34099515	BRD-K34099515	660064	CC(C)N1C[C@@H](C)[C@H](CN(C)Cc2ccc(Oc3ccccc3)cc2)Oc2c(NC(=O)c3ccncc3)cccc2C1=O
+brdk34222889	BRD-K34222889	688888	COc1ccc(cc1)C#CC1=CCCN(C(=O)\C=C\c2cc(OC)c(OC)c(OC)c2)C1=O
+brdk34485477	BRD-K34485477	446716	CNC[C@@H]1Oc2ccc(NC(=O)CCN3CCOCC3)cc2CC(=O)N(C[C@@H]1C)[C@H](C)CO
+brdk35604418	BRD-K35604418	660230	Cc1cs\c(=N/C2CCCCC2)n1\N=C\c1ccc(O)c(O)c1O
+brdk37390332	BRD-K37390332	463198	C[C@H](CO)N1C[C@H](C)[C@@H](CN(C)C(=O)Nc2cccc3ccccc23)Oc2ccc(NC(=O)c3ccncc3)cc2CC1=O
+brdk41334119	BRD-K41334119	446546	CNC[C@@H]1Oc2ccc(NS(C)(=O)=O)cc2CC(=O)N(C[C@@H]1C)[C@H](C)CO
+brdk41597374	BRD-K41597374	404452	C[C@H](CO)N1C[C@H](C)[C@H](CN(C)C(=O)Nc2cc(F)ccc2F)Oc2cc(ccc2S1(=O)=O)C#CC1CCCC1
+brdk42260513	BRD-K42260513	687715	CC(C)n1ncc2c(cc(cc12)-c1ccc(nc1)N1CCNCC1)C(=O)NCc1c(C)cc(C)[nH]c1=O
+brdk44224150	BRD-K44224150	438564	CNC[C@@H]1Oc2ccc(NC(=O)C3CCCCC3)cc2C(=O)N(C[C@@H]1C)[C@@H](C)CO
+brdk45681478	BRD-K45681478	142931	ClC1=C(NCC=C)C(=O)c2ccccc2C1=O
+brdk48334597	BRD-K48334597	431987	C[C@H](CO)N1C[C@H](C)[C@@H](CN(C)C(=O)NC2CCCCC2)Oc2ccc(NC(=O)Cc3cn(C)c4ccccc34)cc2C1=O
+brdk48477130	BRD-K48477130	649754	Cc1n[nH]c2NC3=C([C@@H](c12)c1ccccc1)C(=O)CC(C)(C)C3
+brdk49290616	BRD-K49290616	414479	OC[C@@H]1O[C@@H](CC(=O)NCc2ccncn2)CC[C@H]1NC(=O)c1ccc(F)cc1
+brdk50799972	BRD-K50799972	596868	COc1ccccc1-c1cccc(c1)-c1nc(cc2CN([C@@H](CCO)c12)[S@@](=O)C(C)(C)C)C(=O)NCc1ccncc1
+brdk51490254	BRD-K51490254	616355	ONC(=O)c1cccc(c1)C(=O)Nc1ccccc1
+brdk51831558	BRD-K51831558	687661	CC(C)n1ncc2c(cc(Br)cc12)C(=O)NCc1c(C)cc(C)[nH]c1=O
+brdk52037352	BRD-K52037352	450415	C[C@@H](CO)N1C[C@H](C)[C@H](CN(C)C(=O)Nc2cccc3ccccc23)Oc2ccc(NC(=O)NC3CCCCC3)cc2CC1=O
+brdk55116708	BRD-K55116708	444779	C[C@@H](CO)N1C[C@@H](C)[C@@H](CN(C)Cc2ccc(cc2)C(=O)Nc2ccccc2N)Oc2c(NC(=O)Nc3ccccc3)cccc2C1=O
+brdk55473186	BRD-K55473186	651306	CCC(C)C(NC(=O)C(CCCNC(=N)N)NC(=O)C(CCCNC(=N)N)NC(=O)C(CCCNC(=N)N)NC(=O)C(CC(C)C)NC(=O)C(CCCNC(=N)N)NC(=O)C(CCC(=O)O)NC(=O)CCNC(=O)C)C(=O)NC1(C)CCCC=CCCCC(C)(NC(=O)C(CCCNC(=N)N)NC(=O)C(CS)NC(=O)C(CC(C)C)NC1=O)C(=O)NC(Cc2c[nH]cn2)C(=O)NC(Cc3c[nH]cn3)C(=O)NC(CO)C(=O)NC(C(C)O)C(=O)N
+brdk58730230	BRD-K58730230	660797	CC(C)C[C@H](NC(=O)[C@H](C)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CCCNC(N)=N)NC(C)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](C(C)C)C(=O)NCC(=O)N[C@@H](CC(O)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](C(C)C)C(=O)N[C@@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](Cc2cnc[nH]2)NC(=O)[C@H](CC(N)=O)NC(=O)[C@H](CCCNC(N)=N)NC1=O)C(=O)N[C@@H]([C@@H](C)O)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1ccccc1)C(N)=O
+brdk61166597	BRD-K61166597	348633	Nc1ccc(cc1NC(=O)c1ccc(cc1)C(=O)NCCc1ccncc1)-c1cccs1
+brdk63431240	BRD-K63431240	404566	C[C@@H](CO)N1C[C@H](C)[C@@H](CN(C)C(=O)Nc2ccc3OCOc3c2)Oc2cc(ccc2S1(=O)=O)C#Cc1ccncc1
+brdk64610608	BRD-K64610608	438776	COc1ccc(cc1)S(=O)(=O)N(C)C[C@@H]1Oc2c(NC(=O)Nc3cccc4ccccc34)cccc2C(=O)N(C[C@H]1C)[C@@H](C)CO
+brdk66453893	BRD-K66453893	387472	C[C@@H](CO)N1C[C@H](C)[C@H](CN(C)S(=O)(=O)c2ccc(Cl)cc2)Oc2ccc(NC(=O)CCC(F)(F)F)cc2CC1=O
+brdk66532283	BRD-K66532283	376693	Nc1ccc(cc1NC(=O)C1=CCCC1)-c1cccs1
+brdk70511574	BRD-K70511574	648987	COc1ccc(cc1)S(=O)(=O)N(C(=O)C)c2ccccc2C=Cc3cc[n+]([O-])cc3
+brdk71781559	BRD-K71781559	425733	OC(=O)c1ccc(NCc2nc3cc4ccccc4cc3[nH]2)cc1
+brdk71935468	BRD-K71935468	58566	COC(=O)C(CC#Cc1ccc2NC(=O)[C@@]3([C@H]([C@H]4N([C@H]3c3ccccc3OCCO)[C@@H]([C@@H](OC4=O)c3ccccc3)c3ccccc3)C(=O)N3CCN(CC3)c3ncccn3)c2c1)C(=O)OC
+brdk75293299	BRD-K75293299	438691	C[C@@H](CO)N1C[C@@H](C)[C@H](CN(C)C(=O)Nc2cccc3ccccc23)Oc2c(NC(=O)c3ccncc3)cccc2C1=O
+brdk78574327	BRD-K78574327	435898	C[C@H](CO)N1C[C@H](C)[C@H](CN(C)CC2CC2)Oc2ccc(NS(=O)(=O)c3cn(C)cn3)cc2C1=O
+brdk79669418	BRD-K79669418	660139	CC(C)C[C@@H]1NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](Cc2c[nH]c3ccccc23)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(N)=O)NC(=O)[C@@](C)(CCCCCC\C=C/CCC[C@](C)(NC(=O)[C@H](CC(C)C)NC1=O)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CC(N)=O)C(N)=O)NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@@H](NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CO)NC(=O)[C@H](CCC(N)=O)NC(C)=O)[C@@H](C)O
+brdk80183349	BRD-K80183349	376307	CC(=O)N1CCC(CC1)C(=O)Nc1cc(ccc1N)-c1cccs1
+brdk84807411	BRD-K84807411	437906	C[C@H](CO)N1C[C@H](C)[C@@H](CN(C)C)Oc2c(NC(=O)c3cc(C)nn3C)cccc2C1=O
+brdk85133207	BRD-K85133207	616408	CC(=O)N[C@H]1C[C@H](C1)C(=O)Nc1cc(ccc1N)-c1ccc(F)cc1
+brdk86535717	BRD-K86535717	429535	CO[C@@H]1CC[C@H]2CCN(C)C(=O)[C@@H](C)[C@H](CN(C)C(=O)c3cccc(C#N)c3OC[C@H]1O2)OC
+brdk88742110	BRD-K88742110	606670	COc1ccc(Cn2ccc3ccc(cc23)C(=O)NO)cc1
+brdk90370028	BRD-K90370028	362207	CC(=O)N[C@@H]1C\C=C\CCC(=O)N[C@@H](COC1=O)c1ccccc1
+brdk92856060	BRD-K92856060	119769	COc1ccc(cc1[N+]([O-])=O)S(=O)(=O)N(C(C)=O)c1ccc(OC(C)=O)c2ccccc12
+brdk94991378	BRD-K94991378	53556	COCCOC(=O)N1C(=O)[C@]2([C@@H]([C@@H]3N([C@@H]2c2ccccc2OCCO)[C@H]([C@H](OC3=O)c2ccccc2)c2ccccc2)C(=O)NCC=C)c2cc(ccc12)C#CCC(C(=O)OC)C(=O)OC
+brdk96431673	BRD-K96431673	417262	CN1CCN(CC1)C(=O)C[C@H]1CC[C@H](NC(=O)c2ccc3OCOc3c2)[C@@H](CO)O1
+brdk96970199	BRD-K96970199	410703	C\C=C\c1ccc2c(O[C@@H](CN(C)C(=O)c3ccccc3)[C@@H](C)CN([C@@H](C)CO)S2(=O)=O)c1
+brdk97651142	BRD-K97651142	660135	CN(CCc1cc(Br)c(OCCCNc2ncnc3n(C)cnc23)c(Br)c1)C(=O)c1ccc(C)cc1
+brdk99006945	BRD-K99006945	687395	CCN(CC)c1ccc(cc1)C1=NNC(=O)C[C@H]1C
+brdk99584050	BRD-K99584050	660140	CC[C@H](C)[C@H](NC(C)=O)C(=O)N[C@@H](Cc1c[nH]c2ccccc12)C(=O)N[C@@H]([C@@H](C)CC)C(=O)N[C@@H](C)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@]1(C)CCC\C=C/CCC[C@](C)(NC(=O)[C@H](CC(O)=O)NC(=O)CNC(=O)[C@@H](NC1=O)[C@@H](C)CC)C(=O)N[C@@H](Cc1ccccc1)C(=O)N[C@@H](CC(N)=O)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N[C@@H](C)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CCCNC(N)=N)C(N)=O
+brdm00053801	BRD-M00053801	660890	C[C@H](O)[C@@H]1[C@H](CO)ON(Cc2cccc(CN(CCN(C)C)[C@H](C3CCCCC3)c3ccccc3)c2)[C@@H]1C(=O)N[C@H]1C[C@H]2C[C@@H]([C@@H]1C)C2(C)C.C[C@H](O)[C@@H]1[C@H](CO)ON(Cc2cccc(CN(CCN(C)C)[C@@H](C3CCCCC3)c3ccccc3)c2)[C@@H]1C(=O)N[C@H]1C[C@H]2C[C@@H]([C@@H]1C)C2(C)C
+brefeldina	brefeldin A	411714	CC1CCC\C=C/C2CC(O)CC2C(O)\C=C/C(=O)O1
+brivanib	brivanib	606246	C[C@@H](O)COc1cn2ncnc(Oc3ccc4[nH]c(C)cc4c3F)c2c1C
+byl719	BYL-719	668495	Cc1nc(NC(=O)N2CCC[C@H]2C(N)=O)sc1-c1ccnc(c1)C(C)(C)C(F)(F)F
+c6ceramide	C6-ceramide	44554	CCCCCCCCCCCCC\C=C\[C@@H](O)[C@H](CO)NC(=O)CCCCC
+cabozantinib	cabozantinib	660840	COc1cc2nccc(Oc3ccc(NC(=O)C4(CC4)C(=O)Nc4ccc(F)cc4)cc3)c2cc1OC
+cal101	CAL-101	660430	CC[C@H](Nc1ncnc2[nH]cnc12)c1nc2cccc(F)c2c(=O)n1-c1ccccc1
+canertinib	canertinib	606138	Fc1ccc(Nc2ncnc3cc(OCCCN4CCOCC4)c(NC(=O)C=C)cc23)cc1Cl
+carboplatin	carboplatin	26979	O=C1O[Pt]OC(=O)C11CCC1
+carboplatin:etoposide(40:17mol/mol)	carboplatin:etoposide (40:17 mol/mol)	660223	O=C1O[Pt]OC(=O)C11CCC1.COc1cc(cc(OC)c1O)[C@H]1[C@@H]2[C@H](COC2=O)[C@H](O[C@@H]2O[C@@H]3CO[C@@H](C)O[C@H]3[C@H](O)[C@H]2O)c2cc3OCOc3cc12
+carboplatin:unc0638(2:1mol/mol)	carboplatin:UNC0638 (2:1 mol/mol)	660130	O=C1O[Pt]OC(=O)C11CCC1.COc1cc2c(NC3CCN(CC3)C(C)C)nc(nc2cc1OCCCN1CCCC1)C1CCCCC1
+cay10576	CAY10576	622913	COc1cc2ncn(-c3cc(OCc4ccccc4S(C)(=O)=O)c(s3)C#N)c2cc1OC
+cay10594	CAY10594	411824	O=C(NCCN1CCC2(CC1)N(CNC2=O)c1ccccc1)c1ccc2ccccc2c1
+cay10618	CAY10618	632104	O=C(CCCCCCCn1cc(nn1)-c1cccnc1)Nc1ccccc1-c1ccccc1
+cbb1007	CBB-1007	687721	COC(=O)c1cc(CN2CCN(CC2)C(N)=N)cc(c1)C(=O)N1CCN(CC1)C(=O)c1ccc(cc1)C(N)=N
+cct036477	CCT036477	417663	Cc1[nH]c2ccccc2c1C(Nc1ccccn1)c1ccc(Cl)cc1
+cd1530	CD-1530	375562	OC(=O)c1ccc(cc1)-c1ccc2cc(c(O)cc2c1)C12CC3CC(CC(C3)C1)C2
+cd437	CD-437	375256	OC(=O)c1ccc2cc(ccc2c1)-c1ccc(O)c(c1)C12CC3CC(CC(C3)C1)C2
+cediranib	cediranib	606136	COc1cc2c(Oc3ccc4[nH]c(C)cc4c3F)ncnc2cc1OCCCN1CCCC1
+ceranib2	ceranib-2	660078	COc1ccc(\C=C\C(=O)c2c(-c3ccccc3)c3ccccc3[nH]c2=O)cc1
+cerulenin	cerulenin	52430	C\C=C\C\C=C\CCC(=O)[C@H]1O[C@H]1C(N)=O
+ch55	Ch-55	660137	CC(C)(C)c1cc(cc(c1)C(C)(C)C)C(=O)\C=C\c1ccc(cc1)C(O)=O
+chir99021	CHIR-99021	347812	Cc1c[nH]c(n1)-c1cnc(NCCNc2ccc(cn2)C#N)nc1-c1ccc(Cl)cc1Cl
+chlorambucil	chlorambucil	25334	OC(=O)CCCc1ccc(cc1)N(CCCl)CCCl
+chm1	CHM-1	609674	Fc1ccccc1-c1cc(=O)c2cc3OCOc3cc2[nH]1
+ci976	CI-976	375390	CCCCCCCCCCC(C)(C)C(=O)Nc1c(OC)cc(OC)cc1OC
+ciclopirox	ciclopirox	28784	Cc1cc(C2CCCCC2)n(O)c(=O)c1
+ciclosporin	ciclosporin	55512	CCC1NC(=O)C([C@H](O)[C@H](C)C\C=C\C)N(C)C(=O)C(C(C)C)N(C)C(=O)C(CC(C)C)N(C)C(=O)C(CC(C)C)N(C)C(=O)[C@@H](C)NC(=O)C(C)NC(=O)C(CC(C)C)N(C)C(=O)C(NC(=O)C(CC(C)C)N(C)C(=O)CN(C)C1=O)C(C)C
+cid5951923	CID-5951923	267119	CN(C1CCS(=O)(=O)C1)C(=O)COC(=O)\C=C\c1cccc(c1)[N+]([O-])=O
+cil41	CIL41	176181	N=C(NOC(=O)C12CC3CC(CC(C3)C1)C2)c1ccccc1
+cil55	CIL55	1788	CN(C)CCNC(=O)c1cc2CSc3cc(Cl)ccc3-c2s1
+cil55a	CIL55A	609061	CN(C)CCNC(=O)c1cc2CSc3ccc(Cl)cc3-c2s1
+cil56	CIL56	100490	ON=C1c2cc(ccc2-c2ccc(cc12)S(=O)(=O)N1CCCCC1)S(=O)(=O)N1CCCCC1
+cil70	CIL70	183526	Clc1ccc(CC(=N)NOC(=O)c2cccc3ccccc23)cc1
+cimetidine	cimetidine	26870	CN\C(NCCSCc1nc[nH]c1C)=N/C#N
+clofarabine	clofarabine	660288	Nc1nc(Cl)nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1F
+col3	COL-3	665914	NC(=O)C1C(=O)C[C@@H]2C[C@@H]3Cc4cccc(O)c4C(=O)C3C(=O)[C@]2(O)C1=O
+compound1541a	Compound 1541A	411827	Oc1cccc2cc(C(=O)Nc3cccc(c3)-c3cn4ccccc4n3)c(=O)oc12
+compound1b	compound 1B	62111	CCN(CC)c1ccc(cc1[N+]([O-])=O)C1=NNC(=O)CC1C
+compound23citrate	Compound 23 citrate	417451	CN(C)[C@H]1CC[C@H]2[C@@H](CC[C@H]3[C@@H]4CC=C(c5ccc6cnccc6c5)[C@@]4(C)CC[C@H]23)C1
+compound7dcis	Compound 7d-cis	411805	CCOC(=O)\C=C/n1nnc(n1)-c1cccc(Cl)c1
+cr131b	CR-1-31B	418209	CONC(=O)[C@H]1[C@@H](O)[C@@]2(O)c3c(O[C@]2([C@@H]1c1ccccc1)c1ccc(OC)cc1)cc(OC)cc3OC
+crizotinib	crizotinib	628603	C[C@@H](Oc1cc(cnc1N)-c1cnn(c1)C1CCNCC1)c1c(Cl)ccc(F)c1Cl
+crizotinib:plx4032(2:1mol/mol)	crizotinib:PLX-4032 (2:1 mol/mol)	660857	C[C@@H](Oc1cc(cnc1N)-c1cnn(c1)C1CCNCC1)c1c(Cl)ccc(F)c1Cl.CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(cc23)-c2ccc(Cl)cc2)c1F
+cucurbitacini	cucurbitacin I	595102	CC(C)(O)\C=C\C(=O)[C@](C)(O)C1[C@H](O)C[C@@]2(C)C3CC=C4C(CC(=O)C(=O)C4(C)C)[C@]3(C)C(=O)C[C@]12C
+curcumin	curcumin	28452	COc1cc(C=CC(=O)CC(=O)C=Cc2ccc(O)c(OC)c2)ccc1O
+cyanoquinoline11	cyanoquinoline 11	417415	Fc1ccc(Nc2c(cnc3c(Cl)cc(NCc4cnc[nH]4)cc23)C#N)cc1Cl
+cyclophosphamide	cyclophosphamide	32620	ClCCN(CCCl)P1(=O)NCCCO1
+cytarabinehydrochloride	cytarabine hydrochloride	62690	Nc1ccn([C@@H]2O[C@H](CO)[C@@H](O)[C@@H]2O)c(=O)n1
+cytochalasinb	cytochalasin B	50163	C[C@H]1[C@H]2[C@H](Cc3ccccc3)NC(=O)[C@]22OC(=O)\C=C\[C@H](O)CCC[C@@H](C)C\C=C\[C@H]2[C@H](O)C1=C
+dabrafenib	dabrafenib	687954	CC(C)(C)c1nc(c(s1)-c1ccnc(N)n1)-c1cccc(NS(=O)(=O)c2c(F)cccc2F)c1F
+dacarbazine	dacarbazine	32622	CN(C)\N=N\c1[nH]cnc1C(N)=O
+daporinad	daporinad	418166	O=C(NCCCCC1CCN(CC1)C(=O)c1ccccc1)\C=C\c1cccnc1
+darinaparsin	darinaparsin	609121	C[As](C)SC[C@H](NC(=O)CC[C@H](N)C(O)=O)C(=O)NCC(O)=O
+dasatinib	dasatinib	52882	Cc1nc(Nc2ncc(s2)C(=O)Nc2c(C)cccc2Cl)cc(n1)N1CCN(CCO)CC1
+dbeq	DBeQ	199337	C(Nc1nc(NCc2ccccc2)c2ccccc2n1)c1ccccc1
+decitabine	decitabine	347775	Nc1ncn([C@H]2C[C@H](O)[C@@H](CO)O2)c(=O)n1
+decitabine:carboplatin(1:1mol/mol)	decitabine:carboplatin (1:1 mol/mol)	660250	O=C1O[Pt]OC(=O)C11CCC1.Nc1ncn([C@H]2C[C@H](O)[C@@H](CO)O2)c(=O)n1
+decitabine:navitoclax(2:1mol/mol)	decitabine:navitoclax (2:1 mol/mol)	660180	Nc1ncn([C@H]2C[C@H](O)[C@@H](CO)O2)c(=O)n1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+dexamethasone	dexamethasone	277354	CC1CC2C3CCC4=CC(=O)C=CC4(C)C3(F)C(O)CC2(C)C1(O)C(=O)CO
+dinaciclib	dinaciclib	687578	CCc1cnn2c(NCc3ccc[n+]([O-])c3)cc(nc12)N1CCCC[C@H]1CCO
+docetaxel	docetaxel	660364	CC(=O)O[C@@]12CO[C@@H]1C[C@H](O)[C@]1(C)C2[C@H](OC(=O)c2ccccc2)[C@]2(O)C[C@H](OC(=O)[C@H](O)[C@@H](NC(=O)OC(C)(C)C)c3ccccc3)C(C)=C([C@@H](O)C1=O)C2(C)C
+docetaxel:tanespimycin(2:1mol/mol)	docetaxel:tanespimycin (2:1 mol/mol)	660217	CO[C@H]1C[C@H](C)CC2=C(NCC=C)C(=O)C=C(NC(=O)\C(C)=C\C=C/[C@H](OC)[C@@H](OC(N)=O)\C(C)=C\[C@H](C)[C@H]1O)C2=O.CC(=O)O[C@@]12CO[C@@H]1C[C@H](O)[C@]1(C)C2[C@H](OC(=O)c2ccccc2)[C@]2(O)C[C@H](OC(=O)[C@H](O)[C@@H](NC(=O)OC(C)(C)C)c3ccccc3)C(C)=C([C@@H](O)C1=O)C2(C)C
+doxorubicin	doxorubicin	36599	COc1cccc2C(=O)c3c(O)c4C[C@](O)(C[C@H](O[C@H]5C[C@H](N)[C@H](O)[C@H](C)O5)c4c(O)c3C(=O)c12)C(=O)CO
+doxorubicin:navitoclax(2:1mol/mol)	doxorubicin:navitoclax (2:1 mol/mol)	660280	COc1cccc2C(=O)c3c(O)c4C[C@](O)(C[C@H](O[C@H]5C[C@H](N)[C@H](O)[C@H](C)O5)c4c(O)c3C(=O)c12)C(=O)CO.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+elcpk	ELCPK	609056	O=S(=O)(N1CCCc2ccccc12)c1ccc(cc1)-c1cnc(o1)C1CC1
+elocalcitol	elocalcitol	660319	CCC(O)(CC)\C=C\CC(C)C1=CC[C@@H]2[C@]1(C)CCC\C2=C/C=C1/C[C@@H](O)C[C@H](F)C1=C
+entinostat	entinostat	60218	Nc1ccccc1NC(=O)c1ccc(CNC(=O)OCc2cccnc2)cc1
+epigallocatechin3monogallate	epigallocatechin-3-monogallate	28801	Oc1cc(O)c2C[C@@H](OC(=O)c3cc(O)c(O)c(O)c3)[C@H](Oc2c1)c1cc(O)c(O)c(O)c1
+erastin	erastin	63578	CCOc1ccccc1-n1c(=O)c2ccccc2nc1C(C)N1CCN(CC1)C(=O)COc1ccc(Cl)cc1
+erismodegib	erismodegib	636425	C[C@H]1CN(C[C@@H](C)O1)c1ccc(NC(=O)c2cccc(-c3ccc(OC(F)(F)F)cc3)c2C)cn1
+erlotinib	erlotinib	52928	COCCOc1cc2ncnc(Nc3cccc(c3)C#C)c2cc1OCCOC
+erlotinib:plx4032(2:1mol/mol)	erlotinib:PLX-4032 (2:1 mol/mol)	660768	COCCOc1cc2ncnc(Nc3cccc(c3)C#C)c2cc1OCCOC.CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(cc23)-c2ccc(Cl)cc2)c1F
+etomoxir	etomoxir	660082	OC(=O)[C@@]1(CCCCCCOc2ccc(Cl)cc2)CO1
+etoposide	etoposide	48589	COc1cc(cc(OC)c1O)[C@H]1[C@@H]2[C@H](COC2=O)[C@H](O[C@@H]2O[C@@H]3CO[C@@H](C)O[C@H]3[C@H](O)[C@H]2O)c2cc3OCOc3cc12
+etp46464	ETP-46464	666716	CC(C)(C#N)c1ccc(cc1)N1C(=O)OCc2cnc3ccc(cc3c12)-c1cnc2ccccc2c1
+ex527	EX-527	608999	NC(=O)[C@H]1CCCc2c1[nH]c1ccc(Cl)cc21
+fgin127	FGIN-1-27	61775	CCCCCCN(CCCCCC)C(=O)Cc1c([nH]c2ccccc12)-c1ccc(F)cc1
+fingolimod	fingolimod	640157	CCCCCCCCc1ccc(CCC(N)(CO)CO)cc1
+fluorouracil	fluorouracil	25344	Fc1c[nH]c(=O)[nH]c1=O
+fluvastatin	fluvastatin	660322	CC(C)N1C(\C=C\C(O)CC(O)CC(O)=O)C(c2ccccc12)c1ccc(F)cc1
+foretinib	foretinib	628607	COc1cc2c(Oc3ccc(NC(=O)C4(CC4)C(=O)Nc4ccc(F)cc4)cc3F)ccnc2cc1OCCCN1CCOCC1
+fqi1	FQI-1	102193	CCOc1ccccc1C1CC(=O)Nc2cc3OCOc3cc12
+fqi2	FQI-2	609091	CCOc1ccccc1-c1cc(=O)[nH]c2cc3OCOc3cc12
+fsc231	FSC231	660079	CCOC(=O)NC(=O)C(=C\c1ccc(Cl)c(Cl)c1)\C#N
+fulvestrant	fulvestrant	464880	C[C@]12CC[C@H]3[C@H]([C@@H]1CC[C@@H]2O)[C@H](CCCCCCCCCS(=O)CCCC(F)(F)C(F)(F)F)Cc1cc(O)ccc31
+fumonisinb1	fumonisin B1	616353	CCCC[C@@H](C)[C@@H](OC(=O)C[C@@H](CC(O)=O)C(O)=O)[C@H](CC(C)C[C@H](O)CCCC[C@@H](O)C[C@H](O)[C@H](C)N)OC(=O)C[C@@H](CC(O)=O)C(O)=O
+gant61	GANT-61	609332	CN(C)c1ccccc1CN1CCCN(Cc2ccccc2N(C)C)C1c1ccncc1
+gdc0879	GDC-0879	606248	OCCn1cc(c(n1)-c1ccncc1)-c1ccc2c(CC\C2=N/O)c1
+gdc0941	GDC-0941	639759	CS(=O)(=O)N1CCN(Cc2cc3nc(nc(N4CCOCC4)c3s2)-c2cccc3[nH]ncc23)CC1
+gefitinib	gefitinib	52926	COc1cc2ncnc(Nc3ccc(F)c(Cl)c3)c2cc1OCCCN1CCOCC1
+gemcitabine	gemcitabine	411863	Nc1ccn([C@@H]2O[C@H](CO)[C@@H](O)C2(F)F)c(=O)n1
+gmx1778	GMX-1778	411843	Clc1ccc(OCCCCCC\N=C(\NC#N)Nc2ccncc2)cc1
+gossypol	gossypol	25036	CC(C)c1c(O)c(O)c(C=O)c2c(O)c(c(C)cc12)-c1c(C)cc2c(C(C)C)c(O)c(O)c(C=O)c2c1O
+gsk1059615	GSK1059615	606471	O=C1NC(=O)\C(S1)=C\c1ccc2nccc(-c3ccncc3)c2c1
+gsk2636771	GSK2636771	668723	Cc1nc2c(cc(cc2n1Cc1cccc(c1C)C(F)(F)F)N1CCOCC1)C(O)=O
+gsk3inhibitorix	GSK-3 inhibitor IX	52582	O\N=C1/C(Nc2ccccc12)=C1/C(=O)Nc2cc(Br)ccc12
+gsk4112	GSK4112	660081	CC(C)(C)OC(=O)CN(Cc1ccc(s1)[N+]([O-])=O)Cc1ccc(Cl)cc1
+gsk461364	GSK461364	649862	C[C@@H](Oc1cc(sc1C(N)=O)-n1cnc2ccc(CN3CCN(C)CC3)cc12)c1ccccc1C(F)(F)F
+gsk525762a	GSK525762A	660245	CCNC(=O)C[C@@H]1N=C(c2ccc(Cl)cc2)c2cc(OC)ccc2-n2c(C)nnc12
+gskj4	GSK-J4	687735	CCOC(=O)CCNc1cc(nc(n1)-c1ccccn1)N1CCc2ccccc2CC1
+gw405833	GW-405833	375447	COc1ccc2n(C(=O)c3cccc(Cl)c3Cl)c(C)c(CCN3CCOCC3)c2c1
+gw843682x	GW-843682X	348997	COc1cc2ncn(-c3cc(OCc4ccccc4C(F)(F)F)c(s3)C(N)=O)c2cc1OC
+hbx41108	HBX-41108	679843	Clc1ccc-2c(c1)C(=O)c1nc(C#N)c(nc-21)C#N
+hc067047	HC-067047	660083	Cc1c(cc(-c2ccccc2)n1CCCN1CCOCC1)C(=O)Nc1cccc(c1)C(F)(F)F
+hli373	HLI 373	481311	CN(C)CCCNc1c2ccccc2n(C)c2nc(=O)n(C)c(=O)c12
+hyperforin	hyperforin	660327	CC(C)C(=O)[C@@]12C(=O)C(CC=C(C)C)C(=O)C(CC=C(C)C)(C[C@H](CC=C(C)C)[C@@]1(C)CCC=C(C)C)C2=O
+ibet151	I-BET151	660206	COc1cc2c3n([C@H](C)c4ccccn4)c(=O)[nH]c3cnc2cc1-c1c(C)noc1C
+ibrutinib	ibrutinib	660994	Nc1ncnc2n(nc(-c3ccc(Oc4ccccc4)cc3)c12)[C@@H]1CCCN(C1)C(=O)C=C
+ic87114	IC-87114	55307	Cc1ccccc1-n1c(Cn2cnc3c(N)ncnc23)nc2cccc(C)c2c1=O
+ifosfamide	ifosfamide	35319	ClCCNP1(=O)OCCCN1CCCl
+imatinib	imatinib	345041	CN1CCN(Cc2ccc(cc2)C(=O)Nc2ccc(C)c(Nc3nccc(n3)-c3cccnc3)c2)CC1
+importazole	importazole	46792	CC(Nc1nc(nc2ccccc12)N1CCCC1)c1ccccc1
+indisulam	indisulam	411874	NS(=O)(=O)c1ccc(cc1)S(=O)(=O)Nc1cccc2c(Cl)c[nH]c12
+ipr456	IPR-456	660084	CC1CC(C)CN(C1)c1cc(Nc2ccccc2C(O)=O)c2C(=O)c3ccccc3-c3onc1c23
+isoevodiamine	isoevodiamine	594664	CN1C2N(CCc3c2[nH]c2ccccc32)C(=O)c2ccccc12
+isoliquiritigenin	isoliquiritigenin	25393	Oc1ccc(cc1)\C=C\C(=O)c1ccc(O)cc1O
+isonicotinohydroxamicacid	isonicotinohydroxamic acid	478694	ONC(=O)c1ccncc1
+isox	ISOX	632907	CC(C)(C)OC(=O)Nc1ccc(cc1)-c1cc(no1)C(=O)NCCCCCCC(=O)NO
+isox:bortezomib(250:1mol/mol)	ISOX:bortezomib (250:1 mol/mol)	660173	CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O.CC(C)(C)OC(=O)Nc1ccc(cc1)-c1cc(no1)C(=O)NCCCCCCC(=O)NO
+istradefylline	istradefylline	687694	CCn1c2nc(\C=C\c3ccc(OC)c(OC)c3)n(C)c2c(=O)n(CC)c1=O
+itraconazole	itraconazole	63349	CCC(C)n1ncn(-c2ccc(cc2)N2CCN(CC2)c2ccc(OCC3COC(Cn4cncn4)(O3)c3ccc(Cl)cc3Cl)cc2)c1=O
+iu1	IU1	272805	Cc1cc(C(=O)CN2CCCC2)c(C)n1-c1ccc(F)cc1
+jq1	JQ-1	616354	Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1
+jq1:carboplatin(1:1mol/mol)	JQ-1:carboplatin (1:1 mol/mol)	660247	O=C1O[Pt]OC(=O)C11CCC1.Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1
+jq1:mk0752(1:1mol/mol)	JQ-1:MK-0752 (1:1 mol/mol)	660253	OC(=O)CC[C@H]1CC[C@@](CC1)(c1cc(F)ccc1F)S(=O)(=O)c1ccc(Cl)cc1.Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1
+jq1:navitoclax(2:1mol/mol)	JQ-1:navitoclax (2:1 mol/mol)	660252	Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+jq1:unc0638(2:1mol/mol)	JQ-1:UNC0638 (2:1 mol/mol)	660129	Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1.COc1cc2c(NC3CCN(CC3)C(C)C)nc(nc2cc1OCCCN1CCCC1)C1CCCCC1
+jq1:vorinostat(2:1mol/mol)	JQ-1:vorinostat (2:1 mol/mol)	660823	ONC(=O)CCCCCCC(=O)Nc1ccccc1.Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1
+jw480	JW-480	660227	CC(C)c1ccccc1OC(=O)NCCc1ccc2ccccc2c1
+jw55	JW-55	682993	COc1ccc(cc1)C1(CNC(=O)c2ccc(NC(=O)c3ccco3)cc2)CCOCC1
+jw74	JW-74	676728	COc1ccc(cc1)-n1c(SCc2nc(no2)-c2ccc(C)cc2)nnc1-c1ccncc1
+khcb19	KH-CB19	660085	CCOC(=O)c1c(C(=CN)C#N)c2ccc(Cl)c(Cl)c2n1C
+khs101	KHS101	660819	CC(C)CNc1ccnc(NCc2csc(n2)-c2ccccc2)n1
+ki8751	Ki8751	375560	COc1cc2nccc(Oc3ccc(NC(=O)Nc4ccc(F)cc4F)c(F)c3)c2cc1OC
+ko143	Ko-143	418172	COc1ccc2c3C[C@@H]4N([C@@H](CC(C)C)c3[nH]c2c1)C(=O)[C@H](CCC(=O)OC(C)(C)C)NC4=O
+kpt185	KPT185	660935	COc1cc(cc(c1)C(F)(F)F)-c1ncn(\C=C/C(=O)OC(C)C)n1
+ku0060648	KU 0060648	632119	CCN1CCN(CC(=O)Nc2ccc(-c3cccc4c3oc(cc4=O)N3CCOCC3)c3sc4ccccc4c23)CC1
+ku0063794	KU-0063794	606363	COc1ccc(cc1CO)-c1ccc2c(nc(nc2n1)N1C[C@H](C)O[C@H](C)C1)N1CCOCC1
+ku55933	KU-55933	58339	O=c1cc(oc(c1)-c1cccc2Sc3ccccc3Sc12)N1CCOCC1
+ku60019	KU-60019	660411	C[C@H]1CN(CC(=O)Nc2ccc3Sc4c(Cc3c2)cccc4-c2cc(=O)cc(o2)N2CCOCC2)C[C@@H](C)O1
+kw2449	KW-2449	660413	O=C(N1CCNCC1)c1ccc(cc1)\C=C\c1n[nH]c2ccccc12
+kx2391	KX2-391	660779	O=C(Cc1ccc(cn1)-c1ccc(OCCN2CCOCC2)cc1)NCc1ccccc1
+l685458	L-685458	411717	CC(C)C[C@H](NC(=O)[C@@H](C[C@@H](O)[C@H](Cc1ccccc1)NC(=O)OC(C)(C)C)Cc1ccccc1)C(=O)N[C@@H](Cc1ccccc1)C(N)=O
+lapatinib	lapatinib	634309	CS(=O)(=O)CCNCc1ccc(o1)-c1ccc2ncnc(Nc3ccc(OCc4cccc(F)c4)c(Cl)c3)c2c1
+lbh589	LBH-589	54210	Cc1[nH]c2ccccc2c1CCNCc1ccc(\C=C\C(=O)NO)cc1
+le135	LE-135	375354	CN1c2cc3c(cc2N=C(c2ccc(cc2)C(O)=O)c2ccccc12)C(C)(C)CCC3(C)C
+lenvatinib	lenvatinib	628639	COc1cc2nccc(Oc3ccc(NC(=O)NC4CC4)c(Cl)c3)c2cc1C(N)=O
+leptomycinb	leptomycin B	660086	CCC(\C=C\[C@@H]1OC(=O)C=C[C@@H]1C)=C\[C@H](C)C\C=C\C(C)=C\[C@@H](C)C(=O)[C@@H](C)[C@H](O)[C@@H](C)C\C(C)=C\C(O)=O
+linifanib	linifanib	606033	Cc1ccc(F)c(NC(=O)Nc2ccc(cc2)-c2cccc3[nH]nc(N)c23)c1
+linsitinib	linsitinib	705300	CC1(O)CC(C1)c2nc(c3ccc4ccc(nc4c3)c5ccccc5)c6c(N)nccn26
+lomeguatrib	lomeguatrib	660207	Nc1nc(OCc2cc(Br)cs2)c2[nH]cnc2n1
+lovastatin	lovastatin	30620	CCC(C)C(=O)OC1CC(C)C=C2C=CC(C)C(CCC(O)CC(O)CC(O)=O)C12
+lrrk2in1	LRRK2-IN-1	607696	COc1cc(ccc1Nc1ncc2N(C)C(=O)c3ccccc3N(C)c2n1)C(=O)N1CCC(CC1)N1CCN(C)CC1
+ly2157299	LY-2157299	660431	Cc1cccc(n1)-c1nn2CCCc2c1-c1ccnc2ccc(cc12)C(N)=O
+ly2183240	LY-2183240	375496	CN(C)C(=O)n1nnnc1Cc1ccc(cc1)-c1ccccc1
+manumycina	manumycin A	50727	CCCC[C@@H](C)\C=C(C)\C=C(/C)C(=O)NC1=C[C@@](O)(\C=C\C=C\C=C\C(=O)NC2C(=O)CCC2=O)[C@@H]2O[C@@H]2C1=O
+marinopyrrolea	marinopyrrole A	666910	Oc1ccccc1C(=O)c1[nH]c(Cl)c(Cl)c1-n1c(cc(Cl)c1Cl)C(=O)c1ccccc1O
+masitinib	masitinib	606143	CN1CCN(Cc2ccc(cc2)C(=O)Nc2ccc(C)c(Nc3nc(cs3)-c3cccnc3)c2)CC1
+mdivi1	Mdivi-1	215497	COc1cc(c(Cl)cc1Cl)-n1c(=S)[nH]c2ccccc2c1=O
+merck60	Merck60	61674	CC(=O)Nc1ccc(cc1)C(=O)Nc1cc(ccc1N)-c1cccs1
+methotrexate	methotrexate	30371	CN(Cc1cnc2nc(N)nc(N)c2n1)c1ccc(cc1)C(=O)N[C@@H](CCC(O)=O)C(O)=O
+methylstat	methylstat	667933	COC(=O)\C=C\C(=O)N(O)CCCCNCc1ccc(COC(=O)Nc2cccc3ccccc23)cc1
+mg132	MG-132	58948	CC(C)C[C@H](NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)OCc1ccccc1)C=O
+mgcd265	MGCD-265	628622	Cn1cnc(c1)-c1cc2nccc(Oc3ccc(NC(=S)NC(=O)Cc4ccccc4)cc3F)c2s1
+mi1	MI-1	185987	CC1(C)CN=C(S1)N1CCN(CC1)c1ncnc2sc3CCCCc3c12
+mi2	MI-2	687714	CCCc1cc2c(ncnc2s1)N1CCN(CC1)C1=NCC(C)(C)S1
+mitomycin	mitomycin	50732	CO[C@]12[C@H]3N[C@H]3CN1C1=C([C@H]2COC(N)=O)C(=O)C(N)=C(C)C1=O
+mk0752	MK-0752	660332	OC(=O)CC[C@H]1CC[C@@](CC1)(c1cc(F)ccc1F)S(=O)(=O)c1ccc(Cl)cc1
+mk1775	MK-1775	418167	CN1CCN(CC1)c1ccc(Nc2ncc3c(n2)n(-c2cccc(n2)C(C)(C)O)n(CC=C)c3=O)cc1
+mk2206	MK-2206	377381	NC1(CCC1)c1ccc(cc1)-c1nc2ccn3c(n[nH]c3=O)c2cc1-c1ccccc1
+ml006	ML006	17712	C1CN(CCO1)c1nnc(-c2ccccc2)c(n1)-c1ccccc1
+ml029	ML029	350548	Cc1cc2nc(NCCCO)n(CC(=O)c3cc(c(O)c(c3)C(C)(C)C)C(C)(C)C)c2cc1C
+ml031	ML031	96171	Cc1cc(C(=O)CN2C(=O)CCC2=O)c(C)n1Cc1ccccc1
+ml050	ML050	153820	Brc1cc2OCOc2cc1C1Nc2ccccc2C2C=CCC12
+ml083	ML083	255961	COc1ccc(cc1)S(=O)(=O)N1CCN(CC1)S(=O)(=O)c1ccc2OCCOc2c1
+ml162	ML162	154846	COc1ccc(cc1Cl)N(C(C(=O)NCCc1ccccc1)c1cccs1)C(=O)CCl
+ml203	ML203	411816	Nc1cccc(c1)S(=O)(=O)N1CCCN(CC1)S(=O)(=O)c1ccc2OCCOc2c1
+ml210	ML210	609110	Cc1onc(C(=O)N2CCN(CC2)C(c2ccc(Cl)cc2)c2ccc(Cl)cc2)c1[N+]([O-])=O
+ml239	ML239	609781	Clc1cc(Cl)c(OCC(=O)N\N=C\c2ccc[nH]2)c(Cl)c1
+ml258	ML258	660314	COc1ccc(CN2c3nnnn3C3C(C2=O)C2(CCCC2)Cc2ccccc32)cc1
+ml311	ML311	290356	CCN1CCN(CC1)C(c1ccc(cc1)C(F)(F)F)c1ccc2cccnc2c1O
+ml312	ML312	434195	CC(C)NC(=O)Nc1ccc2O[C@@H](CN(C)S(=O)(=O)c3ccc(Cl)cc3)[C@H](C)CN([C@H](C)CO)C(=O)c2c1
+ml320	ML320	659682	COc1ccccc1[C@H]1c2c(NC3=C1C(=O)CC(C)(C)C3)n[nH]c2C(F)(F)F
+ml334diastereomer	ML334 diastereomer	654278	OC(=O)[C@@H]1CCCC[C@@H]1C(=O)N1CCc2ccccc2[C@H]1CN1C(=O)c2ccccc2C1=O
+mln2238	MLN2238	632873	CC(C)C[C@H](NC(=O)CNC(=O)c1cc(Cl)ccc1Cl)B(O)O
+mln2480	MLN2480	687579	C[C@@H](NC(=O)c1ncnc(N)c1Cl)c1ncc(s1)C(=O)Nc1cc(c(Cl)cn1)C(F)(F)F
+momelotinib	momelotinib	660429	O=C(NCC#N)c1ccc(cc1)-c1ccnc(Nc2ccc(cc2)N2CCOCC2)n1
+mst312	MST-312	411865	Oc1cccc(C(=O)Nc2cccc(NC(=O)c3cccc(O)c3O)c2)c1O
+myricetin	myricetin	29985	Oc1cc(O)c2c(c1)oc(-c1cc(O)c(O)c(O)c1)c(O)c2=O
+myriocin	myriocin	417977	CCCCCCC(=O)CCCCCC\C=C\C[C@H](O)[C@@H](O)C(N)(CO)C(O)=O
+n9isopropylolomoucine	N9-isopropylolomoucine	45093	CC(C)n1cnc2c(NCc3ccccc3)nc(NCCO)nc12
+nakiterpiosin	nakiterpiosin	417452	C[C@H]1C[C@@H](OC1=O)[C@@H](O)[C@@H](C(Cl)Cl)c1ccc2[C@@H]3C[C@@H](Br)[C@]45O[C@H](C[C@]4(C)[C@H]3C(=O)c2c1C)CO[C@H]5O
+narciclasine	narciclasine	632243	O[C@H]1C=C2[C@@H](NC(=O)c3c(O)c4OCOc4cc23)[C@H](O)[C@@H]1O
+navitoclax	navitoclax	362342	CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:birinapant(1:1mol/mol)	navitoclax:birinapant (1:1 mol/mol)	660172	CC[C@H](NC(=O)[C@H](C)NC)C(=O)N1C[C@@H](O)C[C@H]1Cc1c([nH]c2cc(F)ccc12)-c1cc2c(C[C@@H]3C[C@H](O)CN3C(=O)[C@H](CC)NC(=O)[C@H](C)NC)cc(F)cc2[nH]1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:gemcitabine(1:1mol/mol)	navitoclax:gemcitabine (1:1 mol/mol)	660225	Nc1ccn([C@@H]2O[C@H](CO)[C@@H](O)C2(F)F)c(=O)n1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:mst312(1:1mol/mol)	navitoclax:MST-312 (1:1 mol/mol)	660222	Oc1cccc(C(=O)Nc2cccc(NC(=O)c3cccc(O)c3O)c2)c1O.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:piperlongumine(1:1mol/mol)	navitoclax:piperlongumine (1:1 mol/mol)	660284	COc1cc(\C=C\C(=O)N2CCC=CC2=O)cc(OC)c1OC.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:pluripotin(1:1mol/mol)	navitoclax:pluripotin (1:1 mol/mol)	660246	CN1C(=O)N(Cc2cnc(Nc3cc(C)nn3C)nc12)c1cc(NC(=O)c2cccc(c2)C(F)(F)F)ccc1C.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:plx4032(1:1mol/mol)	navitoclax:PLX-4032 (1:1 mol/mol)	660219	CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(cc23)-c2ccc(Cl)cc2)c1F.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+navitoclax:sorafenib(1:1mol/mol)	navitoclax:sorafenib (1:1 mol/mol)	660283	CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(c3)C(F)(F)F)cc2)ccn1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+necrostatin1	necrostatin-1	375435	CN1C(=S)NC(Cc2c[nH]c3ccccc23)C1=O
+necrostatin7	necrostatin-7	660201	Fc1ccc(cc1)-c1n[nH]cc1C=C1SC(=N)N(C1=O)c1nccs1
+necrosulfonamide	necrosulfonamide	677522	COc1nccnc1NS(=O)(=O)c1ccc(NC(=O)\C=C\c2ccc(s2)[N+]([O-])=O)cc1
+nelarabine	nelarabine	660391	COc1nc(N)nc2n(cnc12)[C@@H]1O[C@H](CO)[C@@H](O)[C@@H]1O
+neopeltolide	neopeltolide	411774	CCC[C@H]1C[C@H](C[C@H](C)C[C@@H]2C[C@H](C[C@H](CC(=O)O1)O2)OC(=O)\C=C/CCc1coc(\C=C/CNC(=O)OC)n1)OC
+neratinib	neratinib	418038	CCOc1cc2ncc(C#N)c(Nc3ccc(OCc4ccccn4)c(Cl)c3)c2cc1NC(=O)\C=C\CN(C)C
+neuronaldifferentiationinduceriii	neuronal differentiation inducer III	411733	O=C(NC1CC1)c1cc(on1)-c1cccs1
+niclosamide	niclosamide	32653	Oc1ccc(Cl)cc1C(=O)Nc1ccc(cc1Cl)[N+]([O-])=O
+nilotinib	nilotinib	374749	Cc1cn(cn1)-c1cc(NC(=O)c2ccc(C)c(Nc3nccc(n3)-c3cccnc3)c2)cc(c1)C(F)(F)F
+nintedanib	nintedanib	628601	COC(=O)c1ccc2c(NC(=O)\C2=C(/Nc2ccc(cc2)N(C)C(=O)CN2CCN(C)CC2)c2ccccc2)c1
+npc26	NPC-26	609058	CCOC(=O)c1c(NC(=O)c2ccc(s2)[N+]([O-])=O)sc2c1CC(C)(C)NC2(C)C
+nsc19630	NSC19630	580922	CCC(=O)OCN1C(=O)C=CC1=O
+nsc23766	NSC23766	44503	CCN(CC)CCCC(C)Nc1nc(C)cc(Nc2ccc3nc(C)cc(N)c3c2)n1
+nsc30930	NSC30930	182395	OC(=O)c1cc2cc(OCc3ccccc3)ccc2[nH]1
+nsc48300	NSC48300	594399	O[As](O)(=O)c1ccc(Cc2ccc(cc2)[As](O)(O)=O)cc1
+nsc632839	NSC632839	375594	Cc1ccc(C=C2CNCC(=Cc3ccc(C)cc3)C2=O)cc1
+nsc74859	NSC 74859	411734	Cc1ccc(cc1)S(=O)(=O)OCC(=O)Nc1ccc(C(O)=O)c(O)c1
+nsc95397	NSC95397	50715	OCCSC1=C(SCCO)C(=O)c2ccccc2C1=O
+nutlin3	nutlin-3	411722	COc1ccc(C2=NC(C(N2C(=O)N2CCNC(=O)C2)c2ccc(Cl)cc2)c2ccc(Cl)cc2)c(OC(C)C)c1
+nvp231	NVP-231	660331	O=C(Nc1nc2ccc(NC(=O)C34C[C@H]5C[C@H](C[C@H](C5)C3)C4)cc2s1)c1ccccc1
+nvpadw742	NVP-ADW742	660287	Nc1ncnc2n(cc(-c3cccc(OCc4ccccc4)c3)c12)[C@H]1C[C@H](CN2CCCC2)C1
+nvpbez235	NVP-BEZ235	348992	Cn1c2cnc3ccc(cc3c2n(-c2ccc(cc2)C(C)(C)C#N)c1=O)-c1cnc2ccccc2c1
+nvpbsk805	NVP-BSK805	660434	Fc1cc(cc(F)c1CN1CCOCC1)-c1cccc2ncc(nc12)-c1cnn(c1)C1CCNCC1
+nvptae684	NVP-TAE684	606249	COc1cc(ccc1Nc1ncc(Cl)c(Nc2ccccc2S(=O)(=O)C(C)C)n1)N1CCC(CC1)N1CCN(C)CC1
+o6benzylguanine	O-6-benzylguanine	345712	Nc1nc(OCc2ccccc2)c2[nH]cnc2n1
+obatoclax	obatoclax	606142	COC1=CC(=N\C\1=C/c1[nH]c(C)cc1C)c1cc2ccccc2[nH]1
+olaparib	olaparib	411867	Fc1ccc(Cc2n[nH]c(=O)c3ccccc23)cc1C(=O)N1CCN(CC1)C(=O)C1CC1
+oligomycina	oligomycin A	411869	CCC1CCC2OC3(CC[C@@H](C)C(C[C@H](C)O)O3)[C@H](C)C(OC(=O)\C=C\[C@@H](C)[C@H](O)[C@@H](C)C(=O)[C@H](C)[C@@H](O)[C@H](C)C(=O)[C@@](C)(O)[C@H](O)[C@@H](C)C\C=C\C=C\1)[C@H]2C
+omacetaxinemepesuccinate	omacetaxine mepesuccinate	375219	COC(=O)C[C@](O)(CCCC(C)(C)O)C(=O)O[C@H]1[C@H]2c3cc4OCOc4cc3CCN3CCC[C@]23C=C1OC
+osi027	OSI-027	660433	COc1cccc2cc([nH]c12)-c1nc([C@H]2CC[C@@H](CC2)C(O)=O)n2ncnc(N)c12
+osi930	OSI-930	628620	FC(F)(F)Oc1ccc(NC(=O)c2sccc2NCc2ccnc3ccccc23)cc1
+ouabain	ouabain	37190	C[C@@H]1O[C@@H](O[C@H]2C[C@@H](O)[C@]3(CO)[C@H]4[C@H](O)C[C@]5(C)[C@H](CC[C@]5(O)[C@@H]4CC[C@]3(O)C2)C2=CC(=O)OC2)[C@H](O)[C@H](O)[C@H]1O
+oxaliplatin	oxaliplatin	375582	O=C1O[Pt]2(NC3CCCCC3N2)OC1=O
+pac1	PAC-1	411832	Oc1c(CC=C)cccc1\C=N\NC(=O)CN1CCN(Cc2ccccc2)CC1
+paclitaxel	paclitaxel	26956	CC(=O)O[C@@H]1C2=C(C)[C@H](C[C@@](O)([C@@H](OC(=O)c3ccccc3)C3[C@@]4(CO[C@@H]4C[C@H](O)[C@@]3(C)C1=O)OC(C)=O)C2(C)C)OC(=O)[C@H](O)[C@@H](NC(=O)c1ccccc1)c1ccccc1
+palmostatinb	palmostatin B	679844	CCCCCCCCCC[C@H]1[C@H](CCc2ccc(OC)c(OC)c2)OC1=O
+pandacostat	pandacostat	417098	ONC(=O)\C=C\c1ccc(cc1)C(=O)N\N=C\c1ccc(O)c(O)c1O
+parbendazole	parbendazole	28172	CCCCc1ccc2[nH]c(NC(=O)OC)nc2c1
+parthenolide	parthenolide	411792	C\C1=C\CC[C@@]2(C)O[C@@H]2[C@H]2OC(=O)C(=C)[C@@H]2CC1
+pazopanib	pazopanib	640265	CN(c1ccc2c(C)n(C)nc2c1)c1ccnc(Nc2ccc(C)c(c2)S(N)(=O)=O)n1
+pd153035	PD 153035	52133	COc1cc2ncnc(Nc3cccc(Br)c3)c2cc1OC
+pd318088	PD318088	660410	OCC(O)CONC(=O)c1cc(Br)c(F)c(F)c1Nc1ccc(I)cc1F
+pdmp	PDMP	58472	CCCCCCCCCC(=O)N[C@H](CN1CCOCC1)[C@H](O)c1ccccc1
+pevonedistat	pevonedistat	411809	NS(=O)(=O)OC[C@@H]1C[C@H](C[C@@H]1O)n1ccc2c(N[C@H]3CCc4ccccc34)ncnc12
+pf184	PF-184	660208	C[C@@]1(CO)CN(C[C@]1(C)CO)c1cc(C(=O)Nc2ccc3CCc4c(nn(c4-c3c2)-c2ccc(F)cc2)C(N)=O)c(Cl)cn1
+pf3758309	PF-3758309	687953	CN(C)C[C@@H](NC(=O)N1Cc2c(Nc3nc(C)nc4ccsc34)n[nH]c2C1(C)C)c1ccccc1
+pf4800567hydrochloride	PF-4800567 hydrochloride	688962	Nc1ncnc2n(nc(COc3cccc(Cl)c3)c12)C1CCOCC1
+pf543	PF-543	660073	Cc1cc(CS(=O)(=O)c2ccccc2)cc(OCc2ccc(CN3CCC[C@@H]3CO)cc2)c1
+pf573228	PF-573228	660075	CS(=O)(=O)c1cccc(CNc2nc(Nc3ccc4NC(=O)CCc4c3)ncc2C(F)(F)F)c1
+pf750	PF-750	411719	O=C(Nc1ccccc1)N1CCC(Cc2cnc3ccccc3c2)CC1
+pha793887	PHA-793887	640007	CC(C)CC(=O)Nc1n[nH]c2c1CN(C(=O)C1CCN(C)CC1)C2(C)C
+phloretin	phloretin	24173	Oc1ccc(CCC(=O)c2c(O)cc(O)cc2O)cc1
+pi103	PI-103	411742	Oc1cccc(c1)-c1nc(N2CCOCC2)c2oc3ncccc3c2n1
+pifithrinalpha	pifithrin-alpha	50747	Cc1ccc(cc1)C(=O)Cn1c2CCCCc2sc1=N
+pifithrinmu	pifithrin-mu	375596	NS(=O)(=O)C#Cc1ccccc1
+pik93	PIK-93	660774	CC(=O)Nc1nc(C)c(s1)-c1ccc(Cl)c(c1)S(=O)(=O)NCCO
+piperlongumine	piperlongumine	39782	COc1cc(cc(OC)c1OC)\C=C\C(=O)N1CCC=CC1=O
+piperlongumine:mst312(1:1mol/mol)	piperlongumine:MST-312 (1:1 mol/mol)	660224	COc1cc(\C=C\C(=O)N2CCC=CC2=O)cc(OC)c1OC.Oc1cccc(C(=O)Nc2cccc(NC(=O)c3cccc(O)c3O)c2)c1O
+pitstop2	pitstop2	660985	Brc1ccc(cc1)\C=C1/SC(NS(=O)(=O)c2cccc3ccccc23)=NC1=O
+platin	Platin	375395	N[Pt](N)(Cl)Cl
+pldi	PL-DI	609440	COc1cc(\C=C\C(=O)N2CCC=CC2=O)cc(OC)c1OCCN(C)CCOc1c(OC)cc(\C=C\C(=O)N2CCC=CC2=O)cc1OC
+pluripotin	pluripotin	411833	CN1C(=O)N(Cc2cnc(Nc3cc(C)nn3C)nc12)c1cc(NC(=O)c2cccc(c2)C(F)(F)F)ccc1C
+plx4032	PLX-4032	649420	CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(cc23)-c2ccc(Cl)cc2)c1F
+plx4720	PLX-4720	606256	CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(Cl)cc23)c1F
+prima1	PRIMA-1	50131	OCC1(CO)N2CCC(CC2)C1=O
+prima1met	PRIMA-1-Met	594663	COC[C@]1(CO)[N@@]2CC[C@@H](CC2)C1=O
+prl3inhibitori	PRL-3 inhibitor I	411727	Brc1ccc(OCc2ccccc2Br)c(\C=C2\SC(=S)NC2=O)c1
+procarbazine	procarbazine	28183	CNNCc1ccc(cc1)C(=O)NC(C)C
+prochlorperazine	prochlorperazine	33166	CN1CCN(CCCN2c3ccccc3Sc3ccc(Cl)cc23)CC1
+purmorphamine	purmorphamine	52576	C1CCC(CC1)n1cnc2c(Nc3ccc(cc3)N3CCOCC3)nc(Oc3cccc4ccccc34)nc12
+px12	PX-12	609124	CCC(C)SSc1ncc[nH]1
+pyr41	PYR-41	660202	CCOC(=O)c1ccc(cc1)N1NC(=O)C(=Cc2ccc(o2)[N+]([O-])=O)C1=O
+pyrazolanthrone	pyrazolanthrone	44511	O=C1c2ccccc2-c2n[nH]c3cccc1c23
+qs11	QS-11	609681	OC[C@H](Cc1ccccc1)Nc1nc(Oc2ccc3CCCc3c2)nc2n(Cc3ccc(cc3)-c3ccccc3)cnc12
+quizartinib	quizartinib	640011	CC(C)(C)c1cc(NC(=O)Nc2ccc(cc2)-c2cn3c(n2)sc2cc(OCCN4CCOCC4)ccc32)no1
+qwbi011	QW-BI-011	362063	COC(=O)c1ccc2n(CCCc3ccccc3)c(NC(=O)c3ccccc3)nc2c1
+r428	R428	660993	Nc1nc(Nc2ccc3CC[C@@H](CCc3c2)N2CCCC2)nn1-c1cc2CCCc3ccccc3-c2nn1
+raf265	RAF265	660414	Cn1c(Nc2ccc(cc2)C(F)(F)F)nc2cc(Oc3ccnc(c3)-c3ncc([nH]3)C(F)(F)F)ccc12
+regorafenib	regorafenib	628613	CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(c3)C(F)(F)F)c(F)c2)ccn1
+repligen136	Repligen 136	628408	Cc1ccc(cc1)C(=O)NCCCCCC(=O)Nc1ccc(F)cc1N
+rg108	RG-108	411831	OC(=O)[C@H](Cc1c[nH]c2ccccc12)N1C(=O)c2ccccc2C1=O
+rigosertib	rigosertib	660397	COc1cc(OC)c(\C=C\S(=O)(=O)Cc2ccc(OC)c(NCC(O)=O)c2)c(OC)c1
+rita	RITA	375492	OCc1ccc(s1)-c1ccc(o1)-c1ccc(CO)s1
+ro4929097	RO4929097	687577	CC(C)(C(=O)NCC(F)(F)C(F)(F)F)C(=O)N[C@H]1c2ccccc2-c2ccccc2NC1=O
+ruxolitinib	ruxolitinib	639450	N#CC[C@H](C1CCCC1)n1cc(cn1)-c1ncnc2[nH]ccc12
+salermide	salermide	616352	CC(C(=O)Nc1cccc(c1)\N=C\c1c(O)ccc2ccccc12)c1ccccc1
+salermide:plx4032(12:1mol/mol)	salermide:PLX-4032 (12:1 mol/mol)	660269	CC(C(=O)Nc1cccc(c1)\N=C\c1c(O)ccc2ccccc12)c1ccccc1.CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(cc23)-c2ccc(Cl)cc2)c1F
+saracatinib	saracatinib	606035	CN1CCN(CCOc2cc(OC3CCOCC3)c3c(Nc4c5OCOc5ccc4Cl)ncnc3c2)CC1
+sb225002	SB-225002	52123	Oc1cc(ccc1NC(=O)Nc1ccccc1Br)[N+]([O-])=O
+sb431542	SB-431542	50753	NC(=O)c1ccc(cc1)-c1nc(c([nH]1)-c1ccccn1)-c1ccc2OCOc2c1
+sb525334	SB-525334	639962	Cc1cccc(n1)-c1[nH]c(nc1-c1ccc2nccnc2c1)C(C)(C)C
+sb743921	SB-743921	660238	CC(C)[C@H](N(CCCN)C(=O)c1ccc(C)cc1)c1oc2cc(Cl)ccc2c(=O)c1Cc1ccccc1
+sch529074	SCH-529074	609062	CN(C)CCCNc1nc(CN2CCN(CC2)C(c2ccc(Cl)cc2)c2ccc(Cl)cc2)nc2ccccc12
+sch79797	SCH-79797	375264	CC(C)c1ccc(Cn2ccc3c2ccc2nc(NC4CC4)nc(N)c32)cc1
+selumetinib	selumetinib	348991	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO
+selumetinib:brda02303741(4:1mol/mol)	selumetinib:BRD-A02303741 (4:1 mol/mol)	660178	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.CC(C)N(CCCNC(=O)Nc1ccc(cc1)C(C)(C)C)C[C@H]1O[C@H]([C@H](O)[C@@H]1O)n1ccc2c(N)ncnc12
+selumetinib:decitabine(4:1mol/mol)	selumetinib:decitabine (4:1 mol/mol)	660249	Nc1ncn([C@H]2C[C@H](O)[C@@H](CO)O2)c(=O)n1.Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO
+selumetinib:gdc0941(4:1mol/mol)	selumetinib:GDC-0941 (4:1 mol/mol)	660174	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.CS(=O)(=O)N1CCN(Cc2cc3nc(nc(N4CCOCC4)c3s2)-c2cccc3[nH]ncc23)CC1
+selumetinib:jq1(4:1mol/mol)	selumetinib:JQ-1 (4:1 mol/mol)	660177	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.Cc1sc-2c(c1C)C(=N[C@@H](CC(=O)OC(C)(C)C)c1nnc(C)n-21)c1ccc(Cl)cc1
+selumetinib:mk2206(8:1mol/mol)	selumetinib:MK-2206 (8:1 mol/mol)	660218	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.NC1(CCC1)c1ccc(cc1)-c1nc2ccn3c(n[nH]c3=O)c2cc1-c1ccccc1
+selumetinib:navitoclax(8:1mol/mol)	selumetinib:navitoclax (8:1 mol/mol)	660248	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+selumetinib:piperlongumine(8:1mol/mol)	selumetinib:piperlongumine (8:1 mol/mol)	660220	COc1cc(\C=C\C(=O)N2CCC=CC2=O)cc(OC)c1OC.Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO
+selumetinib:plx4032(8:1mol/mol)	selumetinib:PLX-4032 (8:1 mol/mol)	660133	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.CCCS(=O)(=O)Nc1ccc(F)c(C(=O)c2c[nH]c3ncc(cc23)-c2ccc(Cl)cc2)c1F
+selumetinib:tretinoin(2:1mol/mol)	selumetinib:tretinoin (2:1 mol/mol)	660175	CC(=C/CO)\C=C\C=C(C)\C=C\C1=C(C)CCCC1(C)C.Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO
+selumetinib:unc0638(4:1mol/mol)	selumetinib:UNC0638 (4:1 mol/mol)	660281	Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO.COc1cc2c(NC3CCN(CC3)C(C)C)nc(nc2cc1OCCCN1CCCC1)C1CCCCC1
+selumetinib:vorinostat(8:1mol/mol)	selumetinib:vorinostat (8:1 mol/mol)	660176	ONC(=O)CCCCCCC(=O)Nc1ccccc1.Cn1cnc2c(F)c(Nc3ccc(Br)cc3Cl)c(cc12)C(=O)NOCCO
+semagacestat	semagacestat	660341	CC(C)[C@H](O)C(=O)N[C@@H](C)C(=O)N[C@H]1c2ccccc2CCN(C)C1=O
+serdemetan	serdemetan	418164	C(Cc1c[nH]c2ccccc12)Nc1cccc(Nc2ccncc2)c1
+serdemetan:sch529074(1:1mol/mol)	serdemetan:SCH-529074 (1:1 mol/mol)	660132	C(Cc1c[nH]c2ccccc12)Nc1ccc(Nc2ccncc2)cc1.CN(C)CCCNc1nc(CN2CCN(CC2)C(c2ccc(Cl)cc2)c2ccc(Cl)cc2)nc2ccccc12
+sgx523	SGX-523	635882	Cn1cc(cn1)-c1ccc2nnc(Sc3ccc4ncccc4c3)n2n1
+sid26681509	SID 26681509	411731	CCc1ccccc1NC(=O)CSC(=O)NNC(=O)[C@@H](Cc1c[nH]c2ccccc12)NC(=O)OC(C)(C)C
+sildenafil	sildenafil	27872	CCCc1nn(C)c2C(=O)NC(=Nc12)c3cc(ccc3OCC)S(=O)(=O)N4CCN(C)CC4
+silmitasertib	silmitasertib	660421	OC(=O)c1ccc2c(c1)nc(Nc1cccc(Cl)c1)c1ccncc21
+simvastatin	simvastatin	27894	CCC(C)(C)C(=O)O[C@H]1C[C@@H](C)C=C2C=C[C@H](C)[C@H](CC[C@@H]3C[C@@H](O)CC(=O)O3)[C@@H]12
+sirolimus	sirolimus	56703	CO[C@@H]1C[C@H](C[C@@H](C)[C@@H]2CC(=O)[C@H](C)\C=C(C)\[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)\C=C\C=C\C=C(C)\[C@H](C[C@@H]3CC[C@@H](C)[C@@](O)(O3)C(=O)C(=O)N3CCCC[C@H]3C(=O)O2)OC)CC[C@H]1O
+sirolimus:bortezomib(250:1mol/mol)	sirolimus:bortezomib (250:1 mol/mol)	660134	CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O.CO[C@@H]1C[C@H](C[C@@H](C)[C@@H]2CC(=O)[C@H](C)\C=C(C)\[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)\C=C\C=C\C=C(C)\[C@H](C[C@@H]3CC[C@@H](C)[C@@](O)(O3)C(=O)C(=O)N3CCCC[C@H]3C(=O)O2)OC)CC[C@H]1O
+sitagliptin	sitagliptin	58442	N[C@@H](CC(=O)N1CCn2c(C1)nnc2C(F)(F)F)Cc1cc(F)c(F)cc1F
+sj172550	SJ-172550	416777	CCOc1cc(cc(Cl)c1OCC(=O)OC)\C=C1C(=O)N(N=C/1C)c1ccccc1
+skepinonel	skepinone-L	688799	OC[C@@H](O)COc1ccc2CCc3cc(Nc4ccc(F)cc4F)ccc3C(=O)c2c1
+skiii	SKI-II	375366	Oc1ccc(Nc2nc(cs2)-c2ccc(Cl)cc2)cc1
+smer3	SMER-3	660286	O=C1c2ccccc2-c2nc3nonc3nc12
+sn38	SN-38	375637	CCc1c2Cn3c(cc4c(COC(=O)C4(O)CC)c3=O)-c2nc2ccc(O)cc12
+sns032	SNS-032	606254	CC(C)(C)c1cnc(CSc2cnc(NC(=O)C3CCNCC3)s2)o1
+snx2112	SNX-2112	362338	CC1(C)Cc2c(c(nn2-c2ccc(C(N)=O)c(N[C@H]3CC[C@H](O)CC3)c2)C(F)(F)F)C(=O)C1
+snx2112:bortezomib(250:1mol/mol)	SNX-2112:bortezomib (250:1 mol/mol)	660251	CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O.CC1(C)Cc2c(c(nn2-c2ccc(C(N)=O)c(N[C@H]3CC[C@H](O)CC3)c2)C(F)(F)F)C(=O)C1
+sorafenib	sorafenib	349006	CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(c3)C(F)(F)F)cc2)ccn1
+sotrastaurin	sotrastaurin	661032	CN1CCN(CC1)c1nc(C2=C(C(=O)NC2=O)c2c[nH]c3ccccc23)c2ccccc2n1
+spautin1	spautin-1	657183	Fc1ccc(CNc2ncnc3ccc(F)cc23)cc1
+sr1001	SR1001	660317	CC(=O)Nc1nc(C)c(s1)S(=O)(=O)Nc1ccc(cc1)C(O)(C(F)(F)F)C(F)(F)F
+sr8278	SR8278	668858	CCOC(=O)C1Cc2ccccc2CN1C(=O)c1ccc(SC)s1
+srii138a	SR-II-138A	411770	CON(C)C(=O)[C@H]1[C@@H](O)[C@@]2(O)c3c(O[C@]2([C@@H]1c1ccccc1)c1ccc(OC)cc1)cc(OC)cc3OC
+srt1720	SRT-1720	411820	O=C(Nc1cc(CN2CCNCC2)cc(c1)-c1nc2ccccc2[nH]1)c1cnc2ccccc2n1
+staurosporine	staurosporine	50769	CN[C@@H]1C[C@H]2O[C@@](C)([C@@H]1OC)n1c3ccccc3c3c4CNC(=O)c4c4c5ccccc5n2c4c13
+stemregenin1	StemRegenin 1	609063	CC(C)n1cnc2c(NCCc3ccc(O)cc3)nc(nc12)-c1csc2ccccc12
+stf31	STF-31	652975	CC(C)(C)c1ccc(cc1)S(=O)(=O)NCc1ccc(cc1)C(=O)Nc1cccnc1
+su11274	SU11274	606586	CN(c1cccc(Cl)c1)S(=O)(=O)c1ccc2NC(=O)\C(=C/c3[nH]c(C)c(C(=O)N4CCN(C)CC4)c3C)c2c1
+sunitinib	sunitinib	374750	CCN(CC)CCNC(=O)c1c(C)[nH]c(\C=C2/C(=O)Nc3ccc(F)cc23)c1C
+sz4ta2	SZ4TA2	688138	CC1(C)CCN(CC1)c1ccc(cc1)C(=O)NS(=O)(=O)c1ccc(NCCSc2ccccc2)c(c1)[N+]([O-])=O
+tacedinaline	tacedinaline	54200	CC(=O)Nc1ccc(cc1)C(=O)Nc1ccccc1N
+tacrolimus	tacrolimus	50737	CO[C@@H]1C[C@@H](CC[C@H]1O)\C=C(/C)[C@H]1OC(=O)[C@@H]2CCCCN2C(=O)C(=O)[C@]2(O)O[C@@H]([C@H](C[C@H]2C)OC)[C@H](C[C@@H](C)C\C(C)=C\[C@@H](CC=C)C(=O)C[C@H](O)[C@H]1C)OC
+tamatinib	tamatinib	417818	COc1cc(Nc2ncc(F)c(Nc3ccc4OC(C)(C)C(=O)Nc4n3)n2)cc(OC)c1OC
+tamoxifen	tamoxifen	26972	CC\C(c1ccccc1)=C(/c1ccccc1)c1ccc(OCCN(C)C)cc1
+tandutinib	tandutinib	464458	COc1cc2c(ncnc2cc1OCCCN1CCCCC1)N1CCN(CC1)C(=O)Nc1ccc(OC(C)C)cc1
+tanespimycin	tanespimycin	50134	CO[C@H]1C[C@H](C)CC2=C(NCC=C)C(=O)C=C(NC(=O)\C(C)=C\C=C/[C@H](OC)[C@@H](OC(N)=O)\C(C)=C\[C@H](C)[C@H]1O)C2=O
+tanespimycin:bortezomib(250:1mol/mol)	tanespimycin:bortezomib (250:1 mol/mol)	660221	CC(C)C[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)c1cnccn1)B(O)O.CO[C@H]1C[C@H](C)CC2=C(NCC=C)C(=O)C=C(NC(=O)\C(C)=C\C=C/[C@H](OC)[C@@H](OC(N)=O)\C(C)=C\[C@H](C)[C@H]1O)C2=O
+tanespimycin:gemcitabine(1:1mol/mol)	tanespimycin:gemcitabine (1:1 mol/mol)	660216	Nc1ccn([C@@H]2O[C@H](CO)[C@@H](O)C2(F)F)c(=O)n1.CO[C@H]1C[C@H](C)CC2=C(NCC=C)C(=O)C=C(NC(=O)\C(C)=C\C=C/[C@H](OC)[C@@H](OC(N)=O)\C(C)=C\[C@H](C)[C@H]1O)C2=O
+temozolomide	temozolomide	351043	CN1N=Nc2c(ncn2C1=O)C(=O)N
+temsirolimus	temsirolimus	660358	CO[C@@H]1C[C@H](C[C@@H](C)[C@@H]2CC(=O)[C@H](C)\C=C(C)\[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)\C=C\C=C\C=C(C)\[C@H](C[C@@H]3CC[C@@H](C)[C@@](O)(O3)C(=O)C(=O)N3CCCC[C@H]3C(=O)O2)OC)CC[C@H]1OC(=O)C(C)(CO)CO
+teniposide	teniposide	27871	COc1cc(cc(OC)c1O)[C@H]1[C@@H]2C(COC2=O)C(O[C@@H]2O[C@@H]3CO[C@H](OC3[C@H](O)[C@H]2O)c2cccs2)c2cc3OCOc3cc12
+tg100115	TG-100-115	606470	Nc1nc(N)c2nc(-c3cccc(O)c3)c(nc2n1)-c1cccc(O)c1
+tg101348	TG-101348	411808	Cc1cnc(Nc2ccc(OCCN3CCCC3)cc2)nc1Nc1cccc(c1)S(=O)(=O)NC(C)(C)C
+tgx221	TGX-221	606356	CC(Nc1ccccc1)c1cc(C)cn2c1nc(cc2=O)N1CCOCC1
+thalidomide	thalidomide	24197	O=C1N(C2CCC(=O)NC2=O)C(=O)c2ccccc12
+tigecycline	tigecycline	659993	CN(C)[C@H]1[C@@H]2C[C@@H]3Cc4c(cc(NC(=O)CNC(C)(C)C)c(O)c4C(=O)C3C(=O)[C@]2(O)C(=O)C(C(N)=O)C1=O)N(C)C
+tipifarnibp1	tipifarnib-P1	417417	Cn1cncc1[C@](N)(c1ccc(Cl)cc1)c1ccc2n(C)c(=O)cc(-c3cccc(Cl)c3)c2c1
+tipifarnibp2	tipifarnib-P2	417416	Cn1cncc1[C@@](N)(c1ccc(Cl)cc1)c1ccc2n(C)c(=O)cc(-c3cccc(Cl)c3)c2c1
+tivantinib	tivantinib	687406	O=C1NC(=O)[C@H]([C@@H]1c1c[nH]c2ccccc12)c1cn2CCCc3cccc1c23
+tivozanib	tivozanib	418170	COc1cc2nccc(Oc3ccc(NC(=O)Nc4cc(C)on4)c(Cl)c3)c2cc1OC
+topotecan	topotecan	44580	CC[C@@]1(O)C(=O)OCc2c1cc1-c3nc4ccc(O)c(CN(C)C)c4cc3Cn1c2=O
+tosedostat	tosedostat	417987	CC(C)C[C@H]([C@H](O)C(=O)NO)C(=O)N[C@H](C(=O)OC1CCCC1)c1ccccc1
+tpca1	TPCA-1	375564	NC(=O)Nc1sc(cc1C(N)=O)-c1ccc(F)cc1
+trametinib	trametinib	687418	CC(=O)Nc1cccc(c1)-n1c2c(C)c(=O)n(C)c(Nc3ccc(I)cc3F)c2c(=O)n(C2CC2)c1=O
+tretinoin	tretinoin	23151	CC(=CC=CC(=CC(=O)O)C)C=CC1=C(C)CCCC1(C)C
+tretinoin:carboplatin(2:1mol/mol)	tretinoin:carboplatin (2:1 mol/mol)	660181	O=C1O[Pt]OC(=O)C11CCC1.CC(\C=C\C=C(C)\C=C\C1=C(C)CCCC1(C)C)=C/CO
+tretinoin:navitoclax(4:1mol/mol)	tretinoin:navitoclax (4:1 mol/mol)	660179	CC(=C/CO)\C=C\C=C(C)\C=C\C1=C(C)CCCC1(C)C.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+triazolothiadiazine	triazolothiadiazine	385240	COc1ccc(OC)c(c1)-c1nnc2SCC(=Nn12)c1ccc(OC)c(OC)c1
+trifluoperazine	trifluoperazine	26914	CN1CCN(CCCN2c3ccccc3Sc3ccc(cc23)C(F)(F)F)CC1
+triptolide	triptolide	411720	CC(C)[C@]12O[C@H]1[C@@H]1O[C@]11[C@]3(O[C@H]3CC3C4=C(CC[C@]13C)C(=O)OC4)[C@@H]2O
+tubastatina	tubastatin A	411749	CN1CCc2c(C1)c1ccccc1n2Cc1ccc(cc1)C(=O)NO
+tw37	TW-37	609596	CC(C)c1ccccc1Cc1cc(C(=O)Nc2ccc(cc2)S(=O)(=O)c2ccccc2C(C)(C)C)c(O)c(O)c1O
+unc0321	UNC0321	635576	COc1cc2c(NC3CCN(C)CC3)nc(nc2cc1OCCOCCN(C)C)N1CCCN(C)CC1
+unc0638	UNC0638	594665	COc1cc2c(NC3CCN(CC3)C(C)C)nc(nc2cc1OCCCN1CCCC1)C1CCCCC1
+unc0638:navitoclax(1:1mol/mol)	UNC0638:navitoclax (1:1 mol/mol)	660270	COc1cc2c(NC3CCN(CC3)C(C)C)nc(nc2cc1OCCCN1CCCC1)C1CCCCC1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+vaf347	VAF-347	659226	FC(F)(F)c1ccc(Nc2nccc(n2)-c2cccc(Cl)c2)cc1
+valdecoxib	valdecoxib	32372	Cc1onc(c1-c1ccc(cc1)S(N)(=O)=O)-c1ccccc1
+vandetanib	vandetanib	349002	COc1cc2c(Nc3ccc(Br)cc3F)ncnc2cc1OCC1CCN(C)CC1
+veliparib	veliparib	606034	C[C@@]1(CCCN1)c1nc2c(cccc2[nH]1)C(N)=O
+ver155008	VER-155008	411815	Nc1ncnc2n([C@@H]3O[C@H](COCc4ccc(cc4)C#N)[C@@H](O)[C@H]3O)c(NCc3ccc(Cl)c(Cl)c3)nc12
+vincristine	vincristine	62602	CC[C@]1(O)C[C@@H]2CN(C1)CCc1c([nH]c3ccccc13)[C@@](C2)(C(=O)OC)c1cc2c(cc1OC)N(C=O)[C@@H]1[C@]22CCN3CC=C[C@](CC)([C@@H]23)[C@@H](OC(C)=O)[C@]1(O)C(=O)OC
+vorapaxar	vorapaxar	660136	CCOC(=O)N[C@@H]1CC[C@@H]2[C@H](C[C@@H]3[C@@H]([C@@H](C)OC3=O)[C@H]2\C=C\c2ccc(cn2)-c2cccc(F)c2)C1
+vorinostat	vorinostat	56554	ONC(=O)CCCCCCC(=O)Nc1ccccc1
+vorinostat:carboplatin(1:1mol/mol)	vorinostat:carboplatin (1:1 mol/mol)	660131	O=C1O[Pt]OC(=O)C11CCC1.ONC(=O)CCCCCCC(=O)Nc1ccccc1
+vorinostat:navitoclax(4:1mol/mol)	vorinostat:navitoclax (4:1 mol/mol)	660301	ONC(=O)CCCCCCC(=O)Nc1ccccc1.CC1(C)CCC(=C(CN2CCN(CC2)c2ccc(cc2)C(=O)NS(=O)(=O)c2ccc(N[C@H](CCN3CCOCC3)CSc3ccccc3)c(c2)S(=O)(=O)C(F)(F)F)C1)c1ccc(Cl)cc1
+vu0155056	VU0155056	660119	O=C(NCCN1CCC(CC1)n1c2ccccc2[nH]c1=O)c1ccc2ccccc2c1
+vx680	VX-680	340501	CN1CCN(CC1)c1cc(Nc2cc(C)[nH]n2)nc(Sc2ccc(NC(=O)C3CC3)cc2)n1
+way362450	WAY-362450	660821	CC(C)OC(=O)C1=CN(CC(C)(C)c2c1[nH]c1ccccc21)C(=O)c1ccc(F)c(F)c1
+wp1130	WP1130	660432	CCC[C@H](NC(=O)C(=C\c1cccc(Br)n1)\C#N)c1ccccc1
+wz4002	WZ4002	640366	COc1cc(ccc1Nc1ncc(Cl)c(Oc2cccc(NC(=O)C=C)c2)n1)N1CCN(C)CC1
+wz8040	WZ8040	628614	CN1CCN(CC1)c1ccc(Nc2ncc(Cl)c(Sc3cccc(NC(=O)C=C)c3)n2)cc1
+xl765	XL765	660304	COc1cc(Nc2nc3ccccc3nc2NS(=O)(=O)c2ccc(NC(=O)c3ccc(C)c(OC)c3)cc2)cc(OC)c1
+yk4279	YK 4-279	632103	COc1ccc(cc1)C(=O)CC1(O)C(=O)Nc2c1c(Cl)ccc2Cl
+yl54	YL54	651298	CC[C@H](C)[C@H](NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@H](CCCNC(N)=N)NC(=O)CCNC(C)=O)C(=O)N[C@]1(C)CCC\C=C/CCC[C@@](C)(NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CCSC)NC1=O)C(=O)N[C@@H](C)C(=O)N[C@@H](C)C(=O)N[C@@H](CC(N)=O)C(=O)N[C@@H](CCCNC(N)=N)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](CCCNC(N)=N)C(O)=O
+ym155	YM-155	417979	COCCn1c2c(C(=O)c3ccccc3C2=O)[n+](Cc2cnccn2)c1C
+zebularine	zebularine	411739	OC[C@H]1O[C@H](C(O)[C@H]1O)n1cccnc1=O
+zstk474	ZSTK474	606144	FC(F)c1nc2ccccc2n1-c1nc(nc(n1)N1CCOCC1)N1CCOCC1

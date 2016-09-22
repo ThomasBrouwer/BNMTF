@@ -1,0 +1,504 @@
+1321n1	1321N1
+22rv1	22Rv1
+42mgba	42-MG-BA
+5637	5637
+639v	639-V
+697	697
+769p	769-P
+786o	786-O
+8mgba	8-MG-BA
+8305c	8305C
+8505c	8505C
+a204	A-204
+a253	A-253
+a375	A-375
+a673	A-673
+a172	A172
+a2058	A2058
+a2780	A2780
+a549	A549
+achn	ACHN
+allsil	ALL-SIL
+amo1	AMO-1
+an3ca	AN3 CA
+aspc1	AsPC-1
+au565	AU565
+az521	AZ-521
+bcpap	B-CPAP
+bdcm	BDCM
+bftc909	BFTC-909
+bgc823	BGC-823
+bl41	BL-41
+bl70	BL-70
+bt20	BT-20
+bt474	BT-474
+bt549	BT-549
+bxpc3	BxPC-3
+c2bbe1	C2BBe1
+c32	C32
+c3a	C3A
+caki2	Caki-2
+cal27	CAL 27
+cal12t	CAL-12T
+cal78	CAL-78
+cal851	CAL-85-1
+calu1	Calu-1
+calu3	Calu-3
+calu6	Calu-6
+cama1	CAMA-1
+capan2	Capan-2
+cas1	CAS-1
+cck81	CCK-81
+chl1	CHL-1
+chp212	CHP-212
+ci1	CI-1
+cmk86	CMK-86
+colo201	COLO 201
+colo205	COLO 205
+colo741	COLO 741
+colo320	COLO-320
+colo677	COLO-677
+colo678	COLO-678
+colo679	COLO-679
+colo699	COLO-699
+corl105	COR-L105
+corl23	COR-L23
+cov318	COV318
+cov504	COV504
+daoy	Daoy
+dbtrg05mg	DBTRG-05MG
+del	DEL
+detroit562	Detroit 562
+dkmg	DK-MG
+dms114	DMS 114
+dohh2	DOHH-2
+dov13	DOV13
+du145	DU 145
+dv90	DV-90
+eb1	EB1
+eb2	EB2
+ebc1	EBC-1
+efe184	EFE-184
+efm19	EFM-19
+efo21	EFO-21
+efo27	EFO-27
+em2	EM-2
+en	EN
+es2	ES-2
+ess1	ESS-1
+f36p	F-36P
+fadu	FaDu
+fuov1	FU-OV-1
+fu97	FU97
+g361	G-361
+g401	G-401
+g402	G-402
+gamg	GAMG
+gb1	GB-1
+gciy	GCIY
+gct	GCT
+gi1	GI-1
+glc82	GLC-82
+gms10	GMS-10
+granta519	GRANTA-519
+h4	H4
+hara	HARA
+hcc15	HCC-15
+hcc44	HCC-44
+hcc56	HCC-56
+hcc78	HCC-78
+hcc1187	HCC1187
+hcc1395	HCC1395
+hcc1569	HCC1569
+hcc1806	HCC1806
+hcc1954	HCC1954
+hcc2935	HCC2935
+hcc4006	HCC4006
+hcc70	HCC70
+hcc827	HCC827
+hct116	HCT 116
+hct15	HCT-15
+hdmyz	HD-MY-Z
+hdqp1	HDQ-P1
+hec1a	HEC-1-A
+hec1b	HEC-1-B
+hec151	HEC-151
+hec251	HEC-251
+hec265	HEC-265
+hec59	HEC-59
+hec6	HEC-6
+hel9217	HEL 92.1.7
+hep3b217	Hep 3B2.1-7
+hepg2	Hep G2
+heya8	Hey-A8
+hgc27	HGC-27
+hh	HH
+hle	HLE
+hlf	HLF
+hmc18	HMC-1-8
+hmcb	HMCB
+hos	HOS
+hpac	HPAC
+hpafii	HPAF-II
+hs229t	Hs 229.T
+hs294t	Hs 294T
+hs578t	Hs 578T
+hs683	Hs 683
+hs695t	Hs 695T
+hs729	Hs 729
+hs739t	Hs 739.T
+hs746t	Hs 746T
+hs766t	Hs 766T
+hs840t	Hs 840.T
+hs852t	Hs 852.T
+hs895t	Hs 895.T
+hs936t	Hs 936.T
+hs939t	Hs 939.T
+hs944t	Hs 944.T
+hsc2	HSC-2
+ht	HT
+ht1080	HT-1080
+ht1197	HT-1197
+ht1376	HT-1376
+ht144	HT-144
+ht29	HT-29
+hucct1	HuCCT1
+huh1	huH-1
+hupt3	HUP-T3
+hupt4	HUP-T4
+hut78	HuT 78
+ialm	IA-LM
+igr37	IGR-37
+igr39	IGR-39
+igrov1	IGROV1
+im95	IM95
+imr32	IMR-32
+ipc298	IPC-298
+ishikawa(heraklio)02er	Ishikawa (Heraklio) 02 ER-
+istmes1	IST-MES1
+istmes2	IST-MES2
+j82	J82
+jhh2	JHH-2
+jhh4	JHH-4
+jhh5	JHH-5
+jhh6	JHH-6
+jhh7	JHH-7
+jhos2	JHOS-2
+jhos4	JHOS-4
+jhuem2	JHUEM-2
+jm1	JM1
+jmsu1	JMSU-1
+jurkat	JURKAT
+jvm3	JVM-3
+k029ax	K029AX
+kals1	KALS-1
+karpas299	KARPAS-299
+karpas422	KARPAS-422
+karpas620	KARPAS-620
+kasumi2	KASUMI-2
+kcimoh1	KCI-MOH1
+kcl22	KCL-22
+ke39	KE-39
+ke97	KE-97
+kelly	KELLY
+kg1	KG-1
+khm1b	KHM-1B
+kle	KLE
+kmbc2	KMBC-2
+kmm1	KMM-1
+kmrc1	KMRC-1
+kmrc2	KMRC-2
+kms11	KMS-11
+kms12bm	KMS-12-BM
+kms26	KMS-26
+kms34	KMS-34
+kns42	KNS-42
+kns60	KNS-60
+kns62	KNS-62
+kns81	KNS-81
+ko52	KO52
+kp1n	KP-1N
+kp1nl	KP-1NL
+kp2	KP-2
+kp3	KP-3
+kpnsi9s	KP-N-SI9s
+kp4	KP4
+ku812	KU812
+kuramochi	KURAMOCHI
+kym1	KYM-1
+kyse140	KYSE-140
+kyse150	KYSE-150
+kyse180	KYSE-180
+kyse30	KYSE-30
+kyse410	KYSE-410
+kyse450	KYSE-450
+kyse510	KYSE-510
+kyse520	KYSE-520
+kyse70	KYSE-70
+l363	L-363
+l428	L-428
+l33	L3.3
+lc1/sqsf	LC-1/sq-SF
+lclc103h	LCLC-103H
+ln18	LN-18
+ln229	LN-229
+lounh91	LOU-NH91
+loximvi	LOX IMVI
+lp1	LP-1
+ls123	LS123
+ls411n	LS411N
+ls513	LS513
+lu99	LU99
+ludlu1	LUDLU-1
+m059j	M059J
+malme3m	Malme-3M
+mb157	MB 157
+mc116	MC116
+mcas	MCAS
+mcf7	MCF7
+mdamb157	MDA-MB-157
+mdamb175vii	MDA-MB-175-VII
+mdamb415	MDA-MB-415
+mdamb435s	MDA-MB-435S
+mdamb436	MDA-MB-436
+mdamb453	MDA-MB-453
+mdamb468	MDA-MB-468
+mec1	MEC-1
+meg01	MEG-01
+melho	MEL-HO
+messa	MES-SA
+mewo	MeWo
+mfe280	MFE-280
+mfe296	MFE-296
+mfe319	MFE-319
+mg63	MG-63
+mhhes1	MHH-ES-1
+miapaca2	MIA PaCa-2
+mino	Mino
+mj	MJ
+mkn45	MKN-45
+mkn7	MKN7
+mkn74	MKN74
+moggccm	MOG-G-CCM
+molp8	MOLP-8
+molt16	MOLT-16
+monomac1	MONO-MAC-1
+mor/cpr	MOR/CPR
+mpp89	MPP 89
+msto211h	MSTO-211H
+ncih1048	NCI-H1048
+ncih1092	NCI-H1092
+ncih1155	NCI-H1155
+ncih1184	NCI-H1184
+ncih1299	NCI-H1299
+ncih1339	NCI-H1339
+ncih1341	NCI-H1341
+ncih1355	NCI-H1355
+ncih1373	NCI-H1373
+ncih1563	NCI-H1563
+ncih1568	NCI-H1568
+ncih1573	NCI-H1573
+ncih1581	NCI-H1581
+ncih1648	NCI-H1648
+ncih1650	NCI-H1650
+ncih1651	NCI-H1651
+ncih1666	NCI-H1666
+ncih1693	NCI-H1693
+ncih1694	NCI-H1694
+ncih1703	NCI-H1703
+ncih1792	NCI-H1792
+ncih1793	NCI-H1793
+ncih1869	NCI-H1869
+ncih1915	NCI-H1915
+ncih1944	NCI-H1944
+ncih1975	NCI-H1975
+ncih2009	NCI-H2009
+ncih2023	NCI-H2023
+ncih2030	NCI-H2030
+ncih2052	NCI-H2052
+ncih2085	NCI-H2085
+ncih2087	NCI-H2087
+ncih211	NCI-H211
+ncih2122	NCI-H2122
+ncih2170	NCI-H2170
+ncih2172	NCI-H2172
+ncih2228	NCI-H2228
+ncih226	NCI-H226
+ncih2286	NCI-H2286
+ncih23	NCI-H23
+ncih2444	NCI-H2444
+ncih2452	NCI-H2452
+ncih28	NCI-H28
+ncih322	NCI-H322
+ncih3255	NCI-H3255
+ncih358	NCI-H358
+ncih441	NCI-H441
+ncih460	NCI-H460
+ncih520	NCI-H520
+ncih522	NCI-H522
+ncih647	NCI-H647
+ncih650	NCI-H650
+ncih661	NCI-H661
+ncih727	NCI-H727
+ncih747	NCI-H747
+ncih810	NCI-H810
+ncin87	NCI-N87
+nco2	NCO2
+nih:ovcar3	NIH:OVCAR-3
+nugc3	NUGC-3
+nugc4	NUGC-4
+oc314	OC 314
+oc315	OC 315
+oc316	OC 316
+ociaml2	OCI-AML2
+ociaml5	OCI-AML5
+ocily10	OCI-LY10
+ocum1	OCUM-1
+oe21	OE21
+oe33	OE33
+oncodg1	ONCO-DG-1
+ons76	ONS-76
+opm2	OPM-2
+ov90	OV-90
+ovcar4	OVCAR-4
+ovcar8	OVCAR-8
+ovmana	OVMANA
+ovsaho	OVSAHO
+ovtoko	OVTOKO
+p12ichikawa	P12-ICHIKAWA
+p31/fuj	P31/FUJ
+p3hr1	P3HR-1
+patu8902	PA-TU-8902
+panc0203	Panc 02.03
+panc0327	Panc 03.27
+panc0403	Panc 04.03
+panc1005	Panc 10.05
+pc14	PC-14
+pc3	PC-3
+pfeiffer	Pfeiffer
+pk1	PK-1
+pk45h	PK-45H
+pk59	PK-59
+pl45	PL45
+plc/prf/5	PLC/PRF/5
+psn1	PSN1
+qgp1	QGP-1
+raji	Raji
+rd	RD
+reh	Reh
+rerfgc1b	RERF-GC-1B
+rerflcai	RERF-LC-AI
+rerflcms	RERF-LC-MS
+rkn	RKN
+rko	RKO
+rl952	RL95-2
+rpmi7951	RPMI-7951
+rpmi8402	RPMI-8402
+rt112	RT-112
+rt4	RT4
+rvh421	RVH-421
+saos2	Saos-2
+sbc5	SBC-5
+scaber	SCaBER
+scc25	SCC-25
+scc9	SCC-9
+sf295	SF-295
+sf126	SF126
+sf8657	SF8657
+sh10tc	SH-10-TC
+shp77	SHP-77
+sigm5	SIG-M5
+sima	SIMA
+sjrh30	SJRH30
+sjsa1	SJSA-1
+skbr3	SK-BR-3
+skco1	SK-CO-1
+skes1	SK-ES-1
+skhep1	SK-HEP-1
+sklms1	SK-LMS-1
+sklu1	SK-LU-1
+skmel2	SK-MEL-2
+skmel24	SK-MEL-24
+skmel30	SK-MEL-30
+skmel31	SK-MEL-31
+skmel5	SK-MEL-5
+skmes1	SK-MES-1
+skmm2	SK-MM-2
+sknas	SK-N-AS
+sknbe(2)	SK-N-BE(2)
+skndz	SK-N-DZ
+sknfi	SK-N-FI
+sknsh	SK-N-SH
+skov3	SK-OV-3
+sngm	SNG-M
+snu1	SNU-1
+snu16	SNU-16
+snu182	SNU-182
+snu387	SNU-387
+snu398	SNU-398
+snu423	SNU-423
+snu449	SNU-449
+snu475	SNU-475
+snuc2a	SNU-C2A
+snuc2b	SNU-C2B
+sq1	Sq-1
+sudhl10	SU-DHL-10
+sudhl4	SU-DHL-4
+sudhl6	SU-DHL-6
+sudhl8	SU-DHL-8
+su8686	SU.86.86
+suit2	SUIT-2
+supm2	SUP-M2
+supt1	SUP-T1
+sw1088	SW 1088
+sw1271	SW 1271
+sw1353	SW 1353
+sw1573	SW 1573
+sw1990	SW 1990
+sw780	SW 780
+sw900	SW 900
+sw1417	SW1417
+sw403	SW403
+sw48	SW48
+sw480	SW480
+sw579	SW579
+sw620	SW620
+t47d	T-47D
+t24	T24
+t3m10	T3M-10
+t84	T84
+t98g	T98G
+tc71	TC-71
+tccsup	TCCSUP
+te617t	TE 617.T
+te1	TE-1
+te11	TE-11
+te15	TE-15
+te5	TE-5
+te9	TE-9
+ten	TEN
+toledo	Toledo
+tov112d	TOV-112D
+tov21g	TOV-21G
+tt2609c02	TT2609-C02
+tyknu	TYK-nu
+u118mg	U-118 MG
+u2os	U-2 OS
+u87mg	U-87 MG
+u937	U-937
+uacc257	UACC-257
+uacc62	UACC-62
+uacc812	UACC-812
+umuc3	UM-UC-3
+vmrclcd	VMRC-LCD
+vmrcrcw	VMRC-RCW
+vmrcrcz	VMRC-RCZ
+wm115	WM-115
+wm2664	WM-266-4
+wm793	WM-793
+wm88	WM-88
+wm983b	WM-983B
+wm1799	WM1799
+ykg1	YKG1
+zr751	ZR-75-1
+zr7530	ZR-75-30
