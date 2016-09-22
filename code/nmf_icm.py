@@ -199,7 +199,7 @@ class nmf_icm:
 
     # Functions for model selection, measuring the goodness of fit vs model complexity
     def quality(self,metric):
-        assert metric in ['loglikelihood','BIC','AIC','MSE'], 'Unrecognised metric for model quality: %s.' % metric
+        assert metric in ['loglikelihood','BIC','AIC','MSE','ELBO'], 'Unrecognised metric for model quality: %s.' % metric
 
         log_likelihood = self.log_likelihood()        
         if metric == 'loglikelihood':
@@ -213,6 +213,8 @@ class nmf_icm:
         elif metric == 'MSE':
             R_pred = numpy.dot(self.U,self.V.T)
             return self.compute_MSE(self.M,self.R,R_pred)
+        elif metric == 'ELBO':
+            return 0.
         
     def log_likelihood(self):
         # Return the likelihood of the data given the trained model's parameters

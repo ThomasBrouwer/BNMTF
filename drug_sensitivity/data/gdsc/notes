@@ -1,0 +1,20 @@
+Data from Sanger's Genomics of Drug Sensitivity in Cancer project.
+http://www.cancerrxgene.org/downloads/
+
+*** ic50_excl_empty_filtered_cell_lines_drugs.txt ***
+The original file from website is called gdsc_manova_input_w5.csv (this file has all the genetic info etc filtered, leaving only the IC50 values).
+We removed row with drug AZD6482 (PubChem id 44137675) as there are two columns with that drug (removed the first one).
+Filtered rows 57 and 635 because they had only 2 resp. 1 drug tested. 
+Only included those cancer cell lines that have features available (en_input_w5.csv). The cancer cell lines are also ordered alphabetically (so that they align perfectly with the cell line kernels/constraint matrices).
+Also removed the drug Cisplatin (PubChem id 84691) and reordered columns alphabetically (so that they align perfectly with the drug and cancer line kernels/constraint matrices). 
+Finally, removed one value (-36.485443) as this was an extreme outlier (next lowest value around -17).
+We end up with: 622 cell lines, 138 drugs
+
+*** ic50_excl_empty_filtered_cell_lines_drugs_standardised.txt ***
+As above, but standardised the cell lines (so each row has mean 0, std 1).
+We end up with: 622 cell lines, 138 drugs.
+
+*** /kernels/ ***
+The different similarity kernels, based on drug and cell line features. 
+For binary features we use a Jaccard kernel.
+For real-valued features we use a Gaussian kernel with as the kernel standard deviation value: (no. features) / 4.
