@@ -14,7 +14,7 @@ from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
 
 # Settings
 standardised = False
-iterations = 500
+iterations = 1000
 init_UV = 'random'
 
 K_range = [15,20,25,30]
@@ -22,7 +22,7 @@ no_folds = 10
 restarts = 1
 
 quality_metric = 'AIC'
-output_file = "./results_REDO.txt"
+output_file = "./REDO_results.txt"
 
 alpha, beta = 1., 1.
 lambdaU = 1./10.
@@ -35,8 +35,8 @@ minimum_TN = 0.1
 (_,X_min,M,_,_,_,_) = load_gdsc(standardised=standardised)
 
 # Run the cross-validation framework
-random.seed(42)
-numpy.random.seed(9000)
+#random.seed(42)
+#numpy.random.seed(9000)
 nested_crossval = LineSearchCrossValidation(
     classifier=nmf_icm,
     R=X_min,

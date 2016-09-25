@@ -11,7 +11,7 @@ sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Docu
 import numpy, itertools, random
 from BNMTF.code.nmtf_np import NMTF
 from BNMTF.cross_validation.nested_matrix_cross_validation import MatrixNestedCrossValidation
-from BNMTF.drug_sensitivity.load_data import load_Sanger
+from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
 
 
 # Settings
@@ -22,22 +22,22 @@ train_config = {
     'init_S' : 'exponential',
     'expo_prior' : 0.1
 }
-K_range = [8,10]
-L_range = [8,10]
+K_range = [2,4,6,8]
+L_range = [2,4,6,8]
 P = 5
-no_folds = 5
-output_file = "./results.txt"
-files_nested_performances = ["./fold_%s.txt" % fold for fold in range(1,no_folds+1)]
+no_folds = 10
+output_file = "./REDO_results.txt"
+files_nested_performances = ["./REDO_fold_%s.txt" % fold for fold in range(1,no_folds+1)]
 
 # Construct the parameter search
 parameter_search = [{'K':K,'L':L} for (K,L) in itertools.product(K_range,L_range)]
 
 # Load in the Sanger dataset
-(_,X_min,M,_,_,_,_) = load_Sanger(standardised=standardised)
+(_,X_min,M,_,_,_,_) = load_gdsc(standardised=standardised)
 
 # Run the cross-validation framework
-random.seed(42)
-numpy.random.seed(9000)
+#random.seed(42)
+#numpy.random.seed(9000)
 nested_crossval = MatrixNestedCrossValidation(
     method=NMTF,
     X=X_min,

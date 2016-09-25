@@ -43,9 +43,12 @@ Methods:
     Also logs these findings to the file.
 """
 
-import numpy, mask
+import mask
 from parallel_matrix_cross_validation import ParallelMatrixCrossValidation
-from matrix_cross_validation import MatrixCrossValidation
+
+import numpy
+
+attempts_generate_M = 1000
 
 class MatrixNestedCrossValidation:
     def __init__(self,method,X,M,K,P,parameter_search,train_config,file_performance,files_nested_performances):
@@ -68,7 +71,7 @@ class MatrixNestedCrossValidation:
         
     # Run the cross-validation
     def run(self):
-        folds_test = mask.compute_folds(self.I,self.J,self.K,self.M)
+        folds_test = mask.compute_folds_attempts(I=self.I,J=self.J,no_folds=self.K,attempts=attempts_generate_M,M=self.M)
         folds_training = mask.compute_Ms(folds_test)       
 
         for i,(train,test) in enumerate(zip(folds_training,folds_test)):
@@ -87,9 +90,13 @@ class MatrixNestedCrossValidation:
                 P=self.P
             )
             crossval.run()
-            (best_parameters,_) = crossval.find_best_parameters(evaluation_criterion='MSE',low_better=True)
             
-            print "Best parameters for fold %s were %s." % (i+1,best_parameters)
+            try:
+                (best_parameters,_) = crossval.find_best_parameters(evaluation_criterion='MSE',low_better=True)
+                print "Best parameters for fold %s were %s." % (i+1,best_parameters)
+            except KeyError:
+                best_parameters = self.parameter_search[0]
+                print "Found no performances, dataset too sparse? Use first values instead for fold %s, %s." % (i+1,best_parameters)
             
             # Train the model and test the performance on the test set
             performance_dict = self.run_model(train,test,best_parameters)

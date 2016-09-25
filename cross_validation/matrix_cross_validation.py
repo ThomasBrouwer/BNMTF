@@ -38,7 +38,12 @@ Methods:
     Also logs these findings to the file.
 """
 
-import numpy, mask, json
+import mask
+
+import numpy
+import json
+
+attempts_generate_M = 1000
 
 class MatrixCrossValidation:
     def __init__(self,method,X,M,K,parameter_search,train_config,file_performance):
@@ -64,7 +69,7 @@ class MatrixCrossValidation:
             print "Trying parameters %s." % (parameters)
             
             try:
-                folds_test = mask.compute_folds(self.I,self.J,self.K,self.M)
+                folds_test = mask.compute_folds_attempts(I=self.I,J=self.J,no_folds=self.K,attempts=attempts_generate_M,M=self.M)
                 folds_training = mask.compute_Ms(folds_test)
                 
                 # We need to put the parameter dict into json to hash it

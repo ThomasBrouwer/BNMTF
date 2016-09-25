@@ -14,7 +14,7 @@ from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
 
 # Settings
 standardised = False
-iterations = 500
+iterations = 1000
 init_UV = 'random'
 
 K_range = [15,20,25,30]
@@ -33,8 +33,8 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 (_,X_min,M,_,_,_,_) = load_gdsc(standardised=standardised,sep=',')
 
 # Run the cross-validation framework
-random.seed(42)
-numpy.random.seed(9000)
+#random.seed(42)
+#numpy.random.seed(9000)
 nested_crossval = LineSearchCrossValidation(
     classifier=bnmf_vb_optimised,
     R=X_min,

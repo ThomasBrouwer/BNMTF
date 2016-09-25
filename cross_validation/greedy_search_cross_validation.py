@@ -21,13 +21,14 @@ We start the search using run(). If we use ICM we use run(minimum_TN=<>)
 run(burn_in=<>,thinning=<>).
 """
 
-import sys
-sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Documenten/PhD/")#
+import mask
+from greedy_search import GreedySearch
 
-from BNMTF.grid_search.greedy_search_bnmtf import GreedySearch
-import numpy, mask
+import numpy
 
 metrics = ['MSE','AIC','BIC'] 
+measures = ['R^2','MSE','Rp']
+attempts_generate_M = 1000
 
 class GreedySearchCrossValidation:
     def __init__(self,classifier,R,M,values_K,values_L,folds,priors,init_S,init_FG,iterations,restarts,quality_metric,file_performance):
@@ -55,9 +56,10 @@ class GreedySearchCrossValidation:
         
     # Run the cross-validation
     def run(self,burn_in=None,thinning=None,minimum_TN=None):
-        folds_test = mask.compute_folds(self.I,self.J,self.folds,self.M)
+        folds_test = mask.compute_folds_attempts(I=self.I,J=self.J,no_folds=self.folds,attempts=attempts_generate_M,M=self.M)
         folds_training = mask.compute_Ms(folds_test)
 
+        performances_test = {measure:[] for measure in measures}
         for i,(train,test) in enumerate(zip(folds_training,folds_test)):
             print "Fold %s." % (i+1)
             
@@ -88,6 +90,21 @@ class GreedySearchCrossValidation:
             self.fout.write("Performance: %s.\n\n" % performance)
             self.fout.flush()
             
+            for measure in measures:
+                performances_test[measure].append(performance[measure])
+        
+        # Store the final performances and average
+        average_performance_test = self.compute_average_performance(performances_test)
+        message = "Average performance: %s. \nPerformances test: %s." % (average_performance_test,performances_test)
+        print message
+        self.fout.write(message)        
+        self.fout.flush()
+          
+          
+    # Compute the average performance of the given list of performances (MSE, R^2, Rp)
+    def compute_average_performance(self,performances):
+        return { measure:(sum(values)/float(len(values))) for measure,values in performances.iteritems() }
+
             
     # Initialises and runs the model, and returns the performance on the test set
     def run_model(self,train,test,K,L,burn_in=None,thinning=None,minimum_TN=None):

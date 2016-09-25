@@ -5,9 +5,13 @@ We now have an extra parameter P for the initialisation, defining the number
 of parallel threads we should run.
 """
 
-import numpy, mask, json
+import mask
 from matrix_cross_validation import MatrixCrossValidation
+
 from multiprocessing import Pool
+import numpy
+
+attempts_generate_M = 1000
 
 
 # We try the parameters in parallel. This function either raises an Exception,
@@ -18,11 +22,13 @@ def run_fold(params):
     performance_dict = run_model(method,X,train,test,parameters,train_config)
     return performance_dict           
     
+    
 # Method for running the model with the given parameters
 def run_model(method,X,train,test,parameters,train_config):
     model = method(X,train,**parameters)
     model.train(**train_config)
     return model.predict(test)
+
 
 # Class, redefining the run function
 class ParallelMatrixCrossValidation(MatrixCrossValidation):
@@ -36,7 +42,7 @@ class ParallelMatrixCrossValidation(MatrixCrossValidation):
             print "Trying parameters %s." % (parameters)
             
             try:
-                folds_test = mask.compute_folds(self.I,self.J,self.K,self.M)
+                folds_test = mask.compute_folds_attempts(I=self.I,J=self.J,no_folds=self.K,attempts=attempts_generate_M,M=self.M)
                 folds_training = mask.compute_Ms(folds_test)
                 
                 # We need to put the parameter dict into json to hash it
@@ -56,6 +62,7 @@ class ParallelMatrixCrossValidation(MatrixCrossValidation):
                     for (train,test) in zip(folds_training,folds_test)
                 ]
                 outputs = pool.map(run_fold,all_parameters)
+                pool.close()
                 
                 for performance_dict in outputs:
                     self.store_performances(performance_dict,parameters)

@@ -14,15 +14,15 @@ from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
 
 # Settings
 standardised = False
-iterations = 500
-burn_in = 450
+iterations = 1000
+burn_in = 900
 thinning = 2
 
 init_S = 'random' #'exp' #
 init_FG = 'kmeans' #'exp' #
 
-K_range = [4,5,6,7,8]
-L_range = [4,5,6,7,8]
+K_range = [5,6,7,8,9,10]
+L_range = [5,6,7,8,9,10]
 no_folds = 10
 restarts = 1
 
@@ -39,8 +39,8 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaF':lambdaF, 'lambdaS':lambdaS, 'la
 (_,X_min,M,_,_,_,_) = load_gdsc(standardised=standardised)
 
 # Run the cross-validation framework
-random.seed(42)
-numpy.random.seed(9000)
+#random.seed(1)
+#numpy.random.seed(1)
 nested_crossval = GreedySearchCrossValidation(
     classifier=bnmtf_gibbs_optimised,
     R=X_min,

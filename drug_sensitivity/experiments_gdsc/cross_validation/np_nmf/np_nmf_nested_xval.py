@@ -17,11 +17,11 @@ from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
 # Settings
 standardised = False
 train_config = {
-    'iterations' : 1000,
+    'iterations' : 2000,
     'init_UV' : 'exponential',
     'expo_prior' : 0.1
 }
-K_range = [6,7,8,9,10]
+K_range = [6,8,10,12,14]
 no_folds = 10
 output_file = "./REDO_results.txt"
 files_nested_performances = ["./REDO_fold_%s.txt" % fold for fold in range(1,no_folds+1)]

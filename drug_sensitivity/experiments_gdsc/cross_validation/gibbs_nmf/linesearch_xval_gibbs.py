@@ -1,5 +1,5 @@
 """
-Run the cross validation with line search for model selection using VB-NMF on
+Run the cross validation with line search for model selection using G-NMF on
 the Sanger dataset.
 """
 
@@ -14,8 +14,8 @@ from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
 
 # Settings
 standardised = False
-iterations = 500
-burn_in = 450
+iterations = 1000
+burn_in = 900
 thinning = 2
 init_UV = 'random'
 
@@ -24,7 +24,7 @@ no_folds = 10
 restarts = 1
 
 quality_metric = 'AIC'
-output_file = "./results_REDO.txt"
+output_file = "./REDO_results.txt"
 
 alpha, beta = 1., 1.
 lambdaU = 1./10.
@@ -35,8 +35,8 @@ priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
 (_,X_min,M,_,_,_,_) = load_gdsc(standardised=standardised)
 
 # Run the cross-validation framework
-random.seed(42)
-numpy.random.seed(9000)
+#random.seed(42)
+#numpy.random.seed(9000)
 nested_crossval = LineSearchCrossValidation(
     classifier=bnmf_gibbs_optimised,
     R=X_min,
