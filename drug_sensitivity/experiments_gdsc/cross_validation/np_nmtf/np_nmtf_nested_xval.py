@@ -22,15 +22,13 @@ train_config = {
     'init_S' : 'exponential',
     'expo_prior' : 0.1
 }
-K_range = [2,4,6,8]
-L_range = [2,4,6,8]
 P = 5
 no_folds = 10
 output_file = "./REDO_results.txt"
 files_nested_performances = ["./REDO_fold_%s.txt" % fold for fold in range(1,no_folds+1)]
 
 # Construct the parameter search
-parameter_search = [{'K':K,'L':L} for (K,L) in itertools.product(K_range,L_range)]
+parameter_search = [{'K':K,'L':L} for (K,L) in [(6,6), (8,8), (10,10)]]
 
 # Load in the Sanger dataset
 (_,X_min,M,_,_,_,_) = load_gdsc(standardised=standardised)
