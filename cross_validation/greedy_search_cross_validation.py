@@ -22,7 +22,7 @@ run(burn_in=<>,thinning=<>).
 """
 
 import mask
-from greedy_search import GreedySearch
+from greedy_search_bnmtf import GreedySearch
 
 import numpy
 
