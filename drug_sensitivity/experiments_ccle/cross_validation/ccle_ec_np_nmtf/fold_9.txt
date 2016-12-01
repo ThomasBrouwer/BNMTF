@@ -1,0 +1,4 @@
+Tried parameters {'K': 1, 'L': 1} but got exception: Failed to generate folds for training and test data, 1000 attempts.. 
+Tried parameters {'K': 1, 'L': 2} but got exception: Failed to generate folds for training and test data, 1000 attempts.. 
+Tried parameters {'K': 2, 'L': 1} but got exception: Failed to generate folds for training and test data, 1000 attempts.. 
+Tried parameters {'K': 2, 'L': 2} but got exception: Failed to generate folds for training and test data, 1000 attempts.. 
