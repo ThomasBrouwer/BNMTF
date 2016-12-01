@@ -51,7 +51,7 @@ colours = ['r','b','g','c']
 
 for metric in metrics:
     fig = plt.figure(figsize=(1.9,1.5))
-    fig.subplots_adjust(left=0.12, right=0.95, bottom=0.17, top=0.95)
+    fig.subplots_adjust(left=0.115, right=0.945, bottom=0.17, top=0.95)
     #plt.title("Performances (%s) for different fractions of missing values" % metric)
     plt.xlabel("Iterations", fontsize=8, labelpad=0)
     plt.ylabel(metric, fontsize=8, labelpad=-1)
@@ -71,3 +71,4 @@ for metric in metrics:
         plt.ylim(0,1)
         
     plt.savefig("../graphs_Sanger/mse_Sanger_nmtf_convergences.png", dpi=600)
+    #plt.savefig("/home/tab43/Dropbox/Posters/Poster NIPS AABI 2016 v2 png/images/mse_Sanger_nmtf_convergences.png", dpi=1200)

@@ -70,6 +70,7 @@ for metric in metrics:
         plt.ylim(0,1)
         
     plt.savefig("../graphs_toy/mse_nmf_convergences.png", dpi=600)
+    #plt.savefig("/home/tab43/Dropbox/Posters/Poster NIPS AABI 2016 v2 png/images/mse_nmf_convergences.png", dpi=1200)
         
     # Set up the legend outside
     font_size_legend, number_of_columns, legend_box_line_width, legend_line_width = 12, 4, 1, 2
@@ -80,4 +81,5 @@ for metric in metrics:
     plt.setp(legend.get_lines(),linewidth=legend_line_width)
         
     plt.savefig("../graphs_toy/legend.png", dpi=600)
+    #plt.savefig("/home/tab43/Dropbox/Posters/Poster NIPS AABI 2016 v2 png/images/legend.png", dpi=1200)
     

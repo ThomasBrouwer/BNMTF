@@ -76,3 +76,4 @@ for metric in metrics:
     plt.xticks(numpy.arange(N) + 2*width, x)
     
     plt.savefig("../graphs_toy/mse_nmf_noise_test.png", dpi=600)
+    #plt.savefig("/home/tab43/Dropbox/Posters/Poster NIPS AABI 2016 v2 png/images/mse_nmf_noise_test.png", dpi=1200)
