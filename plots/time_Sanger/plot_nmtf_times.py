@@ -77,3 +77,4 @@ for metric in metrics:
         plt.ylim(0,1)
         
     plt.savefig("../graphs_Sanger/mse_Sanger_nmtf_times.png", dpi=600)
+    #plt.savefig("/home/tab43/Dropbox/Posters/Poster NIPS AABI 2016 v2/images/mse_Sanger_nmtf_times.png", dpi=1200)
