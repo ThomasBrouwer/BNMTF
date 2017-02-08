@@ -1,7 +1,12 @@
 """
 Test the class for Gamma draws and expectations in gamma.py.
 """
-from BNMTF.code.distributions.gamma import gamma_draw, gamma_expectation, gamma_expectation_log, gamma_mode
+
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
+from BNMTF.code.models.distributions.gamma import gamma_draw, gamma_expectation, gamma_expectation_log, gamma_mode
 
 def test_expectation():
     alpha = 2.0

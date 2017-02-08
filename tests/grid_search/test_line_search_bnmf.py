@@ -2,8 +2,12 @@
 Test the line search for BNMF, in line_search_bnmf.py
 """
 
-from BNMTF.grid_search.line_search_bnmf import LineSearch
-from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
+from BNMTF.code.cross_validation.line_search_bnmf import LineSearch
+from BNMTF.code.models.bnmf_vb_optimised import bnmf_vb_optimised
 import numpy, pytest
 
 classifier = bnmf_vb_optimised
@@ -26,7 +30,7 @@ def test_init():
     assert linesearch.priors == priors
     assert linesearch.iterations == iterations
     assert linesearch.initUV == initUV
-    assert linesearch.all_performances == { 'BIC' : [], 'AIC' : [], 'loglikelihood' : [], 'MSE' : [] }
+    assert linesearch.all_performances == { 'BIC' : [], 'AIC' : [], 'loglikelihood' : [], 'MSE' : [], 'ELBO' : [] }
     
     
 def test_search():

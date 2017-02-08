@@ -2,8 +2,12 @@
 Tests for the Iterated Conditional Modes algorithm.
 """
 
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
 import numpy, math, pytest, itertools
-from BNMTF.code.nmf_icm import nmf_icm
+from BNMTF.code.models.nmf_icm import nmf_icm
 
 
 """ Test constructor """

@@ -2,8 +2,12 @@
 Unit tests for the methods in the NMTF class (/code/nmtf_np.py).
 """
 
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
 import numpy, math, pytest, itertools, random
-from BNMTF.code.nmtf_np import NMTF
+from BNMTF.code.models.nmtf_np import NMTF
 
 
 """ Test the initialisation of Omega """

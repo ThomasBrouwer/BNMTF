@@ -2,8 +2,12 @@
 Tests for the BNMTF Variational Bayes algorithm.
 """
 
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
 import numpy, math, pytest, itertools
-from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
+from BNMTF.code.models.bnmtf_vb_optimised import bnmtf_vb_optimised
 
 
 """ Test constructor """

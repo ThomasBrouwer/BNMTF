@@ -2,8 +2,12 @@
 Unit tests for the methods in the NMF class (/code/nmf_np.py).
 """
 
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
 import numpy, math, pytest, itertools
-from BNMTF.code.nmf_np import NMF
+from BNMTF.code.models.nmf_np import NMF
 
 
 """ Test the initialisation of Omega """
@@ -211,7 +215,7 @@ def test_compute_I_div():
     nmf.V = V   
     
     I_div = nmf.compute_I_div()    
-    assert I_div == expected_I_div
+    assert abs(I_div - expected_I_div) < 0.0000001
     
     
 """ Test computing the performance of the predictions using the expectations """

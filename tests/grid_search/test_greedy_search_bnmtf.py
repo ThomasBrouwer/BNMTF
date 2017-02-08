@@ -2,8 +2,12 @@
 Test the grid search for BNMTF, in grid_search_bnmtf.py
 """
 
-from BNMTF.grid_search.greedy_search_bnmtf import GreedySearch
-from BNMTF.code.bnmtf_vb_optimised import bnmtf_vb_optimised
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
+from BNMTF.code.cross_validation.greedy_search_bnmtf import GreedySearch
+from BNMTF.code.models.bnmtf_vb_optimised import bnmtf_vb_optimised
 import numpy, pytest, random
 
 classifier = bnmtf_vb_optimised

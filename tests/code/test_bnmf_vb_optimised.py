@@ -2,8 +2,12 @@
 Tests for the BNMF Variational Bayes algorithm, with optimised matrix operation updates.
 """
 
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
 import numpy, math, pytest, itertools, random
-from BNMTF.code.bnmf_vb_optimised import bnmf_vb_optimised
+from BNMTF.code.models.bnmf_vb_optimised import bnmf_vb_optimised
 
 
 """ Test constructor """

@@ -2,8 +2,12 @@
 Tests for the BNMF Gibbs sampler.
 """
 
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
 import numpy, math, pytest, itertools
-from BNMTF.code.bnmf_gibbs_optimised import bnmf_gibbs_optimised
+from BNMTF.code.models.bnmf_gibbs_optimised import bnmf_gibbs_optimised
 
 
 """ Test constructor """

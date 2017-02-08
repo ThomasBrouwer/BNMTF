@@ -1,7 +1,12 @@
 """
 Test the class for Truncated Normal draws and expectations in truncated_normal.py.
 """
-from BNMTF.code.distributions.truncated_normal import TN_draw, TN_expectation, TN_variance, TN_mode
+
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
+from BNMTF.code.models.distributions.truncated_normal import TN_draw, TN_expectation, TN_variance, TN_mode
 from scipy.stats import norm
 import numpy
 

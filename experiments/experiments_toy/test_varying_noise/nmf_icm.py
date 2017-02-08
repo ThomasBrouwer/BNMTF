@@ -1,0 +1,134 @@
+"""
+Test the performance of VaICM for recovering a toy dataset, where 
+we vary the level of noise, and use 10% test data.
+We repeat this 10 times per noise level and average that.
+
+We use the correct number of latent factors and flatter priors than used to generate the data.
+
+I, J, K = 100, 80, 10
+
+The noise levels indicate the percentage of noise, compared to the amount of 
+variance in the dataset - i.e. the inverse of the Signal to Noise ratio:
+    SNR = std_signal^2 / std_noise^2
+    noise = 1 / SNR
+We test it for 1%, 2%, 5%, 10%, 20%, and 50% noise.
+"""
+
+project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
+import sys
+sys.path.append(project_location)
+
+from BNMTF.code.models.nmf_icm import nmf_icm
+from BNMTF.data_toy.bnmf.generate_bnmf import add_noise, try_generate_M
+from BNMTF.code.cross_validation.mask import calc_inverse_M
+
+import numpy, matplotlib.pyplot as plt
+
+##########
+
+fraction_unknown = 0.1
+noise_ratios = [ 0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5 ] # 1/SNR
+
+input_folder = project_location+"BNMTF/data_toy/bnmf/"
+
+repeats = 10
+iterations = 1000
+I,J,K = 100, 80, 10
+
+alpha, beta = 1., 1.
+lambdaU = numpy.ones((I,K))/10.
+lambdaV = numpy.ones((J,K))/10.
+priors = { 'alpha':alpha, 'beta':beta, 'lambdaU':lambdaU, 'lambdaV':lambdaV }
+
+init_UV = 'random'
+
+minimum_TN = 0.1
+
+metrics = ['MSE', 'R^2', 'Rp']
+
+
+# Load in data
+R_true = numpy.loadtxt(input_folder+"R_true.txt")
+
+
+# For each noise ratio, generate mask matrices for each attempt
+M_attempts = 100
+all_Ms = [ 
+    [try_generate_M(I,J,fraction_unknown,M_attempts) for r in range(0,repeats)]
+    for noise in noise_ratios
+]
+all_Ms_test = [ [calc_inverse_M(M) for M in Ms] for Ms in all_Ms ]
+
+# Make sure each M has no empty rows or columns
+def check_empty_rows_columns(M,fraction):
+    sums_columns = M.sum(axis=0)
+    sums_rows = M.sum(axis=1)
+    for i,c in enumerate(sums_rows):
+        assert c != 0, "Fully unobserved row in M, row %s. Fraction %s." % (i,fraction)
+    for j,c in enumerate(sums_columns):
+        assert c != 0, "Fully unobserved column in M, column %s. Fraction %s." % (j,fraction)
+        
+for Ms in all_Ms:
+    for M in Ms:
+        check_empty_rows_columns(M,fraction_unknown)
+
+
+# For each noise ratio, add that level of noise to the true R
+all_R = []
+variance_signal = R_true.var()
+for noise in noise_ratios:
+    tau = 1. / (variance_signal * noise)
+    print "Noise: %s%%. Variance in dataset is %s. Adding noise with variance %s." % (100.*noise,variance_signal,1./tau)
+    
+    R = add_noise(R_true,tau)
+    all_R.append(R)
+    
+    
+# We now run the VB algorithm on each of the M's for each noise ratio    
+all_performances = {metric:[] for metric in metrics} 
+average_performances = {metric:[] for metric in metrics} # averaged over repeats
+for (noise,R,Ms,Ms_test) in zip(noise_ratios,all_R,all_Ms,all_Ms_test):
+    print "Trying noise ratio %s." % noise
+    
+    # Run the algorithm <repeats> times and store all the performances
+    for metric in metrics:
+        all_performances[metric].append([])
+    for (repeat,M,M_test) in zip(range(0,repeats),Ms,Ms_test):
+        print "Repeat %s of noise ratio %s." % (repeat+1, noise)
+    
+        BNMF = nmf_icm(R,M,K,priors)
+        BNMF.initialise(init_UV)
+        BNMF.run(iterations,minimum_TN=minimum_TN)
+    
+        # Measure the performances
+        performances = BNMF.predict(M_test)
+        for metric in metrics:
+            # Add this metric's performance to the list of <repeat> performances for this noise ratio
+            all_performances[metric][-1].append(performances[metric])
+            
+    # Compute the average across attempts
+    for metric in metrics:
+        average_performances[metric].append(sum(all_performances[metric][-1])/repeats)
+    
+
+    
+print "repeats=%s \nnoise_ratios = %s \nall_performances = %s \naverage_performances = %s" % \
+    (repeats,noise_ratios,all_performances,average_performances)
+
+
+'''
+repeats=10 
+noise_ratios = [0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5] 
+all_performances = {'R^2': [[0.9994275174004048, 0.9994656403948952, 0.9996708221177796, 0.9995347288718752, 0.9993728412262468, 0.999619981753875, 0.9995697852224706, 0.9995508439367382, 0.9995124092128751, 0.9995556075776828], [0.9878832245755035, 0.9884637889922985, 0.9859048321405175, 0.9867771207376747, 0.9877654825259267, 0.9819716445808432, 0.9862989544423829, 0.9853170648242279, 0.9880720155073895, 0.9854688885414058], [0.9747229093869724, 0.9721046731311451, 0.9746043305021105, 0.9724548194664965, 0.968803504686089, 0.9714477793932085, 0.9763408925659203, 0.9751042973989507, 0.9709944217749016, 0.9708258089641953], [0.9268233240613288, 0.942153652981157, 0.9431726336567899, 0.9347929132509821, 0.9311673619339667, 0.9473541318512297, 0.9437485971400831, 0.9375259853569553, 0.934867883731487, 0.9391162187225124], [0.8942025568195693, 0.8902703520523046, 0.8702341360656927, 0.8792356739873265, 0.8873483331357861, 0.8653905410520002, 0.8867979597011612, 0.8927663674030155, 0.8797186484916076, 0.8790765136352358], [0.7990256074012729, 0.7728978707408007, 0.7686681480817688, 0.7959198079850562, 0.745233132727992, 0.790296141423561, 0.7891194390919503, 0.7882630246048945, 0.8054293086806115, 0.7960678022241063], [0.5818369238376604, 0.5619913446409395, 0.5225568235388031, 0.5049061484974569, 0.5285340571647257, 0.48974033404601147, 0.48693144720801695, 0.5505018855893371, 0.5129126696309582, 0.48720828233932445]], 'MSE': [[0.021961390244601007, 0.01783791515535086, 0.014004711613521202, 0.01743406378289614, 0.020559048298976229, 0.015565544744807081, 0.017329985391589701, 0.015950688895202805, 0.015616944038136118, 0.016922990008239151], [0.52280524517411453, 0.48735443687082003, 0.51131982585342517, 0.51433826889056133, 0.48726352256540784, 0.57060021330640498, 0.54788936163734214, 0.4982181087322779, 0.4672137445062966, 0.49528646224927569], [1.0383610354287984, 1.0431877093554609, 1.0276156813390882, 1.0683443240451367, 0.99537081038300812, 1.0095372992885241, 0.92353840755256045, 0.9566102185401687, 1.0644459355580631, 1.0416358364838905], [2.6318869427701026, 2.5363293162013663, 2.2960063099841679, 2.5883073027718519, 2.5199808152824055, 2.450177564962206, 2.314747001321555, 2.3377677749135857, 2.6528040313875461, 2.6635273421713364], [4.5709336917294712, 4.7648335305182465, 5.013238932376491, 4.5388352781435097, 5.1711359515106521, 5.0404242175258158, 5.1082230131022071, 4.5827142830733241, 4.9517558971267013, 5.426416504409417], [9.7864172390575739, 9.8011600069405809, 8.704516072297027, 10.05347108342515, 10.273858392693079, 11.290349630074372, 9.9032958700776401, 9.8714369645012301, 9.2505232507026456, 9.1374364042937302], [25.816680540836302, 26.836068339667023, 25.999883354034342, 29.082571286069534, 26.944719875812147, 27.520926395571404, 25.932036593701991, 26.004813903333066, 28.451955448585078, 25.957354341512559]], 'Rp': [[0.99971567619444301, 0.99973738747637664, 0.9998359945126879, 0.99977155566646414, 0.9996948394107974, 0.99981397220711854, 0.99978638572296563, 0.99977847924032703, 0.99976202022169058, 0.99978426607074489], [0.99392818274541639, 0.99422292434176096, 0.99301661805801733, 0.99337108063408797, 0.9938770263432849, 0.9909829261982479, 0.99313669798147808, 0.99263988594710773, 0.99407366983035406, 0.99275722558333301], [0.9872970797242876, 0.98608149391613575, 0.98727022692049993, 0.98619469316998065, 0.98448117996079731, 0.98563919679905199, 0.98817104337752926, 0.98748982132235952, 0.98548752516759797, 0.98541653526776729], [0.96277597238590051, 0.9706489794572376, 0.9714331620811073, 0.96691170887040767, 0.96519363688398918, 0.97340192077796528, 0.97153950532568345, 0.96878026924467231, 0.96696529053692781, 0.96923516069187232], [0.94617004403148186, 0.94419587331347543, 0.93311040290683611, 0.93776958154494627, 0.94203246403852148, 0.93063056655335197, 0.94213190950149583, 0.94512328685284863, 0.93852748424619059, 0.93771034366909189], [0.89520848268271691, 0.88185160458620482, 0.87766767327953044, 0.89357375644074388, 0.8645477593905081, 0.89028969511561584, 0.89086763113398071, 0.8893164622956774, 0.89810000668634926, 0.89390569945979326], [0.76594451825353271, 0.75827171066070964, 0.74227388558177121, 0.71976089851550162, 0.74230633673428348, 0.71434998045066289, 0.7084737877091225, 0.74865652572894115, 0.7273666878006444, 0.71844248076747952]]} 
+average_performances = {'R^2': [0.99952801777148426, 0.98639230168681702, 0.97274034372699902, 0.93807227026864926, 0.88250410823436987, 0.78509202829620151, 0.52271199164932336], 'MSE': [0.017318328217332028, 0.51022891897859257, 1.0168647257974701, 2.4991534401766122, 4.9168511299515831, 9.8072464914063033, 26.854701007912343], 'Rp': [0.99976805767236177, 0.99320062376630891, 0.98635287956260065, 0.96868856062557618, 0.93974019566582412, 0.88753287710711193, 0.73458468122026488]}
+'''
+
+
+# Plot the MSE, R^2 and Rp
+for metric in metrics:
+    plt.figure()
+    x = noise_ratios
+    y = average_performances[metric]
+    plt.plot(x,y)
+    plt.xlabel("Noise ratios missing")
+    plt.ylabel(metric)
