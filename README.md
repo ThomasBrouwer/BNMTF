@@ -41,8 +41,8 @@ Contains the toy data, and methods for generating toy data.
 - **/bnmtf/** - Generate toy data using **generate_bnmtf.py**, giving files **F.txt**, **S.txt**, **G.txt**, **R.txt**, **R_true.txt** (no noise), **M.txt**.
 
 #### /data_drug_sensitivity/
-Contains the drug sensitivity datasets (GDSC IC50, CTRP EC50, CCLE IC50, CCLE EC50).
-- **/gdsc/**, **/ctrp/**, **/ccle/** - The datasets. We obtained these from the "Bayesian Hybrid Matrix Factorisation for Data Integration" paper (Thomas Brouwer and Pietro Lio', 2017), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**.
+Contains the drug sensitivity datasets (GDSC IC50, CCLE IC50, CCLE EC50, CTRP EC50).
+- **/gdsc/**, **/ctrp/**, **/ccle/** - The datasets. We obtained these from the "Bayesian Hybrid Matrix Factorisation for Data Integration" paper (Thomas Brouwer and Pietro Lio', 2017), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**. We did not use the CTRP EC50 dataset for the cross-validation experiments.
 
 #### /experiments/
 - **/experiments_toy/** - Experiments on the toy data.
@@ -57,12 +57,10 @@ Contains the drug sensitivity datasets (GDSC IC50, CTRP EC50, CCLE IC50, CCLE EC
   - **/time/** - Measure convergence rate of the methods (against time) on the Sanger data.
   - **/grid_search/** - Measure the effectiveness of the line, grid, and greedy search model selection methods on the Sanger data.
   - **/cross_validation/** - 10-fold cross-validation experiments on the Sanger data.
-- **/experiments_ctrp/** - Cross-validation experiments on the CTRP EC50 dataset, as well as helper methods for loading in the data.
-  - **load_data.py** - Helper methods for loading in the CTRP data.
-  - **/cross_validation/** - 10-fold cross-validation experiments on the CTRP data.
 - **/experiments_ccle/** - Cross-validation experiments on the CCLE IC50 and EC50 datasets, as well as helper methods for loading in the data.
   - **load_data.py** - Helper methods for loading in the CCLE IC50 and EC50 data.
   - **/cross_validation/** - 10-fold cross-validation experiments on the CCLE IC50 and EC50 data.
+- **/experiments_ctrp/load_data.py** - Helper methods for loading in the CTRP data.
 
 #### /plots/
 The results and plots for the experiments are stored in this folder, along with scripts for making the plots.
