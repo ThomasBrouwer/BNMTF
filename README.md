@@ -74,4 +74,4 @@ The results and plots for the experiments are stored in this folder, along with 
 - **/time_Sanger/** - Scripts for plotting the convergence (against time) on the Sanger data.
 
 #### /tests/
-py.test unit tests for the code and classes in **/code/**.
+py.test unit tests for the code and classes in **/code/**. To run the tests, simply cd into the /tests/ folder, and run `pytest` in the command line.
