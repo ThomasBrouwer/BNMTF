@@ -17,7 +17,7 @@ Python classes for the BNMF and BNMTF models: Gibbs sampling, Variational Bayes,
 - **bnmf_vb.py** - Implementation of our variational Bayesian inference for BNMF.
 - **nmf_icm.py** - Implementation of Iterated Conditional Modes NMF algorithm (MAP inference). Initially introduced by Schmidt et al. 2009.
 - **nmf_np.py** - Implementation of non-probabilistic NMF (Lee and Seung 2001).
-- **bnmtf_gibbs.py ** - Implementation of our Gibbs sampler for Bayesian non-negative matrix tri-factorisation (BNMTF).
+- **bnmtf_gibbs.py** - Implementation of our Gibbs sampler for Bayesian non-negative matrix tri-factorisation (BNMTF).
 - **bnmtf_vb.py** - Implementation of our variational Bayesian inference for BNMTF.
 - **nmtf_icm.py** - Implementation of Iterated Conditional Modes NMTF algorithm (MAP inference).
 - **nmtf_np.py** - Implementation of non-probabilistic NMTF, introduced by Yoo and Choi 2009.
