@@ -15,7 +15,7 @@ Thomas Brouwer, Jes Frellsen, Pietro Lio'.
 If you wish to use the matrix factorisation models, or replicate the experiments, follow these steps. Please ensure you have Python 2.7 (3 is currently not supported). We recommend option 1, as it allows you to rerun the experiments.
 
 #### Option 1
-1. Clone the project to your computer, by running ``` git clone  ``` in your command line.
+1. Clone the project to your computer, by running ``` git clone https://github.com/ThomasBrouwer/BNMTF.git ``` in your command line.
 2. In your Python script, add the project to your system path using the following lines:
 ```
 project_location = "/path/to/folder/containing/project/"
@@ -30,7 +30,7 @@ model.initialise()
 model.train(iterations=10)
 ```
 #### Option 2
-1. Download the package directly, using ```pip install git+git://github.com/jkbr/httpie.git```.
+1. Download the package directly, using ``` pip install git+git://github.com/ThomasBrouwer/BNMTF.git ```.
 2. You can now import the models in your code, e.g.
 ```
 from BNMTF.code.models.nmf_np import NMF
