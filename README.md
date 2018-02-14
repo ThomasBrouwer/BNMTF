@@ -1,11 +1,57 @@
 # Fast Bayesian nonnegative matrix factorisation and tri-factorisation
-Accepted for NIPS 2016 Workshop on Advances in Approximate Bayesian Inference. [arXiv](https://arxiv.org/abs/1610.08127).
+This project contains an implementation of the non-negative matrix factorisation and tri-factorisation models presented in the paper **Fast Bayesian nonnegative matrix factorisation and tri-factorisation**, accepted for the NIPS 2016 Workshop on Advances in Approximate Bayesian Inference. [arXiv](https://arxiv.org/abs/1610.08127).
+For both models we implement four different inference methods: Gibbs sampling, variational Bayesian inference, iterated conditional modes, and non-probabilistic inference.
+We furthermore provide all datasets used (including the preprocessing scripts), and Python scripts for experiments.
 
-Authors: **Thomas Brouwer**, **Jes Frellsen**, **Pietro Lio'**.
+An extended version of this project, with more experiments and automatic model selection (using automatic relevance determination) can be found [here](https://github.com/ThomasBrouwer/BNMTF_ARD); paper [here](https://arxiv.org/abs/1707.05147).
 
-This project contains an implementation of the Bayesian non-negative matrix factorisation and tri-factorisation models presented in the paper **Fast Bayesian nonnegative matrix factorisation and tri-factorisation**. We furthermore provide all datasets used (including the preprocessing scripts), and Python scripts for experiments.
+#### Paper abstract
+We present a fast variational Bayesian algorithm for performing non-negative matrix factorisation and tri-factorisation. We show that our approach achieves faster convergence per iteration and timestep (wall-clock) than Gibbs sampling and non-probabilistic approaches, and do not require additional samples to estimate the posterior. We show that in particular for matrix tri-factorisation convergence is difficult, but our variational Bayesian approach offers a fast solution, allowing the tri-factorisation approach to be used more effectively.
 
-This project is structured as follows:
+#### Corresponding authors
+Thomas Brouwer, Jes Frellsen, Pietro Lio'.
+
+## Installation 
+If you wish to use the matrix factorisation models, or replicate the experiments, follow these steps. Please ensure you have Python 2.7 (3 is currently not supported). We recommend option 1, as it allows you to rerun the experiments.
+
+#### Option 1
+1. Clone the project to your computer, by running ``` git clone  ``` in your command line.
+2. In your Python script, add the project to your system path using the following lines:
+```
+project_location = "/path/to/folder/containing/project/"
+import sys
+sys.path.append(project_location)
+```
+3. You can now import the models in your code, e.g.
+```
+from BNMTF.code.models.nmf_np import NMF
+model = NMF(R=numpy.ones((4,3)), M=ones((4,3)), K=2)
+model.initialise()
+model.train(iterations=10)
+```
+#### Option 2
+1. Download the package directly, using ```pip install git+git://github.com/jkbr/httpie.git```.
+2. You can now import the models in your code, e.g.
+```
+from BNMTF.code.models.nmf_np import NMF
+model = NMF(R=numpy.ones((4,3)), M=ones((4,3)), K=2)
+model.initialise()
+model.train(iterations=10)
+```
+
+## Citation
+If this project was useful for your research, please consider citing the [extended paper](https://arxiv.org/abs/1707.05147),
+```
+@inproceedings{Brouwer2017b,
+	author = {Brouwer, Thomas and Frellsen, Jes and Li\'{o}, Pietro},
+	booktitle = {Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases (ECML PKDD)},
+	title = {{Comparative Study of Inference Methods for Bayesian Nonnegative Matrix Factorisation}},
+	year = {2017}
+}
+```
+
+## Project structure
+Below you can find a description of the different folders and files available in this repository.
 
 ### /code/
 Python code, for the models, cross-validation methods, and model selection.
