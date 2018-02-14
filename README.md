@@ -52,8 +52,7 @@ Below you can find a description of the different folders and files available in
 ### /code/
 Python code, for the models, cross-validation methods, and model selection.
 
-#### /models/
-Python classes for the BNMF and BNMTF models: Gibbs sampling, Variational Bayes, Iterated Conditional Modes, and non-probabilistic versions.
+**/models/**: Python classes for the BNMF and BNMTF models: Gibbs sampling, Variational Bayes, Iterated Conditional Modes, and non-probabilistic versions.
 - **/distributions/** - Contains code for obtaining draws of the exponential, Gaussian, and Truncated Normal distributions. Also has code for computing the expectation and variance of these distributions.
 - **/kmeans/** - Contains a class for performing K-means clustering on a matrix, when some of the values are unobserved. From my [other Github project](https://github.com/ThomasBrouwer/kmeans_missing).
 - **bnmf_gibbs.py** - Implementation of Gibbs sampler for Bayesian non-negative matrix factorisation (BNMF), extended to take into account missing values. Initially introduced by Schmidt et al. 2009.
@@ -65,8 +64,7 @@ Python classes for the BNMF and BNMTF models: Gibbs sampling, Variational Bayes,
 - **nmtf_icm.py** - Implementation of Iterated Conditional Modes NMTF algorithm (MAP inference).
 - **nmtf_np.py** - Implementation of non-probabilistic NMTF, introduced by Yoo and Choi 2009.
 
-#### /grid_search/
-Classes for doing model selection on the Bayesian NMF and NMTF models, and for doing cross-validation with model selection. We can minimise or maximise the MSE, ELBO, AIC, BIC, log likelihood.
+**/grid_search/**: Classes for doing model selection on the Bayesian NMF and NMTF models, and for doing cross-validation with model selection. We can minimise or maximise the MSE, ELBO, AIC, BIC, log likelihood.
 - **line_search_bnmf.py** - Line search for the BNMF models, trying out different values for K.
 - **line_search_cross_validation** - Class for measuring cross-validation performance, with line search to choose K, for the BNMF models.
 - **grid_search_bnmtf.py** - Full grid search for the BNMTF models, trying all combinations of values for K and L in a given range.
@@ -77,17 +75,17 @@ Classes for doing model selection on the Bayesian NMF and NMTF models, and for d
 - **nested_matrix_cross_validation.py** - Class for measuring cross-validation performance, with nested cross-validation to choose K, used for non-probabilistic NMF and NMTF.
 - **mask.py** - Contains methods for splitting data into training and test folds.
 
-#### /data_toy/
+### /data_toy/
 Contains the toy data, and methods for generating toy data.
 - **/bnmf/** - Generate toy data using **generate_bnmf.py**, giving files **U.txt**, **V.txt**, **R.txt**, **R_true.txt** (no noise), **M.txt**.
 - **/bnmtf/** - Generate toy data using **generate_bnmtf.py**, giving files **F.txt**, **S.txt**, **G.txt**, **R.txt**, **R_true.txt** (no noise), **M.txt**.
 
-#### /data_drug_sensitivity/
+### /data_drug_sensitivity/
 Contains the drug sensitivity datasets (GDSC IC50, CCLE IC50, CCLE EC50, CTRP EC50).
 - **/gdsc/**, **/ccle/** - The datasets. We obtained these from the "Bayesian Hybrid Matrix Factorisation for Data Integration" paper (Thomas Brouwer and Pietro Lio', 2017), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**. 
 - **/gdsc/load_data.py**, **/ccle/load_data.py** - Helper methods for loading in the Sanger, CCLE IC50, and CCLE EC50 datasets.
 
-#### /experiments/
+### /experiments/
 - **/experiments_toy/** - Experiments on the toy data.
   - **/convergence/** - Measure convergence rate of the methods (against iterations) on the toy data.
   - **/time/** - Measure convergence rate of the methods (against time) on the toy data.
@@ -102,7 +100,7 @@ Contains the drug sensitivity datasets (GDSC IC50, CCLE IC50, CCLE EC50, CTRP EC
 - **/experiments_ccle/** - Cross-validation experiments on the CCLE IC50 and EC50 datasets, as well as helper methods for loading in the data.
   - **/cross_validation/** - 10-fold cross-validation experiments on the CCLE IC50 and EC50 data.
 
-#### /plots/
+### /plots/
 The results and plots for the experiments are stored in this folder, along with scripts for making the plots.
 - **/graphs_toy/** - Plots for the experiments on the toy data.
 - **/graphs_Sanger/** - Plots for the experiments on the Sanger GDSC drug sensitivity data.
@@ -113,5 +111,5 @@ The results and plots for the experiments are stored in this folder, along with 
 - **/time_toy/** - Scripts for plotting the convergence (against time) on the toy data.
 - **/time_Sanger/** - Scripts for plotting the convergence (against time) on the Sanger data.
 
-#### /tests/
+### /tests/
 py.test unit tests for the code and classes in **/code/**. To run the tests, simply `cd` into the /tests/ folder, and run `pytest` in the command line.
