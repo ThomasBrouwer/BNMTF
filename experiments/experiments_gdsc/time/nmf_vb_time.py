@@ -11,7 +11,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.models.bnmf_vb_optimised import bnmf_vb_optimised
-from BNMTF.experiments.experiments_gdsc.load_data import load_gdsc
+from BNMTF.data_drug_sensitivity.gdsc.load_data import load_gdsc
 
 import numpy, random, scipy, matplotlib.pyplot as plt
 

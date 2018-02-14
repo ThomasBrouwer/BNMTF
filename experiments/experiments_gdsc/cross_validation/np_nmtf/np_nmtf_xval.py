@@ -11,7 +11,7 @@ sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Docu
 import numpy, itertools, random
 from BNMTF.code.nmtf_np import NMTF
 from BNMTF.cross_validation.matrix_cross_validation import MatrixCrossValidation
-from BNMTF.drug_sensitivity.experiments_gdsc.load_data import load_gdsc
+from BNMTF.data_drug_sensitivity.gdsc.load_data import load_gdsc
 
 
 # Settings

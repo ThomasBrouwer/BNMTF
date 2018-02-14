@@ -9,7 +9,7 @@ sys.path.append(project_location)
 from BNMTF.code.models.bnmtf_vb_optimised import bnmtf_vb_optimised
 from BNMTF.code.cross_validation.mask import compute_Ms, compute_folds
 from BNMTF.code.cross_validation.greedy_search_bnmtf import GreedySearch
-from BNMTF.experiments.experiments_gdsc.load_data import load_gdsc
+from BNMTF.data_drug_sensitivity.gdsc.load_data import load_gdsc
 
 import numpy, matplotlib.pyplot as plt
 import scipy.interpolate

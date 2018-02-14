@@ -10,7 +10,7 @@ sys.path.append(project_location)
 import numpy, random
 from BNMTF.code.models.nmf_icm import nmf_icm
 from BNMTF.code.cross_validation.line_search_cross_validation import LineSearchCrossValidation
-from BNMTF.experiments.experiments_gdsc.load_data import load_gdsc
+from BNMTF.data_drug_sensitivity.gdsc.load_data import load_gdsc
 
 
 # Settings

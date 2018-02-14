@@ -9,7 +9,7 @@ sys.path.append(project_location)
 
 from BNMTF.code.models.bnmtf_gibbs_optimised import bnmtf_gibbs_optimised
 from BNMTF.code.cross_validation.greedy_search_cross_validation import GreedySearchCrossValidation
-from BNMTF.experiments.experiments_ccle.load_data import load_ccle
+from BNMTF.data_drug_sensitivity.ccle.load_data import load_ccle
 
 
 # Settings

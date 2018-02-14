@@ -9,7 +9,7 @@ sys.path.append(project_location)
 import itertools
 from BNMTF.code.models.nmtf_np import NMTF
 from BNMTF.code.cross_validation.nested_matrix_cross_validation import MatrixNestedCrossValidation
-from BNMTF.experiments.experiments_ccle.load_data import load_ccle
+from BNMTF.data_drug_sensitivity.ccle.load_data import load_ccle
 
 
 # Settings

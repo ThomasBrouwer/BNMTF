@@ -10,7 +10,7 @@ sys.path.append(project_location)
 import numpy, random
 from BNMTF.code.models.bnmf_vb_optimised import bnmf_vb_optimised
 from BNMTF.code.cross_validation.line_search_cross_validation import LineSearchCrossValidation
-from BNMTF.experiments.experiments_ccle.load_data import load_ccle
+from BNMTF.data_drug_sensitivity.ccle.load_data import load_ccle
 
 
 # Settings

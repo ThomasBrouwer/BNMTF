@@ -102,6 +102,7 @@ ax[3].hist(N, bins=range(-10,10), normed=True)
 plt.show()
 '''
 
+
 '''
 mu = -37
 std = 1

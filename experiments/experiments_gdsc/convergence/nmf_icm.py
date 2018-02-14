@@ -11,7 +11,7 @@ import sys
 sys.path.append(project_location)
 
 from BNMTF.code.models.nmf_icm import nmf_icm
-from BNMTF.experiments.experiments_gdsc.load_data import load_gdsc
+from BNMTF.data_drug_sensitivity.gdsc.load_data import load_gdsc
 
 import numpy, matplotlib.pyplot as plt
 
