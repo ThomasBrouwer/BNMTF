@@ -16,12 +16,13 @@ If you wish to use the matrix factorisation models, or replicate the experiments
 
 #### Option 1
 1. Clone the project to your computer, by running `git clone https://github.com/ThomasBrouwer/BNMTF.git` in your command line.
-2. In your Python script, add the project to your system path using the following lines:
+2. In your Python script, add the project to your system path using the following lines.  
 ```
 project_location = "/path/to/folder/containing/project/"
 import sys
 sys.path.append(project_location)
 ```
+  For example, if the path to the project is /johndoe/projects/BNMTF/, use `project_location = /johndoe/projects/`.
 3. You can now import the models in your code, e.g.
 ```
 from BNMTF.code.models.nmf_np import NMF
