@@ -15,13 +15,15 @@ Thomas Brouwer, Jes Frellsen, Pietro Lio'.
 If you wish to use the matrix factorisation models, or replicate the experiments, follow these steps. Please ensure you have Python 2.7 (3 is currently not supported). We recommend option 1, as it allows you to rerun the experiments.
 
 #### Option 1
-1. Clone the project to your computer, by running ``` git clone https://github.com/ThomasBrouwer/BNMTF.git ``` in your command line.
-2. In your Python script, add the project to your system path using the following lines:
-```
-project_location = "/path/to/folder/containing/project/"
-import sys
-sys.path.append(project_location)
-```
+1. Clone the project to your computer, by running `git clone https://github.com/ThomasBrouwer/BNMTF.git` in your command line.
+2. In your Python script, add the project to your system path using the following lines.  
+   
+   ``` 
+   project_location = "/path/to/folder/containing/project/"
+   import sys
+   sys.path.append(project_location) 
+   ```
+   For example, if the path to the project is /johndoe/projects/BNMTF/, use `project_location = /johndoe/projects/`.
 3. You can now import the models in your code, e.g.
 ```
 from BNMTF.code.models.nmf_np import NMF
@@ -30,7 +32,7 @@ model.initialise()
 model.train(iterations=10)
 ```
 #### Option 2
-1. Download the package directly, using ``` pip install git+git://github.com/ThomasBrouwer/BNMTF.git ```.
+1. Download the package directly, using `pip install git+git://github.com/ThomasBrouwer/BNMTF.git`.
 2. You can now import the models in your code, e.g.
 ```
 from BNMTF.code.models.nmf_np import NMF
@@ -88,7 +90,8 @@ Contains the toy data, and methods for generating toy data.
 
 #### /data_drug_sensitivity/
 Contains the drug sensitivity datasets (GDSC IC50, CCLE IC50, CCLE EC50, CTRP EC50).
-- **/gdsc/**, **/ctrp/**, **/ccle/** - The datasets. We obtained these from the "Bayesian Hybrid Matrix Factorisation for Data Integration" paper (Thomas Brouwer and Pietro Lio', 2017), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**. We did not use the CTRP EC50 dataset for the cross-validation experiments.
+- **/gdsc/**, **/ccle/** - The datasets. We obtained these from the "Bayesian Hybrid Matrix Factorisation for Data Integration" paper (Thomas Brouwer and Pietro Lio', 2017), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**. 
+- **/gdsc/load_data.py**, **/ccle/load_data.py** - Helper methods for loading in the Sanger, CCLE IC50, and CCLE EC50 datasets.
 
 #### /experiments/
 - **/experiments_toy/** - Experiments on the toy data.
@@ -98,15 +101,12 @@ Contains the drug sensitivity datasets (GDSC IC50, CCLE IC50, CCLE EC50, CTRP EC
   - **/test_varying_missing/** - Measure the predictive performance on missing values for varying sparsity levels.
   - **/test_varying_noise/** - Measure the predictive performance on missing values for varying noise levels.
 - **/experiments_gdsc/** - Experiments on the Sanger GDSC IC50 dataset, as well as helper methods for loading in the data.
-  - **load_data.py** - Helper methods for loading in the Sanger data.
   - **/convergence/** - Measure convergence rate of the methods (against iterations) on the Sanger data.
   - **/time/** - Measure convergence rate of the methods (against time) on the Sanger data.
   - **/grid_search/** - Measure the effectiveness of the line, grid, and greedy search model selection methods on the Sanger data.
   - **/cross_validation/** - 10-fold cross-validation experiments on the Sanger data.
 - **/experiments_ccle/** - Cross-validation experiments on the CCLE IC50 and EC50 datasets, as well as helper methods for loading in the data.
-  - **load_data.py** - Helper methods for loading in the CCLE IC50 and EC50 data.
   - **/cross_validation/** - 10-fold cross-validation experiments on the CCLE IC50 and EC50 data.
-- **/experiments_ctrp/load_data.py** - Helper methods for loading in the CTRP data.
 
 #### /plots/
 The results and plots for the experiments are stored in this folder, along with scripts for making the plots.
