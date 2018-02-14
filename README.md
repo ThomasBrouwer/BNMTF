@@ -31,6 +31,10 @@ model.initialise()
 model.train(iterations=10)
 ```
 
+## Examples
+You can find good examples of the models running on data in the [convergence experiment on the toy data](./experiments/experiments_toy/convergence/), e.g. [nonnegative matrix factorisation with Gibbs sampling](./experiments/experiments_toy/convergence/nmf_gibbs.py).
+
+
 ## Citation
 If this project was useful for your research, please consider citing the [extended paper](https://arxiv.org/abs/1707.05147),
 ```
