@@ -26,7 +26,7 @@ If you wish to use the matrix factorisation models, or replicate the experiments
 3. You can now import the models in your code, e.g.
 ```
 from BNMTF.code.models.nmf_np import NMF
-model = NMF(R=numpy.ones((4,3)), M=ones((4,3)), K=2)
+model = NMF(R=numpy.ones((4,3)), M=numpy.ones((4,3)), K=2)
 model.initialise()
 model.train(iterations=10)
 ```
