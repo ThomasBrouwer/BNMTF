@@ -22,7 +22,7 @@ If you wish to use the matrix factorisation models, or replicate the experiments
    sys.path.append(project_location) 
    ```
    For example, if the path to the project is /johndoe/projects/BNMTF/, use `project_location = /johndoe/projects/`.
-   If you intend to rerun some of the paper's experiments, make sure to change this variable appropriately in the scripts you are running.
+   If you intend to rerun some of the paper's experiments, those scripts automatically add the correct path.
 3. You can now import the models in your code, e.g.
 ```
 from BNMTF.code.models.nmf_np import NMF
