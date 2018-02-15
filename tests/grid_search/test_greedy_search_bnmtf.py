@@ -2,8 +2,8 @@
 Test the grid search for BNMTF, in grid_search_bnmtf.py
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.cross_validation.greedy_search_bnmtf import GreedySearch
