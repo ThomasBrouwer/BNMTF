@@ -37,8 +37,8 @@ You can find good examples of the models running on data in the [convergence exp
 
 ## Citation
 If this project was useful for your research, please consider citing the [extended paper](https://arxiv.org/abs/1707.05147),
+> Thomas Brouwer, Jes Frellsen, and Pietro Lió (2017). Comparative Study of Inference Methods for Bayesian Nonnegative Matrix Factorisation. Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases (ECML PKDD 2017).
 ```
-Thomas Brouwer, Jes Frellsen, and Pietro Lió (2017). Comparative Study of Inference Methods for Bayesian Nonnegative Matrix Factorisation. Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases (ECML PKDD 2017).
 @inproceedings{Brouwer2017b,
 	author = {Brouwer, Thomas and Frellsen, Jes and Li\'{o}, Pietro},
 	booktitle = {Proceedings of the European Conference on Machine Learning and Principles and Practice of Knowledge Discovery in Databases (ECML PKDD)},
