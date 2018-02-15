@@ -2,8 +2,8 @@
 Run the greedy grid search for BNMTF with the Exp priors on the Sanger dataset.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.bnmtf_vb_optimised import bnmtf_vb_optimised

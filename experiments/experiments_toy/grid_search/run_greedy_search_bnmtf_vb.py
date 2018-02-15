@@ -5,8 +5,8 @@ BNMTF. We use the parameters for the true priors.
 The AIC seems to converge best to the true K,L (even when lambda = true_lambda/100).
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.data_toy.bnmtf.generate_bnmtf import generate_dataset, try_generate_M

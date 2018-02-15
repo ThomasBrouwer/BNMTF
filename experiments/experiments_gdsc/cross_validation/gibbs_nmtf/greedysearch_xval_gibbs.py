@@ -3,8 +3,8 @@ Run the cross validation with greedy search for model selection using VB-NMTF
 on the Sanger dataset.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../../"
 sys.path.append(project_location)
 
 import numpy, random

@@ -7,8 +7,8 @@ high for higher values for K and L than the true ones, same for the AIC. With
 the BIC we get a nice peak just below the true K and L (for true K=L=5, at K=L=4).
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.data_toy.bnmtf.generate_bnmtf import generate_dataset, try_generate_M

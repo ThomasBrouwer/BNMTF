@@ -2,8 +2,8 @@
 Test the class for Gamma draws and expectations in gamma.py.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.distributions.gamma import gamma_draw, gamma_expectation, gamma_expectation_log, gamma_mode

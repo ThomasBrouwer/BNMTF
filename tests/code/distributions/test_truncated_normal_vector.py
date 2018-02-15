@@ -2,8 +2,8 @@
 Test the class for Truncated Normal draws and expectations in truncated_normal_vector.py.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.distributions.truncated_normal_vector import TN_vector_draw, TN_vector_expectation, TN_vector_variance, TN_vector_mode

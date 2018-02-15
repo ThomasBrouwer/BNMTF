@@ -2,8 +2,8 @@
 Run the line search for BNMF with the Exp priors on the Sanger dataset.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.bnmf_vb_optimised import bnmf_vb_optimised

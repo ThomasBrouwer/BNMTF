@@ -6,8 +6,8 @@ We can plot the MSE, R2 and Rp as it converges, on the entire dataset.
 We have I=100, J=80, K=5, L=5, and no test data.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.nmtf_np import NMTF

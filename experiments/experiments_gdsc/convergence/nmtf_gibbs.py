@@ -6,8 +6,8 @@ We can plot the MSE, R2 and Rp as it converges, on the entire dataset.
 We give flat priors (1/10).
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.bnmtf_gibbs_optimised import bnmtf_gibbs_optimised

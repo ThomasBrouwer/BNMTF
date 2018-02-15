@@ -2,8 +2,8 @@
 Unit tests for the methods in the NMF class (/code/nmf_np.py).
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../"
 sys.path.append(project_location)
 
 import numpy, math, pytest, itertools

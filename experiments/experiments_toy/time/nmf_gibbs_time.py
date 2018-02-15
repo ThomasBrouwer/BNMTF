@@ -8,8 +8,8 @@ We have I=100, J=80, K=10, and no test data.
 We give flatter priors (1/10) than what was used to generate the data (1).
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.bnmf_gibbs_optimised import bnmf_gibbs_optimised

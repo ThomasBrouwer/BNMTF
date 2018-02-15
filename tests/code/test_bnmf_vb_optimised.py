@@ -2,8 +2,8 @@
 Tests for the BNMF Variational Bayes algorithm, with optimised matrix operation updates.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../"
 sys.path.append(project_location)
 
 import numpy, math, pytest, itertools, random

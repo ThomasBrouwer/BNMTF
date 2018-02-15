@@ -5,8 +5,9 @@ Since we want to find co-clusters of significantly higher/lower drug sensitivity
 values, we should use the unstandardised Sanger dataset.
 """
 
-import sys
-sys.path.append("/home/tab43/Documents/Projects/libraries/")#("/home/thomas/Documenten/PhD/")#
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../../"
+sys.path.append(project_location)
 
 import numpy, random
 from BNMTF.code.nmf_np import NMF

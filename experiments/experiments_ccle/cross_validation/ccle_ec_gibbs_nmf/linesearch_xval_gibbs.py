@@ -3,8 +3,8 @@ Run the cross validation with line search for model selection using VB-NMF on
 the CCLE EC50 dataset.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.bnmf_gibbs_optimised import bnmf_gibbs_optimised
@@ -23,7 +23,7 @@ no_folds = 10
 restarts = 1
 
 quality_metric = 'AIC'
-output_file = "./results.txt"
+output_file = "./results_test.txt"
 
 alpha, beta = 1., 1.
 lambdaU = 1./10.

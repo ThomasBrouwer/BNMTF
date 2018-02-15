@@ -3,8 +3,8 @@ Run the cross validation with line search for model selection using VB-NMF on
 the CCLE IC50 dataset.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.nmf_icm import nmf_icm

@@ -11,8 +11,8 @@ true*5 all values get pushed to 0, leading to terrible solutions), and we get
 a nice peak for the log likelihood and AIC around the true K.
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../../"
 sys.path.append(project_location)
 
 from BNMTF.data_toy.bnmf.generate_bnmf import generate_dataset, try_generate_M

@@ -14,8 +14,8 @@ We add Gaussian noise of precision tau = 1 (prior for gamma: alpha=1,beta=1).
 (Simply using the expectation of our Gamma distribution over tau)
 """
 
-project_location = "/Users/thomasbrouwer/Documents/Projects/libraries/"
-import sys
+import sys, os
+project_location = os.path.dirname(__file__)+"/../../../"
 sys.path.append(project_location)
 
 from BNMTF.code.models.distributions.exponential import exponential_draw
