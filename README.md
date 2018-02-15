@@ -83,7 +83,7 @@ Contains the toy data, and methods for generating toy data.
 
 ### /data_drug_sensitivity/
 Contains the drug sensitivity datasets (GDSC IC50, CCLE IC50, CCLE EC50, CTRP EC50).
-- **/gdsc/**, **/ccle/** - The datasets. We obtained these from the "Bayesian Hybrid Matrix Factorisation for Data Integration" paper (Thomas Brouwer and Pietro Lio', 2017), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**. 
+- **/gdsc/**, **/ccle/** - The datasets. We obtained these from the [Bayesian Hybrid Matrix Factorisation for Data Integration"](https://github.com/ThomasBrouwer/HMF) project ([Thomas Brouwer and Pietro Lio', 2017](https://arxiv.org/abs/1704.04962)), using the complete datasets of each (before finding the overlap). For the GDSC IC50 dataset, some more details can be found in **/gdsc/notes**. 
 - **/gdsc/load_data.py**, **/ccle/load_data.py** - Helper methods for loading in the Sanger, CCLE IC50, and CCLE EC50 datasets.
 
 ### /experiments/
