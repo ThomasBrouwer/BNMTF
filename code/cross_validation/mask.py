@@ -10,7 +10,7 @@ def generate_M(I,J,fraction):
     M = numpy.ones([I,J])
     values = random.sample(range(0,I*J),int(I*J*fraction))
     for v in values:
-        M[v / J][v % J] = 0
+        M[int(v / J)][int(v % J)] = 0
     return M
     
 # Given a mask matrix M, generate an even more sparse matrix M_test, and M_train (s.t. M_test+M_train=M)
