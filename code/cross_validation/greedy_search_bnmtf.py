@@ -174,7 +174,7 @@ class GreedySearch:
     
     def find_KL(self,metric,K,L):
         # See if we have already tried this K and L - if so, return the performance
-        return filter(lambda x: (x[0],x[1]) == (K,L), self.all_values(metric))
+        return list(filter(lambda x: (x[0],x[1]) == (K,L), self.all_values(metric)))
     
     
     def best_value(self,metric):
