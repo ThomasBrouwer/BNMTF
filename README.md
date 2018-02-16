@@ -1,5 +1,5 @@
 # Fast Bayesian nonnegative matrix factorisation and tri-factorisation
-This project contains an implementation of the non-negative matrix factorisation and tri-factorisation models presented in the paper **Fast Bayesian nonnegative matrix factorisation and tri-factorisation**, accepted for the NIPS 2016 Workshop on Advances in Approximate Bayesian Inference. [arXiv](https://arxiv.org/abs/1610.08127).
+This project contains an implementation of the non-negative matrix factorisation and tri-factorisation models presented in the paper [**Fast Bayesian nonnegative matrix factorisation and tri-factorisation**](https://arxiv.org/abs/1610.08127), accepted for the NIPS 2016 Workshop on Advances in Approximate Bayesian Inference.
 For both models we implement four different inference methods: Gibbs sampling, variational Bayesian inference, iterated conditional modes, and non-probabilistic inference.
 We furthermore provide all datasets used (including the preprocessing scripts), and Python scripts for experiments.
 
