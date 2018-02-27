@@ -28,7 +28,7 @@ If you wish to use the matrix factorisation models, or replicate the experiments
 from BNMTF.code.models.nmf_np import NMF
 model = NMF(R=numpy.ones((4,3)), M=numpy.ones((4,3)), K=2)
 model.initialise()
-model.train(iterations=10)
+model.run(iterations=10)
 ```
 
 ## Examples
