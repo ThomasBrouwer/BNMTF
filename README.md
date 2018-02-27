@@ -5,6 +5,8 @@ We furthermore provide all datasets used (including the preprocessing scripts), 
 
 An extended version of this project, with more experiments and automatic model selection (using automatic relevance determination) can be found [here](https://github.com/ThomasBrouwer/BNMTF_ARD); paper [here](https://arxiv.org/abs/1707.05147).
 
+<img src="./images/mf_mtf.png" width="100%"/>
+
 #### Paper abstract
 We present a fast variational Bayesian algorithm for performing non-negative matrix factorisation and tri-factorisation. We show that our approach achieves faster convergence per iteration and timestep (wall-clock) than Gibbs sampling and non-probabilistic approaches, and do not require additional samples to estimate the posterior. We show that in particular for matrix tri-factorisation convergence is difficult, but our variational Bayesian approach offers a fast solution, allowing the tri-factorisation approach to be used more effectively.
 
@@ -117,6 +119,9 @@ The results and plots for the experiments are stored in this folder, along with 
 
 ### /tests/
 py.test unit tests for the code and classes in **/code/**. To run the tests, simply `cd` into the /tests/ folder, and run `pytest` in the command line.
+
+### /images/
+The images at the top of this README.
 
 </br>
 </details>
