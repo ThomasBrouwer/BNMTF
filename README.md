@@ -11,7 +11,7 @@ An extended version of this project, with more experiments and automatic model s
 We present a fast variational Bayesian algorithm for performing non-negative matrix factorisation and tri-factorisation. We show that our approach achieves faster convergence per iteration and timestep (wall-clock) than Gibbs sampling and non-probabilistic approaches, and do not require additional samples to estimate the posterior. We show that in particular for matrix tri-factorisation convergence is difficult, but our variational Bayesian approach offers a fast solution, allowing the tri-factorisation approach to be used more effectively.
 
 #### Authors
-Thomas Brouwer, Jes Frellsen, Pietro Lio'. Contact: tab43@cam.ac.uk / thomas.a.brouwer@gmail.com.
+Thomas Brouwer, Jes Frellsen, Pietro Lio'. Contact: thomas.a.brouwer@gmail.com.
 
 ## Installation 
 If you wish to use the matrix factorisation models, or replicate the experiments, follow these steps. Please ensure you have Python 2.7 (3 is currently not supported). 
